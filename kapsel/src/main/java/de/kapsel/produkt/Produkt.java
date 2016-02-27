@@ -38,8 +38,8 @@ public class Produkt implements Serializable {
 	}
 
 	@Column(name="datum", nullable=true)
-	public String getDatum() {
-		return name;
+	public Date getDatum() {
+		return datum;
 	}
 	public void setDatum(Date datum) {
 		this.datum = datum;
