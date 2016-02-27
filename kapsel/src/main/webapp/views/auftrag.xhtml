@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs">
+
+<h:outputStylesheet name="global.css" library="css" />
+<h:outputStylesheet name="auftrag.css" library="css" />
+
+<h:head>
+
+	<title>#{labels.progName} #{labels.auftrag}</title>
+
+</h:head>
+
+<body>
+
+	<!-- OBEN, HIER KOMMT DER RIBBON REIN -->
+	<div id="header" class="float_frame">
+		<h:form id="ribbon">
+			<p:ribbon>
+				<p:tab title="#{labels.auftrag}">
+					<p:ribbonGroup>
+						<h1>#{labels.auftraege}</h1>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.action}">
+						<p:commandButton value="New" icon="ui-ribbonicon-new"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newAuftrag').show();"/>
+						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editAuftrag').show();" />
+						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('delAuftrag').show();"/>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.export}">
+						<p:commandButton value="To PDF" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+						<p:commandButton value="To Word" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.print}">
+						<p:commandButton value="Print" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup label="Optionen" style="float: right;">
+						<h:button value="#{labels.menu}" outcome="index"></h:button>
+					</p:ribbonGroup>
+					
+				</p:tab>
+
+			</p:ribbon>
+			
+			<p:dialog header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
+				<ui:include src="/WEB-INF/includes/auftragNew.xhtml">
+					<ui:param name="bean" value="#{auftragBean.newAuftrag}"/>
+				</ui:include>
+			    <hr></hr>
+			    <p:commandButton value="OK" onclick="PF('dlg1').hide();"/>
+			    <p:commandButton value="Abbrechen" onclick="PF('dlg1').hide();"/>
+			</p:dialog>
+			
+			<p:dialog header="Auftrag bearbeiten" modal="true" widgetVar="editAuftrag" minHeight="40" resizable="false">
+				<ui:include src="/WEB-INF/includes/auftragNew.xhtml" />
+			    <hr></hr>
+			    <p:commandButton value="OK" onclick="PF('editAuftrag').hide();"/>
+			    <p:commandButton value="Abbrechen" onclick="PF('editAuftrag').hide();"/>
+			</p:dialog>
+			
+			<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
+				<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
+			    <hr></hr>
+			    <p:commandButton value="#{labels.ja}" onclick="PF('delAuftrag').hide();"/>
+			    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
+			</p:dialog>
+			
+		</h:form>
+		
+		
+	</div>
+
+
+	<div id="middle">
+
+
+		<!-- LINKE SEITE -->
+		<h:form id="nav_form">
+			<div id="nav_container">
+				<div id="nav" class="float_frame">
+
+					<!-- Tabelle mit allen Aufträgen -->
+					<p:dataTable id="auftragDT" var="item"
+						value="#{auftragBean.auftraege}" selectionMode="single"
+						selection="#{auftragBean.selectedAuftrag}" rowKey="#{item.anr}"
+						emptyMessage="#{labels.norecords}">
+						<f:facet name="header">#{labels.auftragListe}</f:facet>
+
+
+						<p:ajax event="rowSelect" listener="#{auftragBean.loadAuftrag}"
+							update=":sect_form" />
+						<!-- 
+					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
+					-->
+
+						<p:column headerText="#{labels.a_nr}">
+							<h:outputText value="#{item.anr}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+						<p:column headerText="#{labels.datum}">
+							<h:outputText value="#{item.termin}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{labels.kunde}">
+							<h:outputText value="#{item.kunde.name}" />
+						</p:column>
+					</p:dataTable>
+
+					<hr></hr>
+				</div>
+			</div>
+		</h:form>
+
+		<!-- RECHTE SEITE -->
+		<h:form id="sect_form">
+			<div id="section_container">
+				<div id="section" class="float_frame">
+					
+					<p:accordionPanel multiple="true">
+
+
+						<!-- Auftragsdetails -->
+						<p:tab title="#{labels.auftragDetail}">
+							<br></br>
+								<h:panelGrid columns="2" styleClass="fullWidth">
+									<h:outputText value="#{auftragBean.selectedAuftrag.name}" />
+									<h:outputText id="statusbox" value="#{labels.status}: #{auftragBean.selectedAuftrag.status}" />
+								</h:panelGrid>
+							<br></br>
+							<p:fieldset style="margin-bottom:10px;">
+								<p:panelGrid>
+									<p:row>
+										<p:column>#{labels.anr}:</p:column>
+										<p:column>#{auftragBean.selectedAuftrag.anr}</p:column>
+										<p:column>#start_datum:</p:column>
+										<p:column></p:column>
+										<p:column rowspan="3">#Bild</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.kunde}:</p:column>
+										<p:column>
+											<p:commandLink
+												value="#{auftragBean.selectedAuftrag.kunde.name}"></p:commandLink>
+										</p:column>
+										<p:column>#end_datum</p:column>
+										<p:column>
+											<h:outputText value="#{auftragBean.selectedAuftrag.termin}">
+											<f:convertDateTime pattern="dd.MM.yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.verantwortlichMA}:</p:column>
+										<p:column>#TestMA</p:column>
+										<p:column></p:column>
+										<p:column></p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:fieldset>
+							<p:fieldset legend="#Beschreibung" toggleable="true"
+								toggleSpeed="800">
+								<h:outputText value="#{auftragBean.selectedAuftrag.text}"></h:outputText>
+							</p:fieldset>
+							<br></br>
+							<p:fieldset legend="#Notizen" toggleable="true" toggleSpeed="800"
+								collapsed="true">
+								<p:inputTextarea styleClass="fullWidth"
+									value="#{auftragBean.selectedAuftrag.notizen}"></p:inputTextarea>
+							</p:fieldset>
+							<br></br>
+						</p:tab>
+
+						<!-- Produkte und Leistungen -->
+						<p:tab title="#{labels.prodLeist}">
+
+							<ccs:stdToolbar saveAction="" printAction="" editAction=""
+								addAction="" removeAction="" />
+
+							<!-- Tabelle mit allen Produkten und Leistungen -->
+							<p:dataTable id="produktDT" var="item"
+								emptyMessage="#{labels.norecords}">
+
+								<p:ajax event="rowSelect" listener="#{auftragBean.loadAuftrag}"
+									update=":sect_form" />
+
+								<p:column headerText="Pos.">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.stueckzahl}">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="Bezeichnung">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.typ}">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="Kosten">
+									<h:outputText value="" />
+								</p:column>
+
+							</p:dataTable>
+						</p:tab>
+
+
+						<!-- Dokumente -->
+						<p:tab title="#{labels.doc}">
+
+							<p:tabView>
+								<p:tab title="Übersicht">
+									<h:outputText value="Alle aktuelle Versionen von Dateien" />
+									<p:panelGrid>
+										<p:row>
+											<p:column>Angebot</p:column>
+											<p:column></p:column>
+										</p:row>
+										<p:row>
+											<p:column>Auftragsbestätigung</p:column>
+											<p:column></p:column>
+										</p:row>
+										<p:row>
+											<p:column>Abschlagsrechnung</p:column>
+											<p:column></p:column>
+										</p:row>
+										<p:row>
+											<p:column>Rechnung</p:column>
+											<p:column></p:column>
+										</p:row>
+										<p:row>
+											<p:column>Lieferschein</p:column>
+											<p:column></p:column>
+										</p:row>
+									
+									</p:panelGrid>
+								</p:tab>
+								<p:tab title="Angebote">
+									<h:outputText value="Angebote für den Kunden" />
+								</p:tab>
+								<p:tab title="Auftragsbestätigung">
+									<h:outputText
+										value="Bestätigung durch Kunden - Eingescannte datei/email" />
+								</p:tab>
+								<p:tab title="Abschlagsrechnung">
+									<h:outputText
+										value="Teilrechnung wenn ein Teil der Leistungen erledigt wurden" />
+								</p:tab>
+								<p:tab title="Rechnung">
+									<h:outputText value="End/gesamtrechnung für die Bestellung" />
+								</p:tab>
+								<p:tab title="Brief">
+									<h:outputText value="Briefe an und von Kunden" />
+								</p:tab>
+								<p:tab title="Gesprächsprotokolle">
+									<h:outputText value="Dolor" />
+								</p:tab>
+								<p:tab title="Lieferschein">
+									<h:outputText value="Lieferschein für Kunden" />
+								</p:tab>
+							</p:tabView>
+						</p:tab>
+
+						<p:tab title="#{labels.dateien}">
+
+							<h:form>
+
+								<p:fileUpload value="#{fileUploadView.file}" multiple="true" mode="simple"
+									skinSimple="true" />
+
+								<p:commandButton value="Submit" ajax="false" disabled="true" />
+							</h:form>
+							
+							<p:fieldset style="margin-bottom:10px;">
+							
+							
+							</p:fieldset>
+							
+						</p:tab>
+						
+						<p:tab title="#{labels.stats}" disabled="true"></p:tab>
+
+					</p:accordionPanel>
+
+					<hr></hr>
+
+
+				</div>
+			</div>
+		</h:form>
+	</div>
+
+	<div id="footer"></div>
+
+
+</body>
+</html>

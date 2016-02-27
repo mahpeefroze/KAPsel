@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:panelGrid>
+		<p:row>
+			<p:column>#{labels.anr}:</p:column>
+			<p:column>#{auftragBean.selectedAuftrag.anr + 1}</p:column>
+			<p:column>#start_datum:</p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" value="#{auftragBean.newAuftrag.anfang}"/></p:column>
+			<p:column rowspan="3">#Bild</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column><p:inputText value="#{auftragBean.newAuftrag.name}"/></p:column>
+			<p:column>#end_datum</p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" pages="3" value="#{auftragBean.newAuftrag.termin}"/></p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.kunde}:</p:column>
+			<p:column><h:outputText value="#{auftragBean.newAuftrag.kunde.name}" /></p:column>
+			<p:column>#{labels.verantwortlichMA}:</p:column>
+			<p:column></p:column>
+		</p:row>
+	</p:panelGrid>
+
+
+
+
+</ui:composition>
+
+

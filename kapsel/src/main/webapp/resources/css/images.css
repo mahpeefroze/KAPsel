@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+.kunde_splash{
+	background-image: url('../resources/images/kunde.png');
+}
+
+.auftrag_splash{
+	background-image: url('../resources/images/auftrag.png');
+}
+
+.produkt_splash{
+	background-image: url('../resources/images/produkt.png');
+}
+
+.statistik_splash{
+	background-image: url('../resources/images/statistik.png');
+}
+
+.einstellung_splash{
+	background-image: url('../resources/images/einstellung.png');
+}
+
+.lager_splash{
+	background-image: url('../resources/images/lager.png');
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:outputStylesheet name="global.css" library="css"/> 
+
+<h:head>
+
+<title>#{labels.progName} #{labels.produkt}</title>
+
+</h:head>
+
+<body> 
+
+<div id="header" class="float_frame">
+		<h1>#{labels.kunde}</h1>
+	</div>
+
+
+	<div id="middle">
+
+		<!-- LINKE SEITE -->
+		<h:form id="nav_form">
+			<div id="nav_container">
+				<div id="nav" class="float_frame">
+
+					<!-- Tabelle mit allen Aufträgen -->
+					<p:dataTable id="auftragDT" var="item"
+						value="#{auftragBean.auftraege}" selectionMode="single"
+						selection="#{auftragBean.selectedAuftrag}" rowKey="#{item.anr}"
+						emptyMessage="#{labels.norecords}">
+						<f:facet name="header">#{labels.kundenListe}</f:facet>
+
+
+						<p:ajax event="rowSelect" listener="#{auftragBean.loadAuftrag}"
+							update=":sect_form" />
+						<!-- 
+					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
+					-->
+
+						<p:column headerText="PNR">
+							<h:outputText value="#{item.anr}" />
+						</p:column>
+						<p:column headerText="Name">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+						<p:column headerText="Typ">
+							<h:outputText value="#{item.termin}" />
+						</p:column>
+						<p:column headerText="Preis">
+							<h:outputText value="#{item.kunde.name}" />
+						</p:column>
+					</p:dataTable>
+
+					<hr></hr>
+				</div>
+			</div>
+		</h:form>
+
+		<!-- RECHTE SEITE -->
+		<h:form id="sect_form">
+			<div id="section_container">
+				<div id="section" class="float_frame">
+					<p:accordionPanel multiple="true">
+
+
+						<!-- Produktdetails -->
+						<p:tab title="#{labels.kundenDetail}">
+							<br></br>
+							<h:panelGrid columns="2" styleClass="fullWidth">
+								<h:outputText value="#{auftragBean.selectedAuftrag.name}" />
+								<h:outputText id="statusbox" value="#{labels.status}: #{auftragBean.selectedAuftrag.status}" />
+							</h:panelGrid>
+							<br></br>
+							<p:fieldset style="margin-bottom:10px;">
+								<p:panelGrid>
+									<p:row>
+										<p:column>#{labels.pnr}:</p:column>
+										<p:column>#{auftragBean.selectedAuftrag.anr}</p:column>
+										<p:column>#{labels.typ}:</p:column>
+										<p:column></p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.nachname}:</p:column>
+										<p:column>#{auftragBean.selectedAuftrag.kunde.name}</p:column>
+										<p:column>#{labels.stueckzahl}:</p:column>
+										<p:column></p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:fieldset>
+
+							<br></br>
+						</p:tab>
+
+						<!-- Stueckliste -->
+						<p:tab title="#{labels.stueckliste}">
+
+						</p:tab>
+						
+						<!-- Stueckliste -->
+						<p:tab title="#{labels.arbeitsplan}">
+
+						</p:tab>
+
+
+
+						<!-- Statistiken -->
+						<p:tab title="#{labels.stats}" disabled="true">
+
+						</p:tab>
+
+					</p:accordionPanel>
+
+					<hr></hr>
+
+
+				</div>
+			</div>
+		</h:form>
+	</div>
+
+	<div id="footer"></div>
+
+
+</body> 
+</html>

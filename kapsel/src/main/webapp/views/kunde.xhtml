@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:outputStylesheet name="global.css" library="css" />
+<h:outputStylesheet name="kunde.css" library="css" />
+
+<h:head>
+	<title>#{labels.progName} #{labels.kunde}</title>
+</h:head>
+
+<body>
+
+	<div id="header" class="float_frame">
+		<h:form id="ribbon_form">
+			<p:ribbon>
+				<p:tab title="#{labels.kunde}">
+					<p:ribbonGroup>
+						<h1>#{labels.kunde}</h1>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.action}">
+						<p:commandButton value="New" icon="ui-ribbonicon-new"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newKunde').show();"/>
+						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
+						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('delKunde').show();"/>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.export}">
+						<p:commandButton value="To PDF" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+						<p:commandButton value="To Word" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.print}">
+						<p:commandButton value="Print" icon="ui-ribbonicon-print"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup label="Optionen" style="float: right;">
+						<h:button value="#{labels.menu}" outcome="index"></h:button>
+					</p:ribbonGroup>
+
+				</p:tab>
+
+			</p:ribbon>
+			
+			<p:dialog header="Neuer Kunde" modal="true" widgetVar="newKunde" minHeight="40" resizable="false">
+				<ui:include src="/views/dialogs/kundeNew.xhtml">
+					<ui:param name="selParam" value="4"/>
+				</ui:include>
+			</p:dialog>
+			
+		</h:form>
+	</div>
+
+
+	<div id="middle">
+
+		<!-- LINKE SEITE -->
+		<h:form id="nav_form">
+			<div id="nav_container">
+				<div id="nav" class="float_frame">
+
+					<!-- Tabelle mit allen Kunden -->
+					<p:dataTable id="kundeDT" var="item"
+						value="#{kundeBean.kunden}" selectionMode="single"
+						selection="#{kundeBean.selectedKunde}" rowKey="#{item.knr}"
+						emptyMessage="#{labels.norecords}">
+						<f:facet name="header">#{labels.kundenListe}</f:facet>
+
+
+						<p:ajax event="rowSelect" listener="#{kundeBean.loadKunde}"
+							update=":sect_form"/>		
+						<!-- 
+					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
+					-->
+
+						<p:column headerText="#{labels.k_nr}">
+							<h:outputText value="#{item.knr}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+						<p:column headerText="#{labels.ansprechPartner}">
+							<h:outputText value="#{item.APartner}" />
+						</p:column>
+						<p:column headerText="#{labels.typ}">
+							<h:outputText value="#{item.typ}" />
+						</p:column>
+					</p:dataTable>
+
+					<hr></hr>
+					</div>
+					
+				</div>
+			</h:form>
+
+		<!-- RECHTE SEITE -->
+		<h:form id="sect_form">
+			<div id="section_container">
+				<div id="section" class="float_frame">
+					<p:accordionPanel multiple="true">
+
+
+						<!-- Kundendetails -->
+						<p:tab title="#{labels.kundenDetail}">
+							<br></br>
+							<h:panelGrid columns="2" styleClass="fullWidth">
+								<h:outputText value="#{kundeBean.selectedKunde.name}" />
+								<h:outputText id="statusbox" value="#{labels.status}:" />
+							</h:panelGrid>
+							<br></br>
+							<p:fieldset style="margin-bottom:10px;">
+								<p:panelGrid>
+									<p:row>
+										<p:column>#{labels.knr}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.knr}</p:column>
+										<p:column>#{labels.typ}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.typ}</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.nachname}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.name}</p:column>
+										<p:column>#{labels.rabatt}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.gruppe.rabatt}%</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.ansprechPartner}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.APartner}</p:column>
+										<p:column>#{labels.gruppe}:</p:column>
+										<p:column>#{kundeBean.selectedKunde.gruppe.name}</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:fieldset>
+							<p:fieldset toggleable="false">
+								<p:panelGrid>
+									<p:row>
+										<p:column colspan="3">#{labels.adresse}</p:column>
+										<p:column colspan="2">#{labels.kontakt}</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.strasse}:</p:column>
+										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.strasse}</p:column>
+										<p:column>#{labels.email}</p:column>
+										<p:column>#{kundeBean.selectedKunde.adresse.email}</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.hausnr}</p:column>
+										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.hausnr}</p:column>
+										<p:column>#{labels.telNr}</p:column>
+										<p:column>#{kundeBean.selectedKunde.adresse.telefon}</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.plz}/#{labels.stadt}</p:column>
+										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.plz}/#{kundeBean.selectedKunde.adresse.stadt}</p:column>
+										<p:column>#{labels.mobil}</p:column>
+										<p:column>#{kundeBean.selectedKunde.adresse.mobil}</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.land}</p:column>
+										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.land}</p:column>
+										<p:column>#{labels.web}</p:column>
+										<p:column>#{kundeBean.selectedKunde.adresse.web}</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:fieldset>
+							<br></br>
+						</p:tab>
+
+						<!-- Korrespondenz -->
+						<p:tab title="#{labels.korrespondez}">
+
+						</p:tab>
+
+						<!-- Abgeschlossene Auftraege -->
+						<p:tab title="#{labels.abgeschlosseneAuftraege}">
+
+						</p:tab>
+
+
+						<!-- Statistiken -->
+						<p:tab title="#{labels.stats}" disabled="true">
+
+						</p:tab>
+
+					</p:accordionPanel>
+
+					<hr></hr>
+					
+					<!-- DIALOGE DIE AUF SELECTED BASIEREN -->
+					
+					<p:dialog header="Kunden löschen" modal="true" widgetVar="delKunde" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
+					    <hr></hr>
+					    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" onclick="PF('delKunde').close();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delKunde').hide();"/>
+					</p:dialog>
+					
+					<p:dialog id="editKunde" header="Kunden bearbeiten" modal="true" widgetVar="editKunde" minHeight="40" resizable="false">
+						<h:form>
+						<ui:include src="/views/dialogs/kundeEdit.xhtml"/>
+						</h:form>
+					</p:dialog>
+	
+				</div>
+			</div>
+		</h:form>
+	</div>
+
+	<div id="footer"></div>
+
+
+</body>
+</html>

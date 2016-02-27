@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:outputStylesheet name="global.css" library="css"/>
+<h:outputStylesheet name="images.css" library="css"/> 
+
+<h:head>
+
+<title>#{labels.progName} #{labels.start}</title>
+
+</h:head>
+<h:body>
+	
+	<div id="main_nav" class="centered">
+		<h:form>
+			<h:panelGrid columns="3">
+				<h:commandButton action="kunde" class="button_splash kunde_splash"/>
+				<h:commandButton action="auftrag" class="button_splash auftrag_splash"/>
+				<h:commandButton action="produkt" class="button_splash produkt_splash"/>
+				<h:commandButton action="stats" class="button_splash statistik_splash"/>
+				<h:commandButton action="setup" class="button_splash einstellung_splash"/>
+				<h:commandButton action="lager" class="button_splash lager_splash"/>
+			</h:panelGrid>
+			<h:commandButton value="TestOneToMany" action="#{testBean.doTest()}"/>
+		</h:form>
+	</div>
+</h:body>
+</html>

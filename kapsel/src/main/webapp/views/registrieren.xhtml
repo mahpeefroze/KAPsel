@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:outputStylesheet name="global.css" library="css"/>
+<h:outputStylesheet name="images.css" library="css"/>  
+
+<h:head>
+	<title>#{labels.progName}</title>
+</h:head>
+
+<h:body> 
+	
+	<h:form>
+	
+	<p:panelGrid columns="3">
+		
+		Name
+		<p:inputText id="username" value="#{userBean.name}" required="true" requiredMessage="true">
+			<p:ajax event="blur" update="usernameMsg" />
+		</p:inputText>
+		<p:message id="usernameMsg" for="username" display="icon"/> 
+		Password
+		<p:password id="password" value="#{userBean.password}" required="true" requiredMessage="true">
+			<p:ajax event="blur" update="passwordMsg" />  
+		</p:password>
+		<p:message id="passwordMsg" for="password" display="icon" />
+		
+		<p:commandButton value="OK" action="#{userBean.addUser()}"></p:commandButton>
+		
+		<p:commandButton value="Clear" action="#{userBean.reset()}">
+			<f:ajax render="username password"></f:ajax>
+		</p:commandButton>
+		
+	</p:panelGrid>
+	
+	</h:form>
+</h:body>
+	
+	
+</html>

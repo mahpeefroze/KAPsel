@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- JBoss, Home of Professional Open Source Copyright 2013, Red Hat, Inc. 
+	and/or its affiliates, and individual contributors by the @authors tag. See 
+	the copyright.txt in the distribution for a full listing of individual contributors. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de</groupId>
+	<artifactId>kapsel</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>WildFly Quickstarts: kapsel</name>
+	<description>A starter Java EE 7 webapp project for use on JBoss WildFly / WildFly, generated from the jboss-javaee6-webapp archetype</description>
+
+	<url>http://wildfly.org</url>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+
+	<properties>
+		<!-- Explicitly declaring the source encoding eliminates the following 
+			message: -->
+		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
+			resources, i.e. build is platform dependent! -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		
+		<!-- _________________________________ PLUGINS ____________________________________ -->
+		
+		<!-- Maven Compiler Plugin -->
+		<version.compiler.plugin>3.5</version.compiler.plugin>
+		<version.compiler.target>1.7</version.compiler.target>
+		<version.compiler.source>1.7</version.compiler.source>
+		<!-- WAR Packaging Framework -->
+		<version.war.plugin>2.6</version.war.plugin>
+		<!-- WildFly Maven Plugin -->
+		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+
+
+
+		<!-- __________________________ FRAMEWORKS VERSIONING __________________________________  -->
+		
+		<!-- JSF -->
+		<jsf.version>2.2.12</jsf.version>
+		
+		<!-- PrimeFaces -->
+		<pf.version>5.3</pf.version>
+		
+		<!-- Spring -->
+		<spring.version>4.2.3.RELEASE</spring.version>
+	
+		<!-- MySQL J Connector -->
+		<j_connector.version>5.1.38</j_connector.version>
+
+		<!-- Hibernate -->
+		<hibernate.version>5.0.4.Final</hibernate.version>
+		<hibernateValidation.version>5.2.2.Final</hibernateValidation.version>
+
+	</properties>
+
+
+	<dependencies>
+
+
+		<!-- ___________________________________ JSF + API ___________________________________ -->
+
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>${jsf.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.spec.javax.faces</groupId>
+			<artifactId>jboss-jsf-api_2.2_spec</artifactId>
+			<version>${jsf.version}</version>
+		</dependency>
+		
+		<!--  JavaServer Pages Standard Tag Library -->
+		<dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>jstl</artifactId>
+	        <version>1.2</version>
+   		</dependency>
+   		
+   		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
+		
+		<!-- ___________________________________ PrimeFaces ___________________________________ -->
+		
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>${pf.version}</version>
+		</dependency>
+
+
+		<!-- ___________________________________ Spring Framework ____________________________________ -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		
+		<!-- ___________________________________ MySQL Connector 5.1.35 ___________________________________ -->
+	
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${j_connector.version}</version>
+		</dependency>
+
+
+		<!-- ___________________________________ Hibernate 4.3.8.Final ___________________________________ -->
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
+			typesafe criteria queries -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<!-- Annotation processor that raising compilation errors whenever constraint 
+			annotations are incorrectly used. -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>${hibernateValidation.version}</version>
+		</dependency>
+		
+		<!-- JSR-303 (Bean Validation) Implementation -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernateValidation.version}</version>
+		</dependency>
+
+		
+		<!-- ___________________________________ javassist Byte Manipulation ___________________________________ -->
+		
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.0.GA</version>
+		</dependency>
+		
+
+		<!-- ___________________________________ JUnit ___________________________________ -->
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		
+		
+		
+		<!-- ______________________ Other  Annotation APIs. _______________________________ -->
+
+		<!-- Import the CDI API -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>2.0-EDR1</version>
+		</dependency>
+
+		<!-- Import the Common Annotations API (JSR-250) -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+			<artifactId>jboss-annotations-api_1.2_spec</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+
+		<!-- Java API for RESTful Web Services (JAX-RS API) -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>jaxrs-api</artifactId>
+			<version>3.0.12.Final</version>
+		</dependency>
+
+		<!-- Java Persistance Annotations JPA API -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+
+		<!-- Enterprise Java Beans EJB API  -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+
+
+	</dependencies>
+	
+	
+	
+
+	<build>
+		<!-- Maven will append the version to the finalName (which is the name 
+			given to the generated war, and hence the context root) -->
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${version.war.plugin}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.compiler.plugin}</version>
+				<configuration>
+					<source>${version.compiler.source}</source>
+					<target>${version.compiler.target}</target>
+				</configuration>
+			</plugin>
+			
+			<!-- The WildFly plugin deploys your war to a local WildFly container -->
+			<!-- To use, run: mvn package wildfly:deploy -->
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>${version.wildfly.maven.plugin}</version>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

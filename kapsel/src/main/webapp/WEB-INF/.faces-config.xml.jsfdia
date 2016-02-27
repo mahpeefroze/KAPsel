@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#registrieren.xhtml"
+  PATH="/registrieren.xhtml" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#registrieren.xhtml:0" NAME="item"
+   PATH="/registrieren.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="error::#registrieren.xhtml" NAME="output1"
+    PATH="/registrieren.xhtml" TARGET="rules:#registrieren.xhtml"
+    TITLE="error" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="success::#home.xhtml" NAME="output"
+    PATH="/home.xhtml" TARGET="rules:#home.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#home.xhtml" PATH="/home.xhtml"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#home.xhtml:0" NAME="item" PATH="/home.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::views#index.xhtml" NAME="output"
+    PATH="views/index.xhtml" TARGET="rules:views#index.xhtml"
+    TITLE="success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="error::#home.xhtml" NAME="output1"
+    PATH="/home.xhtml" TARGET="rules:#home.xhtml" TITLE="error" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:views#index.xhtml" PATH="views/index.xhtml"
+  SHAPE="456,104,50,25" model-entity="JSFProcessGroup"/>
+</PROCESS>

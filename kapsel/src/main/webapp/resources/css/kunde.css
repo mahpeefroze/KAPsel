@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+
+#statusbox {   
+    height:20px;
+    padding:10px 20px 10px 10px;
+    border:1px dashed black;
+    float:right;
+}
+
+#header {
+    border-color: #578BC9;
+    color: #578BC9;
+}
+
+#nav {
+	border-color:#578BC9;
+    color:#578BC9;
+}
+
+#section{
+	border-color:#578BC9;
+    color:#578BC9;
+}
+
+.ui-accordion-content{
+	background-color: rgba(174, 204, 240, 0.2);
+}
