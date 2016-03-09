@@ -76,7 +76,7 @@ public class Kunde implements Serializable {
 		this.typ = typ;
 	}
 	
-	@OneToOne
+	@ManyToOne
 	public KGruppe getGruppe() {
 		return gruppe;
 	}

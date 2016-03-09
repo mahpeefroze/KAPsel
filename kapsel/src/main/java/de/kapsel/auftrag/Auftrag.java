@@ -69,7 +69,7 @@ public class Auftrag implements Serializable{
 	//ManyToOne -> MANY objects of this class relate to ONE object of the other class (MANY auftraege -> ONE kunde)
 	//Cascade.Type.ALL connects internally (hibernate) and adds/deletes combined stuff e.g. removes all auftraege when kunde is removed
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public Kunde getKunde() {
 		return this.kunde;
 	}

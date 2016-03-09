@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 
 import de.kapsel.auftrag.Auftrag;
 import de.kapsel.auftrag.services.IAuftragService;
+import de.kapsel.kunde.Kunde;
 
 @ManagedBean
 @ViewScoped
@@ -31,7 +32,7 @@ public class AuftragBean implements Serializable{
 	//Gather Items to fill the table
 	public AuftragBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
-		//setAuftraege(auftragService.getAuftraege());
+		//setAuftraege(auftragService.getAuftraege());  -> Moved to postconstruct init()
 		this.newAuftrag = new Auftrag();
 	}
 
@@ -83,6 +84,18 @@ public class AuftragBean implements Serializable{
 		setSelectedAuftrag((Auftrag) event.getObject());
 
     }
+	
+	//Basic strategy for creating new AuftragNr, get highest existing and icrement it by 1
+		public long createAnr(){
+			long anr = getAuftraege().get(0).getAnr();
+			for(Auftrag a : getAuftraege()){
+				long tempAnr = a.getAnr();
+				if(tempAnr>anr){
+					anr=tempAnr;
+				}
+			}
+			return anr + 1;
+		}
 
 
 	public void addAuftrag(){
@@ -90,7 +103,7 @@ public class AuftragBean implements Serializable{
 		try {
 
 			//Implement logic for creating new ANR and also put it
-			this.newAuftrag.setAnr(20151010);
+			this.newAuftrag.setAnr(createAnr());
 			this.newAuftrag.setKunde(null);
 			getAuftragService().addAuftrag(this.newAuftrag);
 		} catch (DataAccessException e) {
@@ -106,6 +119,7 @@ public class AuftragBean implements Serializable{
 
 	public void deleteAuftrag(){
 		getAuftragService().deleteAuftrag(this.selectedAuftrag);
+		init();
 	}
 
 

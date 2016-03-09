@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+	<p:panelGrid>
+		<p:row>
+			<p:column>#{labels.pnr}:</p:column>
+			<p:column>#{labels.p_nr}</p:column>
+			<p:column>#{labels.erstDatum}:</p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
+			<p:column rowspan="3">#Bild</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column>
+				<p:inputText value="" />
+			</p:column>
+			<p:column>#{labels.modDatum}:</p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="2">#{labels.beschreibung}:</p:column>
+			<p:column>#typ:</p:column>
+			<p:column>
+				<!-- TODO Umschreiben auf Produktyp
+				
+					<p:selectOneMenu id="newKtypSelect" value="#{kundeBean.newKunde.typ}" style="width:200px">
+					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
+				</p:selectOneMenu>
+				 -->
+			</p:column>
+		</p:row>
+		<p:row>
+			<!-- Bezeichnungsfeld -->
+			<p:column colspan="5">
+				<p:inputTextarea styleClass="fullWidth"></p:inputTextarea>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column><p:selectBooleanCheckbox value=""/></p:column>
+			<p:column>#{labels.c_stueckliste}</p:column>
+			<p:column  colspan="3"/>
+		</p:row>
+		<p:row>
+			<p:column colspan="5">
+			
+			<ccs:stdToolbar saveAction="" printAction="" editAction=""
+								addAction="" removeAction="" />
+
+							<!-- Tabelle mit allen Produkten und Leistungen -->
+							<p:dataTable id="bauteilDT" var="item"
+								emptyMessage="#{labels.norecords}">
+
+								<p:ajax event="rowSelect" 
+									update=":sect_form" />
+
+								<p:column headerText="#{labels.position}" style="width: 30px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.stueck_zahl}" style="width: 30px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="Bezeichnung" style="width: 80px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.prodL}" style="width: 50px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.prodB}" style="width: 50px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.prodD}" style="width: 50px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.bemerkung}" style="width: 80px;">
+									<h:outputText value="" />
+								</p:column>
+								<p:column headerText="#{labels.preis}" style="width: 60px;">
+									<h:outputText value="" />
+								</p:column>
+
+							</p:dataTable>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+	<p:commandButton value="OK" onclick="PF('newProdukt').close();" />
+	<p:commandButton value="Abbrechen" onclick="PF('newProdukt').hide();" />
+
+
+</ui:composition>
+
+

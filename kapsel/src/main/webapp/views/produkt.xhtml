@@ -16,7 +16,47 @@
 <body> 
 
 <div id="header" class="float_frame">
-		<h1>#{labels.kunde}</h1>
+		<h:form id="ribbon_form">
+			<p:ribbon>
+				<p:tab title="#{labels.kunde}">
+					<p:ribbonGroup>
+						<h1>#{labels.kunde}</h1>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.action}">
+						<p:commandButton value="New" icon="ui-ribbonicon-new"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newProdukt').show();"/>
+						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
+						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick=""/>
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.export}">
+						<p:commandButton value="To PDF" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+						<p:commandButton value="To Word" icon="ui-ribbonicon-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+
+					<p:ribbonGroup label="#{labels.print}">
+						<p:commandButton value="Print" icon="ui-ribbonicon-print"
+							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup label="Optionen" style="float: right;">
+						<h:button value="#{labels.menu}" outcome="index"></h:button>
+					</p:ribbonGroup>
+
+				</p:tab>
+
+			</p:ribbon>
+			
+			<p:dialog header="Neues Produkt" modal="true" widgetVar="newProdukt" style="max-width: 1000px;" minHeight="40" resizable="false">
+				<ui:include src="/views/dialogs/produktNew.xhtml"/>
+			</p:dialog>
+			
+		</h:form>
 	</div>
 
 
