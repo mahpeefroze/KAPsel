@@ -16,24 +16,32 @@ public class Bauteil implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private long id;
-	private String name;
-	private int menge;
-	private double laenge;
-	private double breite;
-	private double dicke;
-	private String bemerkung;
-	private String werkstoff;
+	private int position=0;
+	private String name="";
+	private int menge=1;
+	private double laenge=0;
+	private double breite=0;
+	private double dicke=0;
+	private String bemerkung="";
+	private String werkstoff="";
 	private Produkt produkt;
 	
-	
-	@Column(name="id", nullable=false, unique=true)
-	@GeneratedValue
 	@Id
+	@GeneratedValue
+	@Column(name="id", nullable=false, unique=true)
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	@Column(name="pos", nullable=false)
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
 	}
 	
 	@Column(name="name", nullable=false, unique=true)

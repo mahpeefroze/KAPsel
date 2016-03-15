@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -20,14 +21,15 @@ public class Produkt implements Serializable {
 	private long id;
 	private long pnr;
 	private String name;
-	private Date datum;
-	private Set<Bauteil> bauteil;
+	private Date erstDatum;
+	private Date modDatum;
+	private Set<Bauteil> bauteile;
 	//private ArbeitsSchritt aschritt; <- include when bauteil is ready and working
 
 
-	@Column(name="id", nullable=false, unique=true)
-	@GeneratedValue
 	@Id
+	@GeneratedValue
+	@Column(name="id", nullable=false, unique=true)
 	public long getId() {
 		return id;
 	}
@@ -50,22 +52,29 @@ public class Produkt implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Column(name="datum", nullable=true)
-	public Date getDatum() {
-		return datum;
+	
+	@Column(name="erst_datum", nullable=true)
+	public Date getErstDatum() {
+		return erstDatum;
 	}
-	public void setDatum(Date datum) {
-		this.datum = datum;
+	public void setErstDatum(Date erstDatum) {
+		this.erstDatum = erstDatum;
 	}
 	
-	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="produkt")
-	public Set<Bauteil> getBauteil() {
-		return bauteil;
+	@Column(name="mod_datum", nullable=true)
+	public Date getModDatum() {
+		return modDatum;
 	}
-	public void setBauteil(Set<Bauteil> bauteil) {
-		this.bauteil = bauteil;
+	public void setModDatum(Date modDatum) {
+		this.modDatum = modDatum;
+	}
+	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="produkt")
+	public Set<Bauteil> getBauteile() {
+		return bauteile;
+	}
+	public void setBauteile(Set<Bauteil> bauteile) {
+		this.bauteile = bauteile;
 	}
 	
 

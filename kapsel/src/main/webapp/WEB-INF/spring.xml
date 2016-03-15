@@ -18,16 +18,13 @@
 		<property name="annotatedClasses">
             <list>
             	<!-- Core -->
-                <value>de.kapsel.auftrag.dao.AuftragDAO</value>
                 <value>de.kapsel.auftrag.Auftrag</value> <!-- Without this, Auftrag is unknown entity -->
-                <value>de.kapsel.kunde.dao.KundeDAO</value>
                 <value>de.kapsel.kunde.Kunde</value>
-                <value>de.kapsel.kunde.dao.KGruppeDAO</value>
                 <value>de.kapsel.kunde.KGruppe</value>
+                <value>de.kapsel.produkt.Produkt</value>
+                <value>de.kapsel.produkt.Bauteil</value>
                 <!-- Utils/Globals -->
-                <value>de.kapsel.um.dao.UserDAO</value>
                 <value>de.kapsel.um.User</value> 
-                <value>de.kapsel.global.dao.AdresseDAO</value>
                 <value>de.kapsel.global.Adresse</value>
             </list>
         </property>
@@ -84,6 +81,24 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
+	<!-- PRODUKT DECLARATION -->
+	<bean id="produkt" class="de.kapsel.produkt.Produkt" />
+	<bean id="produktService" class="de.kapsel.produkt.services.ProduktService">
+		<property name="produktDAO" ref="produktDAO" />
+	</bean>
+	<bean id="produktDAO" class="de.kapsel.produkt.dao.ProduktDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- BAUTEIL DECLARATION -->
+	<bean id="bauteil" class="de.kapsel.produkt.Bauteil" />
+	<bean id="bauteilService" class="de.kapsel.produkt.services.BauteilService">
+		<property name="bauteilDAO" ref="bauteilDAO" />
+	</bean>
+	<bean id="bauteilDAO" class="de.kapsel.produkt.dao.BauteilDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
 	<!-- Adresse DECLARATION -->
 	<bean id="adresse" class="de.kapsel.global.Adresse" />
 	<bean id="adresseService" class="de.kapsel.global.services.AdresseService">
@@ -92,8 +107,6 @@
 	<bean id="adresseDAO" class="de.kapsel.global.dao.AdresseDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
-	
     
     <!-- Enable the configuration of transactional behavior based on annotations -->
     <tx:annotation-driven transaction-manager="txManager"/>

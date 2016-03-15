@@ -8,12 +8,13 @@
 
 
 <cc:interface>
-
+	
 	<cc:attribute name="addAction" required="true"/>
 	<cc:attribute name="editAction" required="true"/>
 	<cc:attribute name="removeAction" required="true"/>
 	<cc:attribute name="saveAction" required="true"/>
 	<cc:attribute name="printAction" required="true"/>
+	<cc:clientBehavior name="addEvent" event="click" targets="addButton" />
 
 </cc:interface>
 
@@ -25,7 +26,7 @@
 
 	<p:toolbar>
 		<f:facet name="left">
-			<p:commandButton type="button" title="#{labels.add}" icon="ui-icon-document" action="#{cc.attrs.addAction}" />
+			<p:commandButton id="addButton" title="#{labels.add}" icon="ui-icon-document" />
 			<p:commandButton type="button" title="#{labels.edit}" icon="ui-icon-pencil" />
 			<p:commandButton type="button" title="#{labels.delete}" icon="ui-icon-trash" />
 

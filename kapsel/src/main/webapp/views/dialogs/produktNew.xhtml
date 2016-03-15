@@ -10,7 +10,7 @@
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.pnr}:</p:column>
-			<p:column>#{labels.p_nr}</p:column>
+			<p:column>#{produktBean.createPnr()}</p:column>
 			<p:column>#{labels.erstDatum}:</p:column>
 			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
 			<p:column rowspan="3">#Bild</p:column>
@@ -18,7 +18,7 @@
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
-				<p:inputText value="" />
+				<p:inputText value="#{produktBean.newProdukt.name}" />
 			</p:column>
 			<p:column>#{labels.modDatum}:</p:column>
 			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
@@ -27,13 +27,7 @@
 			<p:column colspan="2">#{labels.beschreibung}:</p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
-				<!-- TODO Umschreiben auf Produktyp
-				
-					<p:selectOneMenu id="newKtypSelect" value="#{kundeBean.newKunde.typ}" style="width:200px">
-					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
-				</p:selectOneMenu>
-				 -->
+			
 			</p:column>
 		</p:row>
 		<p:row>
@@ -43,46 +37,75 @@
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column><p:selectBooleanCheckbox value=""/></p:column>
+			<p:column><p:selectBooleanCheckbox value="#{produktBean.stuecklisteCB}">
+				<p:ajax update="stuecklistePanel" event="change"></p:ajax>
+			</p:selectBooleanCheckbox></p:column>
 			<p:column>#{labels.c_stueckliste}</p:column>
 			<p:column  colspan="3"/>
 		</p:row>
-		<p:row>
+	</p:panelGrid>
+	<p:panelGrid id="stuecklistePanel">
+		<p:row rendered="#{produktBean.stuecklisteCB}">
 			<p:column colspan="5">
 			
-			<ccs:stdToolbar saveAction="" printAction="" editAction=""
-								addAction="" removeAction="" />
-
+			<ccs:stdToolbar saveAction="" printAction="" editAction="" addAction="" removeAction="">
+			</ccs:stdToolbar> 
 							<!-- Tabelle mit allen Produkten und Leistungen -->
-							<p:dataTable id="bauteilDT" var="item"
-								emptyMessage="#{labels.norecords}">
+							
+							<p:commandButton update="newBauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
+							
+							<p:dataTable id="newBauteilDT" var="item" value="#{produktBean.newProdukt.bauteile}" selectionMode="single"
+								rowKey="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
-								<p:ajax event="rowSelect" 
-									update=":sect_form" />
+								<!-- p:ajax event="rowSelect" 
+									update=":sect_form" / -->
+									
+								<p:ajax event="cellEdit" listener="#{produktBean.onDialogEdit}" immediate="true"/>	
 
 								<p:column headerText="#{labels.position}" style="width: 30px;">
-									<h:outputText value="" />
+									<h:outputText value="#{item.position}" />
 								</p:column>
 								<p:column headerText="#{labels.stueck_zahl}" style="width: 30px;">
-									<h:outputText value="" />
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
-								<p:column headerText="Bezeichnung" style="width: 80px;">
-									<h:outputText value="" />
+								<p:column headerText="#{labels.bezeichnung}" style="width: 80px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+						           </p:cellEditor>
 								</p:column>
 								<p:column headerText="#{labels.prodL}" style="width: 50px;">
-									<h:outputText value="" />
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
 								<p:column headerText="#{labels.prodB}" style="width: 50px;">
-									<h:outputText value="" />
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
 								<p:column headerText="#{labels.prodD}" style="width: 50px;">
-									<h:outputText value="" />
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.dicke}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.dicke}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
 								<p:column headerText="#{labels.bemerkung}" style="width: 80px;">
-									<h:outputText value="" />
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.bemerkung}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.bemerkung}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
-								<p:column headerText="#{labels.preis}" style="width: 60px;">
-									<h:outputText value="" />
+								<p:column headerText="#{labels.werkstoff}" style="width: 70px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.werkstoff}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.werkstoff}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
 								</p:column>
 
 							</p:dataTable>
@@ -90,10 +113,8 @@
 		</p:row>
 	</p:panelGrid>
 
-	<p:commandButton value="OK" onclick="PF('newProdukt').close();" />
+	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" onclick="PF('newProdukt').close();" />
 	<p:commandButton value="Abbrechen" onclick="PF('newProdukt').hide();" />
 
 
 </ui:composition>
-
-
