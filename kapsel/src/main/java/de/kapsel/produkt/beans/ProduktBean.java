@@ -144,10 +144,11 @@ public class ProduktBean implements Serializable{
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
 		Bauteil b = new Bauteil();
-		b.setProdukt(getNewProdukt());
 		b.setPosition(getNewProdukt().getBauteile().size()+1);
 		getNewProdukt().getBauteile().add(b);
 	}
+	
+
 	
 	//Update Bauteil Values in produktNew Dialog
 	public void onDialogEdit(CellEditEvent event){

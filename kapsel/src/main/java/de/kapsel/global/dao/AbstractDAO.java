@@ -32,7 +32,6 @@ public abstract class AbstractDAO<T extends Serializable>{
     //getName() returns full name with package -> thus need to split and pass only last element
     public String getTName(){
     	String name=this.tClass.getName();
-    	System.out.println(name);
     	String[] subs=name.split("\\.");
     	return subs[subs.length-1];
     }
