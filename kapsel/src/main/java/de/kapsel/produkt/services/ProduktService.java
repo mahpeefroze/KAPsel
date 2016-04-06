@@ -11,7 +11,7 @@ import de.kapsel.produkt.dao.IProduktDAO;
 
 public class ProduktService implements IProduktService{
 
-	//Injection AuftragDAO
+	//Injection ProduktDAO
 	@ManagedProperty(value="#{produktDAO}")
 	private IProduktDAO produktDAO;
 

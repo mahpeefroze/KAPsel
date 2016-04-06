@@ -21,6 +21,8 @@ public class Produkt implements Serializable {
 	private long id;
 	private long pnr;
 	private String name;
+	private String text;
+	private int zeit;
 	private Date erstDatum;
 	private Date modDatum;
 	private Set<Bauteil> bauteile;
@@ -53,6 +55,21 @@ public class Produkt implements Serializable {
 		this.name = name;
 	}
 	
+	@Column(name="text")
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	@Column(name="zeit")
+	public int getZeit() {
+		return zeit;
+	}
+	public void setZeit(int zeit) {
+		this.zeit = zeit;
+	}
 	@Column(name="erst_datum", nullable=true)
 	public Date getErstDatum() {
 		return erstDatum;

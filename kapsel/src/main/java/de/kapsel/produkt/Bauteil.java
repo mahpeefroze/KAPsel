@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,7 +23,7 @@ public class Bauteil implements Serializable{
 	private double breite=0;
 	private double dicke=0;
 	private String bemerkung="";
-	private String werkstoff="";
+	private Material material;
 
 	
 	@Id
@@ -91,12 +92,12 @@ public class Bauteil implements Serializable{
 		this.bemerkung = bemerkung;
 	}
 	
-	@Column(name="werkstoff")
-	public String getWerkstoff() {
-		return werkstoff;
+	@ManyToOne
+	public Material getMaterial() {
+		return material;
 	}
-	public void setWerkstoff(String werkstoff) {
-		this.werkstoff = werkstoff;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 	
 	

@@ -27,20 +27,20 @@ public class BauteilService implements IBauteilService {
 	
 	@Override
 	@Transactional(readOnly = false)
-	public void addBauteil(Bauteil produkt) {
-		bauteilDAO.addItem(produkt);
+	public void addBauteil(Bauteil bauteil) {
+		bauteilDAO.addItem(bauteil);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void updateBauteil(Bauteil produkt) {
-		bauteilDAO.updateItem(produkt);
+	public void updateBauteil(Bauteil bauteil) {
+		bauteilDAO.updateItem(bauteil);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void deleteBauteil(Bauteil produkt) {
-		bauteilDAO.deleteItem(produkt);
+	public void deleteBauteil(Bauteil bauteil) {
+		bauteilDAO.deleteItem(bauteil);
 	}
 
 	@Override

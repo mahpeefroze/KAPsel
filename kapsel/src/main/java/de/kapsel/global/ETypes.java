@@ -36,5 +36,23 @@ public class ETypes {
 		adressen;
 	}
 	
-
+	public enum MaterialT{
+		Holz,
+		Platte,
+		Klebstoff,
+		Farbe,
+		Lack,
+		Öl,
+		Beschlag;
+	}
+	
+	public enum UnitT{
+		kg,
+		g,
+		l,
+		m2,
+		m3;
+	}
+	
+	
 }

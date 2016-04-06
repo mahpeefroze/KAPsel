@@ -16,7 +16,9 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.produkt.Bauteil;
+import de.kapsel.produkt.Material;
 import de.kapsel.produkt.Produkt;
+import de.kapsel.produkt.services.IMaterialService;
 import de.kapsel.produkt.services.IProduktService;
 
 @ManagedBean
@@ -28,10 +30,13 @@ public class ProduktBean implements Serializable{
 	private Produkt selectedProdukt;
 	private Produkt newProdukt;
 	private boolean stuecklisteCB;
+	private long materialId;
 
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
-
+	
+	@ManagedProperty(value="#{materialService}")
+	private IMaterialService materialService;
 
 	//Gather Items to fill the table
 	public ProduktBean(){
@@ -98,7 +103,24 @@ public class ProduktBean implements Serializable{
 		this.produktService = produktService;
 	}
 	
-	//Load data of specific Item into details-table; not called on page load -> additional load in init()
+	public IMaterialService getMaterialService() {
+		return materialService;
+	}
+
+	public void setMaterialService(IMaterialService materialService) {
+		this.materialService = materialService;
+	}
+
+
+	public long getMaterialId() {
+		return materialId;
+	}
+
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
+	}
+
+		//Load data of specific Item into details-table; not called on page load -> additional load in init()
 		public void loadProdukt(SelectEvent event) {
 			setSelectedProdukt((Produkt) event.getObject());
 
@@ -144,6 +166,7 @@ public class ProduktBean implements Serializable{
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
 		Bauteil b = new Bauteil();
+		b.setMaterial(new Material());
 		b.setPosition(getNewProdukt().getBauteile().size()+1);
 		getNewProdukt().getBauteile().add(b);
 	}
@@ -202,7 +225,8 @@ public class ProduktBean implements Serializable{
 			return;
 		}
 		if(colName.equals("Werkstoff")){
-			b.setWerkstoff(value);
+			Material material = getMaterialService().getMaterialById(getMaterialId());
+			b.setMaterial(material);
 			return;
 		}
 	}

@@ -23,6 +23,7 @@
                 <value>de.kapsel.kunde.KGruppe</value>
                 <value>de.kapsel.produkt.Produkt</value>
                 <value>de.kapsel.produkt.Bauteil</value>
+                <value>de.kapsel.produkt.Material</value>
                 <!-- Utils/Globals -->
                 <value>de.kapsel.um.User</value> 
                 <value>de.kapsel.global.Adresse</value>
@@ -96,6 +97,15 @@
 		<property name="bauteilDAO" ref="bauteilDAO" />
 	</bean>
 	<bean id="bauteilDAO" class="de.kapsel.produkt.dao.BauteilDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- MATERIAL DECLARATION -->
+	<bean id="material" class="de.kapsel.produkt.Material" />
+	<bean id="materialService" class="de.kapsel.produkt.services.MaterialService">
+		<property name="materialDAO" ref="materialDAO" />
+	</bean>
+	<bean id="materialDAO" class="de.kapsel.produkt.dao.MaterialDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	

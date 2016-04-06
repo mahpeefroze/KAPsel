@@ -187,15 +187,20 @@
 								</p:column>
 								<p:column headerText="#{labels.werkstoff}" style="width: 70px;">
 									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.werkstoff}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.werkstoff}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
+										<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
+										<f:facet name="input">
+										<p:selectOneMenu id="materialTypSelect" value="#{produktBean.materialId}" style="width:140px" filter="true" filterMatchMode="contains">
+											<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
+											<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
+										</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
 								</p:column>
 
 							</p:dataTable>
 						</p:tab>
 						
-						<!-- Stueckliste -->
+						<!-- Arbeitsplan -->
 						<p:tab title="#{labels.arbeitsplan}">
 
 						</p:tab>
