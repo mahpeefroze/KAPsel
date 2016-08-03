@@ -1,6 +1,7 @@
 package de.kapsel.produkt.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +57,7 @@ public class ProduktBean implements Serializable{
 		}
 		
 		//
-		Set<Bauteil> bSet = new HashSet<Bauteil>();
+		List<Bauteil> bSet = new ArrayList<Bauteil>();
 		getNewProdukt().setBauteile(bSet);
 	}
 	
@@ -189,7 +190,7 @@ public class ProduktBean implements Serializable{
 	private void updateBauteile(Produkt p, CellEditEvent event){
 		String newValue = event.getNewValue().toString();
         int position = Integer.parseInt(event.getRowKey());
-        Set<Bauteil> s = p.getBauteile();
+        List<Bauteil> s = p.getBauteile();
         //Iterate through all Bauteile of 1 Produkt to find the one changed | position corresponding to rowKey - PF DataTable property
         for(Bauteil b : s){
         	if(b.getPosition()==position){

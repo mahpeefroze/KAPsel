@@ -2,6 +2,7 @@ package de.kapsel.produkt;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="bauteile")
-public class Bauteil implements Serializable{
+public class Bauteil implements Serializable, Comparable<Bauteil>{
 
 	
 	private static final long serialVersionUID = 1L;
@@ -92,7 +93,7 @@ public class Bauteil implements Serializable{
 		this.bemerkung = bemerkung;
 	}
 	
-	@ManyToOne
+	@ManyToOne(cascade= CascadeType.PERSIST)
 	public Material getMaterial() {
 		return material;
 	}
@@ -100,5 +101,14 @@ public class Bauteil implements Serializable{
 		this.material = material;
 	}
 	
+	@Override
+	public int compareTo(Bauteil bauteil) {
+		if(bauteil==null){
+			return -1;
+		}
+		return Integer.compare(this.position, bauteil.getPosition());
+	}
+	
+
 	
 }

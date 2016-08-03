@@ -52,7 +52,7 @@
 
 			</p:ribbon>
 			
-			<p:dialog header="Neues Produkt" modal="true" widgetVar="newProdukt" style="max-width: 1000px;" minHeight="40" resizable="false">
+			<p:dialog header="Neues Produkt" modal="true" widgetVar="newProdukt" style="min-width: 1000px; max-width: 1000px;" minHeight="40" resizable="false">
 				<ui:include src="/views/dialogs/produktNew.xhtml"/>
 			</p:dialog>
 			
@@ -139,7 +139,7 @@
 							<p:commandButton update="bauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
 							
 							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single"
-								rowKey="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
 								<!-- p:ajax event="rowSelect" 
 									update=":sect_form" / -->

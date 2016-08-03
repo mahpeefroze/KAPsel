@@ -1,7 +1,8 @@
 package de.kapsel.produkt;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name="produkte")
 public class Produkt implements Serializable {
@@ -23,9 +27,10 @@ public class Produkt implements Serializable {
 	private String name;
 	private String text;
 	private int zeit;
-	private Date erstDatum;
-	private Date modDatum;
-	private Set<Bauteil> bauteile;
+	private double preis;
+	private Timestamp erstDatum;
+	private Timestamp modDatum;
+	private List<Bauteil> bauteile;
 	//private ArbeitsSchritt aschritt; <- include when bauteil is ready and working
 
 
@@ -70,30 +75,40 @@ public class Produkt implements Serializable {
 	public void setZeit(int zeit) {
 		this.zeit = zeit;
 	}
-	@Column(name="erst_datum", nullable=true)
-	public Date getErstDatum() {
+	
+	@Column(name="preis")
+	public double getPreis() {
+		return preis;
+	}
+	public void setPreis(double preis) {
+		this.preis = preis;
+	}
+	
+	@CreationTimestamp
+	@Column(name="erst_datum", nullable=false)
+	public Timestamp getErstDatum() {
 		return erstDatum;
 	}
-	public void setErstDatum(Date erstDatum) {
+	public void setErstDatum(Timestamp erstDatum) {
 		this.erstDatum = erstDatum;
 	}
 	
-	@Column(name="mod_datum", nullable=true)
-	public Date getModDatum() {
+	@UpdateTimestamp
+	@Column(name="mod_datum", nullable=false)
+	public Timestamp getModDatum() {
 		return modDatum;
 	}
-	public void setModDatum(Date modDatum) {
+	public void setModDatum(Timestamp modDatum) {
 		this.modDatum = modDatum;
 	}
 	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
 	//..which led to Circular Dependency => removed Produkt from Bauteil, hibernate maps the relation in additional table now
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-	public Set<Bauteil> getBauteile() {
+	@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+	public List<Bauteil> getBauteile() {
 		return bauteile;
 	}
-	public void setBauteile(Set<Bauteil> bauteile) {
+	public void setBauteile(List<Bauteil> bauteile) {
 		this.bauteile = bauteile;
 	}
 	
-
 }

@@ -7,21 +7,15 @@
 
 
 
-	<p:panelGrid>
+	<p:panelGrid styleClass="fullWidth">
 		<p:row>
 			<p:column>#{labels.pnr}:</p:column>
 			<p:column>#{produktBean.createPnr()}</p:column>
-			<p:column>#{labels.erstDatum}:</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
-			<p:column rowspan="3">#Bild</p:column>
-		</p:row>
-		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
 				<p:inputText value="#{produktBean.newProdukt.name}" />
 			</p:column>
-			<p:column>#{labels.modDatum}:</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy"/></p:column>
+			<p:column rowspan="3">#Bild</p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="2">#{labels.beschreibung}:</p:column>
@@ -32,8 +26,8 @@
 		</p:row>
 		<p:row>
 			<!-- Bezeichnungsfeld -->
-			<p:column colspan="5">
-				<p:inputTextarea styleClass="fullWidth"></p:inputTextarea>
+			<p:column colspan="4">
+				<p:inputTextarea styleClass="fullWidth" value="#{produktBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."></p:inputTextarea>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -55,7 +49,7 @@
 							<p:commandButton update="newBauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
 							
 							<p:dataTable id="newBauteilDT" var="item" value="#{produktBean.newProdukt.bauteile}" selectionMode="single"
-								rowKey="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
+								rowKey="#{item.position}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
 								<!-- p:ajax event="rowSelect" 
 									update=":sect_form" / -->
@@ -103,9 +97,14 @@
 								</p:column>
 								<p:column headerText="#{labels.werkstoff}" style="width: 70px;">
 									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.werkstoff}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.werkstoff}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
+										<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
+										<f:facet name="input">
+										<p:selectOneMenu id="materialTypSelectNew" value="#{produktBean.materialId}" style="width:140px" filter="true" filterMatchMode="contains">
+											<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
+											<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
+										</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
 								</p:column>
 
 							</p:dataTable>

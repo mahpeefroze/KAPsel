@@ -24,7 +24,7 @@
 
 					<p:ribbonGroup label="#{labels.action}">
 						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newKunde').show();"/>
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.setEdit(false)}" update=":sect_form"/>
 						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
 						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
@@ -41,6 +41,20 @@
 					<p:ribbonGroup label="#{labels.print}">
 						<p:commandButton value="Print" icon="ui-ribbonicon-print"
 							styleClass="ui-ribbon-bigbutton" type="button" />
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup label="" rendered="#{kundeBean.editMode and !kundeBean.editType}">
+						<p:commandButton value="OK" icon="ui-ribbonicon-ok"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick=""/>
+						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.cancelEdit()}"/>
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup label="" rendered="#{kundeBean.editMode and kundeBean.editType}">
+						<p:commandButton value="Edit" icon="ui-ribbonicon-new"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.updateKunde()}"/>
+						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.cancelEdit()}"/>
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
@@ -107,11 +121,27 @@
 			<div id="section_container">
 				<div id="section" class="float_frame">
 					<p:accordionPanel multiple="true">
-
-
 						<!-- Kundendetails -->
 						<p:tab title="#{labels.kundenDetail}">
+							
 							<br></br>
+							<!-- Edit Kunde -->
+							<ui:fragment rendered="#{kundeBean.editMode and kundeBean.editType}">
+								<ui:include src="/views/includes/kundeNewEdit.xhtml">
+									<ui:param name="eKunde" value="#{kundeBean.selectedKunde}"/>
+									<ui:param name="type" value="edit"/>
+								</ui:include>
+							</ui:fragment>
+							
+							<!-- New Kunde -->
+							<ui:fragment rendered="#{kundeBean.editMode and !kundeBean.editType}">
+								<ui:include src="/views/includes/kundeNewEdit.xhtml">
+									<ui:param name="eKunde" value="#{kundeBean.newKunde}"/>
+									<ui:param name="type" value="new"/>
+								</ui:include>
+							</ui:fragment>
+							
+							
 							<h:panelGrid columns="2" styleClass="fullWidth">
 								<h:outputText value="#{kundeBean.selectedKunde.name}" />
 								<h:outputText id="statusbox" value="#{labels.status}:" />
