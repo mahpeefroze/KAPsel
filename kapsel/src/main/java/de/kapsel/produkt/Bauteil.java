@@ -93,7 +93,7 @@ public class Bauteil implements Serializable, Comparable<Bauteil>{
 		this.bemerkung = bemerkung;
 	}
 	
-	@ManyToOne(cascade= CascadeType.PERSIST)
+	@ManyToOne
 	public Material getMaterial() {
 		return material;
 	}

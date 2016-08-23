@@ -6,7 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-
+	<h:form id="dlgPanel">
 	<p:panelGrid styleClass="fullWidth">
 		<p:row>
 			<p:column>#{labels.pnr}:</p:column>
@@ -32,7 +32,7 @@
 		</p:row>
 		<p:row>
 			<p:column><p:selectBooleanCheckbox value="#{produktBean.stuecklisteCB}">
-				<p:ajax update="stuecklistePanel" event="change"></p:ajax>
+				<p:ajax update="stuecklistePanel" event="change"/>
 			</p:selectBooleanCheckbox></p:column>
 			<p:column>#{labels.c_stueckliste}</p:column>
 			<p:column  colspan="3"/>
@@ -111,9 +111,10 @@
 			</p:column>
 		</p:row>
 	</p:panelGrid>
+	</h:form>
 
-	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" onclick="PF('newProdukt').close();" />
-	<p:commandButton value="Abbrechen" onclick="PF('newProdukt').hide();" />
+	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgPanel nav_form" oncomplete="PF('newProdukt').hide();" />
+	<p:commandButton value="Abbrechen" update="dlgPanel" oncomplete="PF('newProdukt').hide();" />
 
 
 </ui:composition>

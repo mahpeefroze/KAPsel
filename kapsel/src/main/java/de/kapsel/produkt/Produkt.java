@@ -103,7 +103,7 @@ public class Produkt implements Serializable {
 	}
 	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
 	//..which led to Circular Dependency => removed Produkt from Bauteil, hibernate maps the relation in additional table now
-	@OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	public List<Bauteil> getBauteile() {
 		return bauteile;
 	}

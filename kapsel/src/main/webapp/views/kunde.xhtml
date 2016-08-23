@@ -24,7 +24,7 @@
 
 					<p:ribbonGroup label="#{labels.action}">
 						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.setEdit(false)}" update=":sect_form"/>
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newKunde').show();"/>
 						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
 						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"

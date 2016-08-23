@@ -25,11 +25,11 @@
 
 					<p:ribbonGroup label="#{labels.action}">
 						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newProdukt').show();"/>
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('newProdukt').show()"/>
 						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
 						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('delProdukt').show();"/>
+							styleClass="ui-ribbon-bigbutton" update="nav_form" oncomplete="PF('delProdukt').show();"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -52,11 +52,8 @@
 
 			</p:ribbon>
 			
-			<p:dialog header="Neues Produkt" modal="true" widgetVar="newProdukt" style="min-width: 1000px; max-width: 1000px;" minHeight="40" resizable="false">
-				<ui:include src="/views/dialogs/produktNew.xhtml"/>
-			</p:dialog>
-			
 		</h:form>
+		
 	</div>
 
 
@@ -96,7 +93,7 @@
 				</div>
 			</div>
 		</h:form>
-
+		
 		<!-- RECHTE SEITE -->
 		<h:form id="sect_form">
 			<div id="section_container">
@@ -218,7 +215,7 @@
 					<p:dialog header="Produkt löschen" modal="true" widgetVar="delProdukt" minHeight="40" resizable="false">
 						<p>Möchten Sie wirklich dieses Produkt löschen?</p>
 					    <hr></hr>
-					    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" onclick="PF('delProdukt').close();"/>
+					    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" update="nav_form sect_form" oncomplete="PF('delProdukt').hide();"/>
 					    <p:commandButton value="#{labels.nein}" onclick="PF('delProdukt').hide();"/>
 					</p:dialog>	
 
@@ -228,7 +225,12 @@
 	</div>
 
 	<div id="footer"></div>
-
+	
+	
+		
+	<p:dialog id="produktNewDlg" header="Neues Produkt" modal="true" widgetVar="newProdukt" style="min-width: 1000px; max-width: 1000px;" minHeight="40" resizable="false">
+			<ui:include src="/views/dialogs/produktNew.xhtml"/>
+	</p:dialog>
 
 </body> 
 </html>

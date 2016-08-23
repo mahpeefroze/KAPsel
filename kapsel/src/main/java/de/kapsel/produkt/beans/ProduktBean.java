@@ -50,6 +50,9 @@ public class ProduktBean implements Serializable{
 		try{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
+			//Clearing newProudukt Dialog fields
+			this.newProdukt = new Produkt();
+			stuecklisteCB=false;
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
@@ -121,11 +124,11 @@ public class ProduktBean implements Serializable{
 		this.materialId = materialId;
 	}
 
-		//Load data of specific Item into details-table; not called on page load -> additional load in init()
-		public void loadProdukt(SelectEvent event) {
-			setSelectedProdukt((Produkt) event.getObject());
+	//Load data of specific Item into details-table; not called on page load -> additional load in init()
+	public void loadProdukt(SelectEvent event) {
+		setSelectedProdukt((Produkt) event.getObject());
 
-	    }
+    }
 		
 		//Basic strategy for creating new ProduktNr, get highest existing and icrement it by 1
 	public long createPnr(){
@@ -159,7 +162,6 @@ public class ProduktBean implements Serializable{
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
-		
 		init();
 
 	}
@@ -167,8 +169,8 @@ public class ProduktBean implements Serializable{
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
 		Bauteil b = new Bauteil();
-		b.setMaterial(new Material());
-		b.setPosition(getNewProdukt().getBauteile().size()+1);
+		b.setMaterial(getMaterialService().getMaterialById(99));
+		b.setPosition(getNewProdukt().getBauteile().size()+1); 
 		getNewProdukt().getBauteile().add(b);
 	}
 	
@@ -176,26 +178,31 @@ public class ProduktBean implements Serializable{
 	
 	//Update Bauteil Values in produktNew Dialog
 	public void onDialogEdit(CellEditEvent event){
-        updateBauteile(getNewProdukt(), event);
+        updateBauteile(getNewProdukt(), event, true); //RowKey will be 0 for not yet created objects :C
 	}
 	
 	//Update Bauteil Values in Details View + DB
 	public void onSelectedCellEdit(CellEditEvent event){
-        updateBauteile(getSelectedProdukt(), event);
+        updateBauteile(getSelectedProdukt(), event, false);
         //Stays in parent Event Call
         updateProdukt();
 	}
 	
 	//Update Bauteil Values in Model
-	private void updateBauteile(Produkt p, CellEditEvent event){
+	private void updateBauteile(Produkt p, CellEditEvent event, boolean onCreate){
 		String newValue = event.getNewValue().toString();
-        int position = Integer.parseInt(event.getRowKey());
+        int absPosition = Integer.parseInt(event.getRowKey());
         List<Bauteil> s = p.getBauteile();
         //Iterate through all Bauteile of 1 Produkt to find the one changed | position corresponding to rowKey - PF DataTable property
         for(Bauteil b : s){
-        	if(b.getPosition()==position){
-        		updateBauteilValue(b, event.getColumn().getHeaderText(), newValue);
+        	//RowKey corresponds with TableID
+        	if(!onCreate){
+        		if(b.getId()!=absPosition) continue;
+        	}else{
+        		if(b.getPosition()!=absPosition) continue;
         	}
+        	
+        	updateBauteilValue(b, event.getColumn().getHeaderText(), newValue);
         }
 	}
 	
