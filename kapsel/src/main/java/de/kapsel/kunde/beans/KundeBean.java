@@ -28,6 +28,8 @@ public class KundeBean implements Serializable{
 	private Kunde selectedKunde;
 	private Kunde newKunde;
 	private long kGruppeId;
+	private boolean editMode=false;
+	private boolean editType=false;
 	
 	
 	private String newName;
@@ -38,8 +40,6 @@ public class KundeBean implements Serializable{
 	public void setNewName(String newName) {
 		this.newName = newName;
 	}
-
-	
 	
 	
 	@ManagedProperty(value="#{kundeService}")
@@ -55,15 +55,22 @@ public class KundeBean implements Serializable{
 	public KundeBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
 		//setKunden(kundeService.getKunden()); -> Moved to postconstruct init()
-		this.newKunde = new Kunde();
+		//Is being called anyway on init() to clear fields after insert, so no need here as it can be called in first init on pageload
+		//this.newKunde = new Kunde();
 	}
 
 	@PostConstruct
     public void init() {
+		//Clear newKunde contents
+		this.newKunde = new Kunde();
+		//Get list items
 		setKunden(kundeService.getKunden());
+		//Intital data table selection
 		setSelectedKunde(getKunden().get(0));
-		Adresse adresse = new Adresse();
-		newKunde.setAdresse(adresse);
+		//Initiate nested Entity or else null will be returned OR try hibernate fetch annotation in model class
+		getNewKunde().setAdresse(new Adresse());
+		//Reset DropDown Label
+		setkGruppeId(0);
 	}
 
 	
@@ -104,8 +111,24 @@ public class KundeBean implements Serializable{
 		this.kGruppeId = kGruppeId;
 	}
 
+	//editMode/viewMode == 1/0
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
 	
-	
+	//For render switch editType: 0 = create [newKunde], 1 = edit [selectedKunde]
+	public boolean isEditType() {
+		return editType;
+	}
+
+	public void setEditType(boolean editType) {
+		this.editType = editType;
+	}
+
 	//Getter and Setter for the Services
 	public IKundeService getKundeService() {
 		return kundeService;
@@ -136,7 +159,7 @@ public class KundeBean implements Serializable{
 		setSelectedKunde((Kunde) event.getObject());
     }
 	
-	//Basic strategy for creating new KundenNr, get highest existing and icrement it by 1
+	//Basic strategy for creating new KundenNr, get highest existing and increment it by 1
 	public long createKnr(){
 		long knr = getKunden().get(0).getKnr();
 		for(Kunde k : getKunden()){
@@ -153,17 +176,33 @@ public class KundeBean implements Serializable{
 			this.newKunde.setKnr(createKnr());
 			KGruppe kGruppe = getkGruppeService().getKGruppeById(kGruppeId);
 			this.newKunde.setGruppe(kGruppe);
+			//Only for testing purposes, later on every field needs to be filled !!!!!!!!!!!!!!!!!!!!!!!!
+			if(this.newKunde.getAdresse().getId()==0){
+				this.newKunde.setAdresse(getAdresseService().getAdresseById(2));
+			}
 			getKundeService().addKunde(this.newKunde);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 		
+		cancelEdit();
 		init();
 
 	}
 
 	public void updateKunde(){
 		getKundeService().updateKunde(this.selectedKunde);
+		cancelEdit();
+	}
+	
+	public void setEdit(boolean type){
+		setEditMode(true);
+		setEditType(type);
+	}
+	
+	public void cancelEdit(){
+		setEditMode(false);
+		setEditType(false);
 	}
 
 	public void deleteKunde(){

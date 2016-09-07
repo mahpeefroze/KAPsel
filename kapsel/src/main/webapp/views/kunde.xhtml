@@ -24,11 +24,11 @@
 
 					<p:ribbonGroup label="#{labels.action}">
 						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newKunde').show();"/>
+							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
 						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
 						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('delKunde').show();"/>
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -65,15 +65,10 @@
 
 			</p:ribbon>
 			
-			<p:dialog header="Neuer Kunde" modal="true" widgetVar="newKunde" minHeight="40" resizable="false">
-				<ui:include src="/views/dialogs/kundeNew.xhtml">
-					<ui:param name="selParam" value="4"/>
-				</ui:include>
-			</p:dialog>
+			
 			
 		</h:form>
 	</div>
-
 
 	<div id="middle">
 
@@ -86,7 +81,7 @@
 					<p:dataTable id="kundeDT" var="item"
 						value="#{kundeBean.kunden}" selectionMode="single"
 						selection="#{kundeBean.selectedKunde}" rowKey="#{item.knr}"
-						emptyMessage="#{labels.norecords}">
+						emptyMessage="#{labels.norecords}" sortBy="#{item.knr}">
 						<f:facet name="header">#{labels.kundenListe}</f:facet>
 
 
@@ -226,10 +221,10 @@
 					
 					<!-- DIALOGE DIE AUF SELECTED BASIEREN -->
 					
-					<p:dialog header="Kunden löschen" modal="true" widgetVar="delKunde" minHeight="40" resizable="false">
+					<p:dialog id="deleteKunde" header="Kunden löschen" modal="true" widgetVar="delKunde" minHeight="40" resizable="false">
 						<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
 					    <hr></hr>
-					    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" onclick="PF('delKunde').close();"/>
+					    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" update="nav_form sect_form" oncomplete="PF('delKunde').hide();"/>
 					    <p:commandButton value="#{labels.nein}" onclick="PF('delKunde').hide();"/>
 					</p:dialog>
 					
@@ -245,7 +240,16 @@
 	</div>
 
 	<div id="footer"></div>
-
+	
+	
+		
+	<p:dialog id="kundeNewDlg" header="Neuer Kunde" modal="true" widgetVar="newKunde" minHeight="40" resizable="false">
+			<ui:include src="/views/dialogs/kundeNew.xhtml"/>
+			<!-- 
+			<ui:param name="selParam" value="4"/>
+			</ui:include>
+			 -->
+	</p:dialog>
 
 </body>
 </html>

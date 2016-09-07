@@ -84,7 +84,7 @@ public class Kunde implements Serializable {
 		this.gruppe = gruppe;
 	}
 
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.MERGE)
 	public Adresse getAdresse() {
 		return adresse;
 	}

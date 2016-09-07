@@ -25,11 +25,11 @@
 
 					<p:ribbonGroup label="#{labels.action}">
 						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" oncomplete="PF('newProdukt').show()"/>
+							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
 						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
 						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
-							styleClass="ui-ribbon-bigbutton" update="nav_form" oncomplete="PF('delProdukt').show();"/>
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -82,10 +82,14 @@
 							<h:outputText value="#{item.name}" />
 						</p:column>
 						<p:column headerText="#{labels.erstDatum}">
-							<h:outputText value="#{item.erstDatum}" />
+							<h:outputText value="#{item.erstDatum}" >
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
 						</p:column>
 						<p:column headerText="#{labels.modDatum}">
-							<h:outputText value="#{item.modDatum}" />
+							<h:outputText value="#{item.modDatum}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
 						</p:column>
 					</p:dataTable>
 
@@ -141,7 +145,7 @@
 								<!-- p:ajax event="rowSelect" 
 									update=":sect_form" / -->
 									
-								<p:ajax event="cellEdit" listener="#{produktBean.onSelectedCellEdit}"/>	
+								<p:ajax event="cellEdit" listener="#{produktBean.onProduktEdit}" update="nav_form"/>	
 
 								<p:column headerText="#{labels.position}" style="width: 30px;">
 									<h:outputText value="#{item.position}" />

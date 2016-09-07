@@ -6,7 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-
+	<h:form id="dlgKundePanel">
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.knr}:</p:column>
@@ -75,10 +75,13 @@
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-
-	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" onclick="PF('newKunde').close();" />
-	<p:commandButton value="Abbrechen" onclick="PF('newKunde').hide();" />
-
+	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgKundePanel nav_form" oncomplete="PF('newKunde').hide();">
+		<p:resetInput target="newKgruppeSelect" />
+	</p:commandButton>
+	</h:form>
+	
+	<p:commandButton value="Abbrechen" update="dlgKundePanel" oncomplete="PF('newKunde').hide();" />
+	
 
 </ui:composition>
 

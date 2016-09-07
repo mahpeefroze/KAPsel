@@ -75,7 +75,7 @@
 	</p:panelGrid>
 	<br></br>
 	
-	<p:commandButton value="OK" update=":nav_form" action="#{kundeBean.updateKunde()}" onclick="PF('editKunde').close();" />
+	<p:commandButton value="OK" update="nav_form sect_form" action="#{kundeBean.updateKunde()}" oncomplete="PF('editKunde').hide();" />
 	<p:commandButton value="Abbrechen" onclick="PF('editKunde').hide();" />
 
 

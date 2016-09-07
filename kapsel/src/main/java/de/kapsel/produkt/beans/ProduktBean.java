@@ -2,9 +2,7 @@ package de.kapsel.produkt.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -44,24 +42,28 @@ public class ProduktBean implements Serializable{
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
 		this.newProdukt = new Produkt();
 	}
-
+	
+	//Prepare data for first display or update after insert/delete
 	@PostConstruct
     public void init() {
 		try{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
-			//Clearing newProudukt Dialog fields
-			this.newProdukt = new Produkt();
-			stuecklisteCB=false;
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
 		}
 		
-		//
-		List<Bauteil> bSet = new ArrayList<Bauteil>();
-		getNewProdukt().setBauteile(bSet);
+		//Clearing newProudukt Dialog fields
+		resetNewProdukt();
+	}
+	
+	public void resetNewProdukt(){
+		setNewProdukt(new Produkt());
+		getNewProdukt().setBauteile(new ArrayList<Bauteil>());
+		setMaterialId(0);
+		stuecklisteCB=false;
 	}
 	
 	//Container for SingleSelectTable Items
@@ -153,12 +155,12 @@ public class ProduktBean implements Serializable{
 		try {
 
 			//Implement logic for creating new PNR and also put it
-			this.newProdukt.setPnr(createPnr());
+			getNewProdukt().setPnr(createPnr());
 			//If stueckliste checkbox unchecked
 			if(!stuecklisteCB){
 				getNewProdukt().setBauteile(null);
 			}
-			getProduktService().addProdukt(this.newProdukt);
+			getProduktService().addProdukt(getNewProdukt());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
@@ -169,20 +171,21 @@ public class ProduktBean implements Serializable{
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
 		Bauteil b = new Bauteil();
-		b.setMaterial(getMaterialService().getMaterialById(99));
 		b.setPosition(getNewProdukt().getBauteile().size()+1); 
 		getNewProdukt().getBauteile().add(b);
+		//Reset SelectOneMenu's starting value
+		setMaterialId(0); 
 	}
 	
 
 	
 	//Update Bauteil Values in produktNew Dialog
-	public void onDialogEdit(CellEditEvent event){
-        updateBauteile(getNewProdukt(), event, true); //RowKey will be 0 for not yet created objects :C
+	public void onProduktNew(CellEditEvent event){
+        updateBauteile(getNewProdukt(), event, true);
 	}
 	
 	//Update Bauteil Values in Details View + DB
-	public void onSelectedCellEdit(CellEditEvent event){
+	public void onProduktEdit(CellEditEvent event){
         updateBauteile(getSelectedProdukt(), event, false);
         //Stays in parent Event Call
         updateProdukt();
@@ -190,55 +193,28 @@ public class ProduktBean implements Serializable{
 	
 	//Update Bauteil Values in Model
 	private void updateBauteile(Produkt p, CellEditEvent event, boolean onCreate){
-		String newValue = event.getNewValue().toString();
-        int absPosition = Integer.parseInt(event.getRowKey());
-        List<Bauteil> s = p.getBauteile();
-        //Iterate through all Bauteile of 1 Produkt to find the one changed | position corresponding to rowKey - PF DataTable property
-        for(Bauteil b : s){
-        	//RowKey corresponds with TableID
-        	if(!onCreate){
-        		if(b.getId()!=absPosition) continue;
-        	}else{
-        		if(b.getPosition()!=absPosition) continue;
-        	}
-        	
-        	updateBauteilValue(b, event.getColumn().getHeaderText(), newValue);
+		//String newValue = event.getNewValue().toString();
+        String colName = event.getColumn().getHeaderText();
+        if(colName.equals("Werkstoff")){
+        	int absPosition = Integer.parseInt(event.getRowKey());
+            List<Bauteil> s = p.getBauteile();
+			Material material = getMaterialService().getMaterialById(getMaterialId());
+	        //Iterate through all Bauteile of 1 Produkt to find the one changed
+			//For newly created objects RowKey returns temporary ID's in Datatable => Positions
+			//For existing objects RowKey returns uniqe DB Table ID
+	        for(Bauteil b : s){
+	        	if(!onCreate){
+	        		//onEdit
+	        		if(b.getId()!=absPosition) continue;
+	        	}else{
+	        		//onCreate
+	        		if(b.getPosition()!=absPosition) continue;
+	        	}
+	        	//Pass found Bauteil b
+	        	b.setMaterial(material);
+	        }
         }
 	}
-	
-	//Edit selected value of 1 Bauteil - no index is given, so differentiation must be made - REVISION NEEDED, ENUM SWITCH MIGHT BE BETTER
-	private void updateBauteilValue(Bauteil b, String colName, String value){
-		if(colName.equals("Stck.")){
-			b.setMenge(Integer.parseInt(value));
-			return;
-		}
-		if(colName.equals("Bezeichnung")){
-			b.setName(value);
-			return;
-		}
-		if(colName.equals("Länge")){
-			b.setLaenge(Double.parseDouble(value));
-			return;
-		}
-		if(colName.equals("Breite")){
-			b.setBreite(Double.parseDouble(value));
-			return;
-		}
-		if(colName.equals("Dicke")){
-			b.setDicke(Double.parseDouble(value));
-			return;
-		}
-		if(colName.equals("Bemerkung")){
-			b.setBemerkung(value);
-			return;
-		}
-		if(colName.equals("Werkstoff")){
-			Material material = getMaterialService().getMaterialById(getMaterialId());
-			b.setMaterial(material);
-			return;
-		}
-	}
-	
 	
 
 	public void updateProdukt(){
