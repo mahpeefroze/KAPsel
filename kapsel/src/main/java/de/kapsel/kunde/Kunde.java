@@ -28,6 +28,7 @@ public class Kunde implements Serializable {
 	private String text;
 	private Adresse adresse;
 	private double rabatt;
+	private ETypes.KundeStatus status;
 
 	//First Test if One to Many works
 	//private ArrayList<Produkt> produkt;
@@ -107,7 +108,13 @@ public class Kunde implements Serializable {
 	public void setRabatt(double rabatt) {
 		this.rabatt = rabatt;
 	}
-
 	
-
+	@Column(name="status", nullable=false)
+	public ETypes.KundeStatus getStatus() {
+		return status;
+	}
+	public void setStatus(ETypes.KundeStatus status) {
+		this.status = status;
+	}
+	
 }

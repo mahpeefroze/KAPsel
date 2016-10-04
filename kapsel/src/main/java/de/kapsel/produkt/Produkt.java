@@ -3,7 +3,6 @@ package de.kapsel.produkt;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +30,7 @@ public class Produkt implements Serializable {
 	private Timestamp erstDatum;
 	private Timestamp modDatum;
 	private List<Bauteil> bauteile;
-	//private ArbeitsSchritt aschritt; <- include when bauteil is ready and working
+	private List<Arbeitsschritt> aschritte;
 
 
 	@Id
@@ -110,5 +109,15 @@ public class Produkt implements Serializable {
 	public void setBauteile(List<Bauteil> bauteile) {
 		this.bauteile = bauteile;
 	}
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	public List<Arbeitsschritt> getAschritte() {
+		return aschritte;
+	}
+	public void setAschritte(List<Arbeitsschritt> aschritte) {
+		this.aschritte = aschritte;
+	}
+	
+	
 	
 }

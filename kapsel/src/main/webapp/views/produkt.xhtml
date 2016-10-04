@@ -137,13 +137,12 @@
 						<p:tab title="#{labels.stueckliste}">
 							<!-- Tabelle mit allen Produkten und Leistungen -->
 							
-							<p:commandButton update="bauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
+							<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
+							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" icon="ui-icon-cross" action="#{produktBean.deleteBauteilView}" />
 							
-							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single"
+							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
 								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
-								<!-- p:ajax event="rowSelect" 
-									update=":sect_form" / -->
 									
 								<p:ajax event="cellEdit" listener="#{produktBean.onProduktEdit}" update="nav_form"/>	
 
@@ -203,7 +202,48 @@
 						
 						<!-- Arbeitsplan -->
 						<p:tab title="#{labels.arbeitsplan}">
+							
+							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
+							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" icon="ui-icon-cross" action="#{produktBean.deleteBauteilView}" />
+							
+							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
+									
+								<p:ajax event="cellEdit" listener="#{produktBean.onProduktEdit}" update="nav_form"/>	
+
+								<p:column headerText="#{labels.position}" style="width: 30px;">
+									<h:outputText value="#{item.position}" />
+								</p:column>
+								<p:column headerText="#{labels.stueck_zahl}" style="width: 30px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
+								</p:column>
+								<p:column headerText="#{labels.bezeichnung}" style="width: 80px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+						           </p:cellEditor>
+								</p:column>
+								<p:column headerText="#{labels.prodL}" style="width: 50px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
+								</p:column>
+								<p:column headerText="#{labels.prodB}" style="width: 50px;">
+									<p:cellEditor>
+						               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
+						            </p:cellEditor>
+								</p:column>
+							
+						
+
+							</p:dataTable>
+							
 						</p:tab>
 
 

@@ -24,6 +24,7 @@
                 <value>de.kapsel.produkt.Produkt</value>
                 <value>de.kapsel.produkt.Bauteil</value>
                 <value>de.kapsel.produkt.Material</value>
+                <value>de.kapsel.produkt.Arbeitsschritt</value>
                 <!-- Utils/Globals -->
                 <value>de.kapsel.um.User</value> 
                 <value>de.kapsel.global.Adresse</value>
@@ -106,6 +107,15 @@
 		<property name="materialDAO" ref="materialDAO" />
 	</bean>
 	<bean id="materialDAO" class="de.kapsel.produkt.dao.MaterialDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- ARBEITSSCHRITT DECLARATION -->
+	<bean id="arbeitsschritt" class="de.kapsel.produkt.Arbeitsschritt" />
+	<bean id="arbeitsschrittService" class="de.kapsel.produkt.services.ArbeitsschrittService">
+		<property name="arbeitsschrittDAO" ref="arbeitsschrittDAO" />
+	</bean>
+	<bean id="arbeitsschrittDAO" class="de.kapsel.produkt.dao.ArbeitsschrittDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	

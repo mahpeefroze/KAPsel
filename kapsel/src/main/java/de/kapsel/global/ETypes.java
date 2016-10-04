@@ -17,7 +17,10 @@ public class ETypes {
 		OEFFENTLICH;
 	}
 	
-	
+	public enum KundeStatus{
+		aktiv,
+		gesperrt;
+	}
 
 	public enum UserT{
 		ADMIN,
@@ -52,6 +55,12 @@ public class ETypes {
 		l,
 		m2,
 		m3;
+	}
+	
+	public enum ProduktT{
+		Herstellung,
+		Reparatur,
+		Sonstiges;
 	}
 	
 	

@@ -139,7 +139,7 @@
 							
 							<h:panelGrid columns="2" styleClass="fullWidth">
 								<h:outputText value="#{kundeBean.selectedKunde.name}" />
-								<h:outputText id="statusbox" value="#{labels.status}:" />
+								<h:outputText id="statusbox" value="#{labels.status}: #{kundeBean.selectedKunde.status}" />
 							</h:panelGrid>
 							<br></br>
 							<p:fieldset style="margin-bottom:10px;">

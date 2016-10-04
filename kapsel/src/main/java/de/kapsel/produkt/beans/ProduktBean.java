@@ -14,9 +14,11 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.produkt.Arbeitsschritt;
 import de.kapsel.produkt.Bauteil;
 import de.kapsel.produkt.Material;
 import de.kapsel.produkt.Produkt;
+import de.kapsel.produkt.services.IBauteilService;
 import de.kapsel.produkt.services.IMaterialService;
 import de.kapsel.produkt.services.IProduktService;
 
@@ -28,6 +30,8 @@ public class ProduktBean implements Serializable{
 	private List<Produkt> produkte;
 	private Produkt selectedProdukt;
 	private Produkt newProdukt;
+	private Bauteil selectedBauteil;
+	private Arbeitsschritt selectedAschritt;
 	private boolean stuecklisteCB;
 	private long materialId;
 
@@ -36,6 +40,9 @@ public class ProduktBean implements Serializable{
 	
 	@ManagedProperty(value="#{materialService}")
 	private IMaterialService materialService;
+	
+	@ManagedProperty(value="#{bauteilService}")
+	private IBauteilService bauteilService;
 
 	//Gather Items to fill the table
 	public ProduktBean(){
@@ -59,11 +66,20 @@ public class ProduktBean implements Serializable{
 		resetNewProdukt();
 	}
 	
+	//newProdukt
 	public void resetNewProdukt(){
 		setNewProdukt(new Produkt());
 		getNewProdukt().setBauteile(new ArrayList<Bauteil>());
 		setMaterialId(0);
 		stuecklisteCB=false;
+	}
+
+	public Produkt getNewProdukt() {
+		return newProdukt;
+	}
+
+	public void setNewProdukt(Produkt newProdukt) {
+		this.newProdukt = newProdukt;
 	}
 	
 	//Container for SingleSelectTable Items
@@ -83,15 +99,26 @@ public class ProduktBean implements Serializable{
 	public void setSelectedProdukt(Produkt selectedProdukt) {
 		this.selectedProdukt = selectedProdukt;
 	}
-
-	public Produkt getNewProdukt() {
-		return newProdukt;
+	
+	//Selection Bauteil
+	public Bauteil getSelectedBauteil() {
+		return selectedBauteil;
 	}
 
-	public void setNewProdukt(Produkt newProdukt) {
-		this.newProdukt = newProdukt;
+	public void setSelectedBauteil(Bauteil selectedBauteil) {
+		this.selectedBauteil = selectedBauteil;
 	}
 	
+	//Selection Arbeitsschritt
+	public Arbeitsschritt getSelectedAschritt() {
+		return selectedAschritt;
+	}
+
+	public void setSelectedAschritt(Arbeitsschritt selectedAschritt) {
+		this.selectedAschritt = selectedAschritt;
+	}
+	
+	//Show/hide flag for Stueckliste in newProduktDlg
 	public boolean isStuecklisteCB() {
 		return stuecklisteCB;
 	}
@@ -116,7 +143,14 @@ public class ProduktBean implements Serializable{
 	public void setMaterialService(IMaterialService materialService) {
 		this.materialService = materialService;
 	}
+	
+	public IBauteilService getBauteilService() {
+		return bauteilService;
+	}
 
+	public void setBauteilService(IBauteilService bauteilService) {
+		this.bauteilService = bauteilService;
+	}
 
 	public long getMaterialId() {
 		return materialId;
@@ -171,13 +205,21 @@ public class ProduktBean implements Serializable{
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
 		Bauteil b = new Bauteil();
-		b.setPosition(getNewProdukt().getBauteile().size()+1); 
-		getNewProdukt().getBauteile().add(b);
+		//Splitting full clientID name
+		String[] source = actionEvent.getComponent().getClientId().split(":");
+		//Differentiating between Bauteil Add in View and in Dialog
+		if(source[source.length-1].equals("btAddView")){
+			b.setPosition(getSelectedProdukt().getBauteile().size()+1); 
+			getSelectedProdukt().getBauteile().add(b);
+		}else{
+			b.setPosition(getNewProdukt().getBauteile().size()+1); 
+			getNewProdukt().getBauteile().add(b);
+		}
 		//Reset SelectOneMenu's starting value
 		setMaterialId(0); 
 	}
 	
-
+	
 	
 	//Update Bauteil Values in produktNew Dialog
 	public void onProduktNew(CellEditEvent event){
@@ -216,13 +258,46 @@ public class ProduktBean implements Serializable{
         }
 	}
 	
+	public void deleteBauteilView(){
+		try{
+			updateBauteilPosition(getSelectedBauteil().getPosition(), getSelectedProdukt());
+			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
+			updateProdukt();
+			//Cascade somehow doesn't remove items from bauteile, need manual remove or else lots of dead records
+			getBauteilService().deleteBauteil(getSelectedBauteil());
+		}catch(java.lang.IllegalArgumentException e){
+			System.out.println("selectedBauteil is empty");
+		}catch(java.lang.NullPointerException e){
+			System.out.println("selectedBauteil is empty Nullpointer");
+		}
+	}
+	
+	public void deleteBauteilDlg(){
+		try{
+			updateBauteilPosition(getSelectedBauteil().getPosition(), getNewProdukt());
+			getNewProdukt().getBauteile().remove(getSelectedBauteil());
+		}catch(java.lang.IllegalArgumentException e){
+			System.out.println("selectedBauteil is empty");
+		}catch(java.lang.NullPointerException e){
+			System.out.println("selectedBauteil is empty Nullpointer");
+		}
+	}
+	
+	private void updateBauteilPosition(int delPos, Produkt p){
+		List<Bauteil> s = p.getBauteile();
+		for(Bauteil b:s){
+			if(b.getPosition()>delPos){
+				b.setPosition(b.getPosition()-1);
+			}
+		}
+	}
 
 	public void updateProdukt(){
-		getProduktService().updateProdukt(this.selectedProdukt);
+		getProduktService().updateProdukt(getSelectedProdukt());
 	}
 
 	public void deleteProdukt(){
-		getProduktService().deleteProdukt(this.selectedProdukt);
+		getProduktService().deleteProdukt(getSelectedProdukt());
 		init();
 	}
 	
