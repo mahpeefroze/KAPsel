@@ -13,8 +13,8 @@ import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.Adresse;
 import de.kapsel.global.services.IAdresseService;
-import de.kapsel.kunde.KGruppe;
-import de.kapsel.kunde.Kunde;
+import de.kapsel.kunde.entities.KGruppe;
+import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKGruppeService;
 import de.kapsel.kunde.services.IKundeService;
 

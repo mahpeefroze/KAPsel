@@ -1,4 +1,4 @@
-package de.kapsel.produkt;
+package de.kapsel.produkt.entities;
 
 import java.io.Serializable;
 
@@ -10,11 +10,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="aschritte")
-public class Arbeitsschritt implements Serializable {
+public class Arbeitsschritt implements Serializable, Comparable<Arbeitsschritt> {
 
 	private static final long serialVersionUID = 1L;
 	
 	private long id;
+	private int position=0;
 	private String name;
 	private double zeit;
 	private String notiz;
@@ -28,6 +29,14 @@ public class Arbeitsschritt implements Serializable {
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	@Column(name="pos", nullable=false)
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
 	}
 	
 	@Column(name="name", nullable=false)
@@ -55,6 +64,12 @@ public class Arbeitsschritt implements Serializable {
 		this.notiz = notiz;
 	}
 	
-	
+	@Override
+	public int compareTo(Arbeitsschritt aschritt) {
+		if(aschritt==null){
+			return -1;
+		}
+		return Integer.compare(this.position, aschritt.getPosition());
+	}
 	
 }

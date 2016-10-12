@@ -11,9 +11,9 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.auftrag.Auftrag;
+import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.auftrag.services.IAuftragService;
-import de.kapsel.kunde.Kunde;
+import de.kapsel.kunde.entities.Kunde;
 
 @ManagedBean
 @ViewScoped

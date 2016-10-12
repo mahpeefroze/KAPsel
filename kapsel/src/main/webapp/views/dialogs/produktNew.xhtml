@@ -18,10 +18,23 @@
 			<p:column rowspan="3">#Bild</p:column>
 		</p:row>
 		<p:row>
+			<p:column>#{labels.pZeit}:</p:column>
+			<p:column>
+				<p:inputText value="#{produktBean.newProdukt.zeit}" />#{labels.zeitEinheit}
+			</p:column>
+			<p:column>#{labels.preis}:</p:column>
+			<p:column>
+				<p:inputText value="#{produktBean.newProdukt.preis}" />#{labels.waehrung}
+			</p:column>
+		</p:row>
+		<p:row>
 			<p:column colspan="2">#{labels.beschreibung}:</p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
-			
+				<p:selectOneMenu id="newPtypSelect" value="#{produktBean.newProdukt.typ}" style="width:200px">
+					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.produktT}" var="typ" itemLabel="#{typ}" itemValue="#{produktT}" />
+				</p:selectOneMenu>
 			</p:column>
 		</p:row>
 		<p:row>

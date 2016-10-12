@@ -1,4 +1,4 @@
-package de.kapsel.auftrag;
+package de.kapsel.auftrag.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import de.kapsel.kunde.Kunde;
+import de.kapsel.kunde.entities.Kunde;
 
 
 @Entity

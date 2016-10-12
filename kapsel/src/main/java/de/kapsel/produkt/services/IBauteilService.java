@@ -2,7 +2,7 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import de.kapsel.produkt.Bauteil;
+import de.kapsel.produkt.entities.Bauteil;
 
 public interface IBauteilService {
 	

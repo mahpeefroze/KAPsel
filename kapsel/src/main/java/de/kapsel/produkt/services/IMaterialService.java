@@ -1,7 +1,8 @@
 package de.kapsel.produkt.services;
 
 import java.util.List;
-import de.kapsel.produkt.Material;
+
+import de.kapsel.produkt.entities.Material;
 
 public interface IMaterialService {
 	

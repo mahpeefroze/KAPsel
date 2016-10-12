@@ -2,7 +2,7 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import de.kapsel.produkt.Arbeitsschritt;
+import de.kapsel.produkt.entities.Arbeitsschritt;
 
 public interface IArbeitsschrittService{
 	

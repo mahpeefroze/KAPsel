@@ -10,7 +10,7 @@ import javax.faces.bean.RequestScoped;
 
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.produkt.Material;
+import de.kapsel.produkt.entities.Material;
 import de.kapsel.produkt.services.IMaterialService;
 
 @ManagedBean

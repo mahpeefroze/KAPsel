@@ -1,4 +1,4 @@
-package de.kapsel.kunde;
+package de.kapsel.kunde.entities;
 
 import java.io.Serializable;
 import java.util.Date;

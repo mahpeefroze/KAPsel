@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.kunde.KGruppe;
 import de.kapsel.kunde.dao.IKGruppeDAO;
+import de.kapsel.kunde.entities.KGruppe;
 
 public class KGruppeService implements IKGruppeService {
 

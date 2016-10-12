@@ -14,10 +14,10 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.produkt.Arbeitsschritt;
-import de.kapsel.produkt.Bauteil;
-import de.kapsel.produkt.Material;
-import de.kapsel.produkt.Produkt;
+import de.kapsel.produkt.entities.Arbeitsschritt;
+import de.kapsel.produkt.entities.Bauteil;
+import de.kapsel.produkt.entities.Material;
+import de.kapsel.produkt.entities.Produkt;
 import de.kapsel.produkt.services.IBauteilService;
 import de.kapsel.produkt.services.IMaterialService;
 import de.kapsel.produkt.services.IProduktService;
@@ -207,7 +207,7 @@ public class ProduktBean implements Serializable{
 		Bauteil b = new Bauteil();
 		//Splitting full clientID name
 		String[] source = actionEvent.getComponent().getClientId().split(":");
-		//Differentiating between Bauteil Add in View and in Dialog
+		//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
 		if(source[source.length-1].equals("btAddView")){
 			b.setPosition(getSelectedProdukt().getBauteile().size()+1); 
 			getSelectedProdukt().getBauteile().add(b);

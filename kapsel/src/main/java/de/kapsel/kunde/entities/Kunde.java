@@ -1,4 +1,4 @@
-package de.kapsel.kunde;
+package de.kapsel.kunde.entities;
 
 import java.io.Serializable;
 
@@ -31,8 +31,7 @@ public class Kunde implements Serializable {
 	private ETypes.KundeStatus status;
 
 	//First Test if One to Many works
-	//private ArrayList<Produkt> produkt;
-	//private ArrayList<Leistung> leistung;
+	//private ArrayList<Auftrag> auftraege;
 
 
 	@Id

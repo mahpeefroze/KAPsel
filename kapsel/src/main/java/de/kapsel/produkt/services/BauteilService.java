@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.Bauteil;
 import de.kapsel.produkt.dao.IBauteilDAO;
+import de.kapsel.produkt.entities.Bauteil;
 
 public class BauteilService implements IBauteilService {
 	

@@ -7,7 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
-import de.kapsel.produkt.Bauteil;
+import de.kapsel.produkt.entities.Bauteil;
 import de.kapsel.produkt.services.IBauteilService;
 
 @ManagedBean

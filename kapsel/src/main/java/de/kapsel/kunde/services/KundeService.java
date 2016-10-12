@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.kunde.Kunde;
 import de.kapsel.kunde.dao.IKundeDAO;
+import de.kapsel.kunde.entities.Kunde;
 
 public class KundeService implements IKundeService{
 

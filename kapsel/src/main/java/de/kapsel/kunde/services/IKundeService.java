@@ -2,7 +2,7 @@ package de.kapsel.kunde.services;
 
 import java.util.List;
 
-import de.kapsel.kunde.Kunde;
+import de.kapsel.kunde.entities.Kunde;
 
 
 public interface IKundeService {

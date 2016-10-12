@@ -2,7 +2,7 @@ package de.kapsel.auftrag.services;
 
 import java.util.List;
 
-import de.kapsel.auftrag.Auftrag;
+import de.kapsel.auftrag.entities.Auftrag;
 
 public interface IAuftragService {
 

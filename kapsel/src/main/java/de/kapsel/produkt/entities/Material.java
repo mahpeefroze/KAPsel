@@ -1,4 +1,4 @@
-package de.kapsel.produkt;
+package de.kapsel.produkt.entities;
 
 import java.io.Serializable;
 

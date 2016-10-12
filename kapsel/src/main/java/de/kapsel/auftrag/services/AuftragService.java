@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.auftrag.Auftrag;
 import de.kapsel.auftrag.dao.IAuftragDAO;
+import de.kapsel.auftrag.entities.Auftrag;
 
 public class AuftragService implements IAuftragService {
 

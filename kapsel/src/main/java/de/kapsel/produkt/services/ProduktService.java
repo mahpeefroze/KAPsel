@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.Produkt;
 import de.kapsel.produkt.dao.IProduktDAO;
+import de.kapsel.produkt.entities.Produkt;
 
 public class ProduktService implements IProduktService{
 

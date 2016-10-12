@@ -4,57 +4,59 @@ import java.util.List;
 
 import javax.faces.bean.ManagedProperty;
 
-import de.kapsel.produkt.Arbeitsschritt;
+import org.springframework.transaction.annotation.Transactional;
+
 import de.kapsel.produkt.dao.IArbeitsschrittDAO;
+import de.kapsel.produkt.entities.Arbeitsschritt;
 
 public class ArbeitsschrittService implements IArbeitsschrittService{
 	
 	//Injection BauteilDAO
-		@ManagedProperty(value="#{arbeitsschrittDAO}")
-		private IArbeitsschrittDAO arbeitsschrittDAO;
+	@ManagedProperty(value="#{arbeitsschrittDAO}")
+	private IArbeitsschrittDAO arbeitsschrittDAO;
 
-		public IArbeitsschrittDAO getArbeitsschrittDAO() {
-			return arbeitsschrittDAO;
-		}
+	public IArbeitsschrittDAO getArbeitsschrittDAO() {
+		return arbeitsschrittDAO;
+	}
 
-		public void setArbeitsschrittDAO(IArbeitsschrittDAO arbeitsschrittDAO) {
-			this.arbeitsschrittDAO = arbeitsschrittDAO;
-		}
+	public void setArbeitsschrittDAO(IArbeitsschrittDAO arbeitsschrittDAO) {
+		this.arbeitsschrittDAO = arbeitsschrittDAO;
+	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public void addArbeitsschritt(Arbeitsschritt arbeitsschritt) {
-		// TODO Auto-generated method stub
-		
+		arbeitsschrittDAO.addItem(arbeitsschritt);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void updateArbeitsschritt(Arbeitsschritt arbeitsschritt) {
-		// TODO Auto-generated method stub
-		
+		arbeitsschrittDAO.updateItem(arbeitsschritt);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void deleteArbeitsschritt(Arbeitsschritt arbeitsschritt) {
-		// TODO Auto-generated method stub
-		
+		arbeitsschrittDAO.deleteItem(arbeitsschritt);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Arbeitsschritt getArbeitsschrittByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return arbeitsschrittDAO.getItemByName(name);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Arbeitsschritt getArbeitsschrittById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return arbeitsschrittDAO.getItemById(id);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Arbeitsschritt> getArbeitsschritte() {
-		// TODO Auto-generated method stub
-		return null;
+		return arbeitsschrittDAO.getItems();
 	}
 	
 	

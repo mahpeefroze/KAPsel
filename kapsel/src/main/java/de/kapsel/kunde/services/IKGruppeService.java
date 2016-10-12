@@ -2,7 +2,7 @@ package de.kapsel.kunde.services;
 
 import java.util.List;
 
-import de.kapsel.kunde.KGruppe;
+import de.kapsel.kunde.entities.KGruppe;
 
 public interface IKGruppeService {
 

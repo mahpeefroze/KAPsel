@@ -10,6 +10,10 @@ public class ETypes {
 	public KundeT[] getKundeT(){
 		return KundeT.values();
 	}
+	
+	public ProduktT[] getProduktT(){
+		return ProduktT.values();
+	}
 
 	public enum KundeT{
 		PRIVAT,
@@ -46,7 +50,8 @@ public class ETypes {
 		Farbe,
 		Lack,
 		Öl,
-		Beschlag;
+		Beschlag,
+		Sonstiges;
 	}
 	
 	public enum UnitT{

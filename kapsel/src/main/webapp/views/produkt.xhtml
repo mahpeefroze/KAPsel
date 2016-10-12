@@ -120,12 +120,31 @@
 										<p:column>#{produktBean.selectedProdukt.pnr}</p:column>
 										<p:column>#{labels.typ}:</p:column>
 										<p:column></p:column>
+										<p:column>#{labels.erstDatum}</p:column>
+										<p:column>
+											<h:outputText value="#{produktBean.selectedProdukt.erstDatum}">
+												<f:convertDateTime pattern="dd.MM.yyyy" />
+											</h:outputText>
+										</p:column>
 									</p:row>
 									<p:row>
-										<p:column>#{labels.nachname}:</p:column>
-										<p:column>#{produktBean.selectedProdukt.name}</p:column>
-										<p:column>#{labels.stueckzahl}:</p:column>
-										<p:column></p:column>
+										<p:column colspan="4">
+											<p:fieldset legend="#Beschreibung" toggleable="false">
+												<h:outputText value="#{produktBean.selectedProdukt.text}"></h:outputText>
+											</p:fieldset>
+										</p:column>
+										<p:column>#{labels.modDatum}:</p:column>
+										<p:column>
+											<h:outputText value="#{produktBean.selectedProdukt.modDatum}">
+												<f:convertDateTime pattern="dd.MM.yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>#{labels.preis}</p:column>
+										<p:column>#{produktBean.selectedProdukt.preis}</p:column>
+										<p:column>#{labels.pZeit}</p:column>
+										<p:column>#{produktBean.selectedProdukt.zeit}</p:column>
 									</p:row>
 								</p:panelGrid>
 							</p:fieldset>

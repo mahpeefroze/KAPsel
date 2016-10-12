@@ -1,4 +1,4 @@
-package de.kapsel.produkt;
+package de.kapsel.produkt.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import de.kapsel.global.ETypes;
+
 @Entity
 @Table(name="produkte")
 public class Produkt implements Serializable {
@@ -25,6 +27,7 @@ public class Produkt implements Serializable {
 	private long pnr;
 	private String name;
 	private String text;
+	private ETypes.ProduktT typ;
 	private int zeit;
 	private double preis;
 	private Timestamp erstDatum;
@@ -65,6 +68,14 @@ public class Produkt implements Serializable {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	@Column(name="typ")
+	public ETypes.ProduktT getTyp() {
+		return typ;
+	}
+	public void setTyp(ETypes.ProduktT typ) {
+		this.typ = typ;
 	}
 	
 	@Column(name="zeit")

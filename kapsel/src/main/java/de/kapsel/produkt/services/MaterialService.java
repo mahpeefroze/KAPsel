@@ -6,8 +6,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.Material;
 import de.kapsel.produkt.dao.IMaterialDAO;
+import de.kapsel.produkt.entities.Material;
 
 public class MaterialService implements IMaterialService {
 

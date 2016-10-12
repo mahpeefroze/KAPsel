@@ -2,7 +2,7 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import de.kapsel.produkt.Produkt;
+import de.kapsel.produkt.entities.Produkt;
 
 public interface IProduktService {
 

@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
-import de.kapsel.kunde.KGruppe;
+import de.kapsel.kunde.entities.KGruppe;
 import de.kapsel.kunde.services.IKGruppeService;
 
 @ManagedBean
