@@ -14,13 +14,16 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.global.DTItem;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
 import de.kapsel.produkt.entities.Material;
 import de.kapsel.produkt.entities.Produkt;
+import de.kapsel.produkt.services.IArbeitsschrittService;
 import de.kapsel.produkt.services.IBauteilService;
 import de.kapsel.produkt.services.IMaterialService;
 import de.kapsel.produkt.services.IProduktService;
+import de.kapsel.produkt.services.IWerkzeugService;
 
 @ManagedBean
 @ViewScoped
@@ -34,6 +37,7 @@ public class ProduktBean implements Serializable{
 	private Arbeitsschritt selectedAschritt;
 	private boolean stuecklisteCB;
 	private long materialId;
+	private long werkzeugId;
 
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
@@ -43,7 +47,13 @@ public class ProduktBean implements Serializable{
 	
 	@ManagedProperty(value="#{bauteilService}")
 	private IBauteilService bauteilService;
-
+	
+	@ManagedProperty(value="#{arbeitsschrittService}")
+	private IArbeitsschrittService arbeitsschrittService;
+	
+	@ManagedProperty(value="#{werkzeugService}")
+	private IWerkzeugService werkzeugService;
+	
 	//Gather Items to fill the table
 	public ProduktBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
@@ -70,7 +80,9 @@ public class ProduktBean implements Serializable{
 	public void resetNewProdukt(){
 		setNewProdukt(new Produkt());
 		getNewProdukt().setBauteile(new ArrayList<Bauteil>());
+		getNewProdukt().setAschritte(new ArrayList<Arbeitsschritt>());
 		setMaterialId(0);
+		setWerkzeugId(0);
 		stuecklisteCB=false;
 	}
 
@@ -151,6 +163,22 @@ public class ProduktBean implements Serializable{
 	public void setBauteilService(IBauteilService bauteilService) {
 		this.bauteilService = bauteilService;
 	}
+	
+	public IArbeitsschrittService getArbeitsschrittService() {
+		return arbeitsschrittService;
+	}
+
+	public void setArbeitsschrittService(IArbeitsschrittService arbeitsschrittService) {
+		this.arbeitsschrittService = arbeitsschrittService;
+	}
+
+	public IWerkzeugService getWerkzeugService() {
+		return werkzeugService;
+	}
+
+	public void setWerkzeugService(IWerkzeugService werkzeugService) {
+		this.werkzeugService = werkzeugService;
+	}
 
 	public long getMaterialId() {
 		return materialId;
@@ -158,6 +186,14 @@ public class ProduktBean implements Serializable{
 
 	public void setMaterialId(long materialId) {
 		this.materialId = materialId;
+	}
+	
+	public long getWerkzeugId() {
+		return werkzeugId;
+	}
+
+	public void setWerkzeugId(long werkzeugId) {
+		this.werkzeugId = werkzeugId;
 	}
 
 	//Load data of specific Item into details-table; not called on page load -> additional load in init()
@@ -201,6 +237,19 @@ public class ProduktBean implements Serializable{
 		init();
 
 	}
+	
+	public void updateProdukt(){
+		getProduktService().updateProdukt(getSelectedProdukt());
+	}
+
+	public void deleteProdukt(){
+		getProduktService().deleteProdukt(getSelectedProdukt());
+		init();
+	}
+	
+	
+	//--------------------------------------------BAUTEIL SECTION-----------------------------------------------------//
+	
 	
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
 	public void addBauteil(ActionEvent actionEvent){
@@ -258,9 +307,11 @@ public class ProduktBean implements Serializable{
         }
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void deleteBauteilView(){
 		try{
-			updateBauteilPosition(getSelectedBauteil().getPosition(), getSelectedProdukt());
+			//updateBauteilPosition(getSelectedBauteil().getPosition(), getSelectedProdukt());
+			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getSelectedProdukt().getBauteile()));
 			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
 			updateProdukt();
 			//Cascade somehow doesn't remove items from bauteile, need manual remove or else lots of dead records
@@ -272,9 +323,10 @@ public class ProduktBean implements Serializable{
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked" , "rawtypes"})
 	public void deleteBauteilDlg(){
 		try{
-			updateBauteilPosition(getSelectedBauteil().getPosition(), getNewProdukt());
+			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getNewProdukt().getBauteile()));
 			getNewProdukt().getBauteile().remove(getSelectedBauteil());
 		}catch(java.lang.IllegalArgumentException e){
 			System.out.println("selectedBauteil is empty");
@@ -292,15 +344,32 @@ public class ProduktBean implements Serializable{
 		}
 	}
 
-	public void updateProdukt(){
-		getProduktService().updateProdukt(getSelectedProdukt());
-	}
 
-	public void deleteProdukt(){
-		getProduktService().deleteProdukt(getSelectedProdukt());
-		init();
+	//--------------------------------------------ARBEITSSCHRITT SECTION-----------------------------------------------------//
+	
+	public void addArbeitsschritt(ActionEvent actionEvent){
+		Arbeitsschritt a = new Arbeitsschritt();
+		//Splitting full clientID name
+		String[] source = actionEvent.getComponent().getClientId().split(":");
+		//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
+		if(source[source.length-1].equals("asAddView")){
+			a.setPosition(getSelectedProdukt().getAschritte().size()+1); 
+			getSelectedProdukt().getAschritte().add(a);
+		}else{
+			a.setPosition(getNewProdukt().getAschritte().size()+1); 
+			getNewProdukt().getAschritte().add(a);
+		}
+		//Reset SelectOneMenu's starting value
+		setWerkzeugId(0); 
+		
 	}
 	
-	
-	
+	private void updateItemPosition(int delPos, ArrayList<DTItem> items){
+		//if(o.getClass().equals(Bauteil.class)){}
+		for(DTItem t:items){
+			if(t.getPosition()>delPos){
+				t.setPosition(t.getPosition()-1);
+			}
+		}
+	}
 }

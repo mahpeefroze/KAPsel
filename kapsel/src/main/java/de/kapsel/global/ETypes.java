@@ -68,5 +68,10 @@ public class ETypes {
 		Sonstiges;
 	}
 	
+	public enum ASchrittT{
+		Maschinenarbeit,
+		Bankraum,
+		Montage;
+	}
 	
 }

@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import de.kapsel.global.DTItem;
+
 @Entity
 @Table(name="bauteile")
-public class Bauteil implements Serializable, Comparable<Bauteil>{
+public class Bauteil implements DTItem, Serializable, Comparable<Bauteil>{
 
 	
 	private static final long serialVersionUID = 1L;

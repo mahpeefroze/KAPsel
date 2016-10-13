@@ -222,10 +222,10 @@
 						<!-- Arbeitsplan -->
 						<p:tab title="#{labels.arbeitsplan}">
 							
-							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
-							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" icon="ui-icon-cross" action="#{produktBean.deleteBauteilView}" />
+							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addArbeitsschritt}" />
+							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" icon="ui-icon-cross" action="#{produktBean.deleteArbeitsschrittView}" />
 							
-							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
+							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.aschritte}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
 								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
 									
@@ -234,28 +234,27 @@
 								<p:column headerText="#{labels.position}" style="width: 30px;">
 									<h:outputText value="#{item.position}" />
 								</p:column>
-								<p:column headerText="#{labels.stueck_zahl}" style="width: 30px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
 								<p:column headerText="#{labels.bezeichnung}" style="width: 80px;">
 									<p:cellEditor>
 						               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
 						               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
 						           </p:cellEditor>
 								</p:column>
-								<p:column headerText="#{labels.prodL}" style="width: 50px;">
+								<p:column headerText="#{labels.zeit}" style="width: 50px;">
 									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
+						               <f:facet name="output"><h:outputText value="#{item.zeit}" /></f:facet>
+						               <f:facet name="input"><p:inputText value="#{item.zeit}" style="width:96%"/></f:facet>
 						            </p:cellEditor>
 								</p:column>
-								<p:column headerText="#{labels.prodB}" style="width: 50px;">
+								<p:column headerText="#{labels.werkzeug}" style="width: 50px;">
 									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
+						               <f:facet name="output"><h:outputText value="#{item.werkzeug.name}" /></f:facet>
+										<f:facet name="input">
+										<p:selectOneMenu id="werkzeugSelect" value="#{produktBean.werkzeugId}" style="width:140px" filter="true" filterMatchMode="contains">
+											<f:selectItem itemLabel="Werkzeug auswaehlen" itemValue="" noSelectionOption="true" />
+											<f:selectItems value="#{werkzeugBean.werkzeuge}" var="wz" itemLabel="#{wz.name} | #{wz.stundensatz} #{labels.waehrung}/#{labels.stundeH}" itemValue="#{wz.id}"/>				
+										</p:selectOneMenu>
+										</f:facet>
 						            </p:cellEditor>
 								</p:column>
 							
