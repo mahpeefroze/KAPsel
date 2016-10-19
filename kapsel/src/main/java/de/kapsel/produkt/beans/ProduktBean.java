@@ -19,6 +19,7 @@ import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
 import de.kapsel.produkt.entities.Material;
 import de.kapsel.produkt.entities.Produkt;
+import de.kapsel.produkt.entities.Werkzeug;
 import de.kapsel.produkt.services.IArbeitsschrittService;
 import de.kapsel.produkt.services.IBauteilService;
 import de.kapsel.produkt.services.IMaterialService;
@@ -271,36 +272,28 @@ public class ProduktBean implements Serializable{
 	
 	
 	//Update Bauteil Values in produktNew Dialog
-	public void onProduktNew(CellEditEvent event){
-        updateBauteile(getNewProdukt(), event, true);
+	public void onBauteileNew(CellEditEvent event){
+        updateBauteile(getNewProdukt(), event);
 	}
 	
 	//Update Bauteil Values in Details View + DB
-	public void onProduktEdit(CellEditEvent event){
-        updateBauteile(getSelectedProdukt(), event, false);
-        //Stays in parent Event Call
+	public void onBauteileEdit(CellEditEvent event){
+        updateBauteile(getSelectedProdukt(), event);
+        //Can only updated existing DB entries
         updateProdukt();
 	}
 	
 	//Update Bauteil Values in Model
-	private void updateBauteile(Produkt p, CellEditEvent event, boolean onCreate){
-		//String newValue = event.getNewValue().toString();
+	private void updateBauteile(Produkt p, CellEditEvent event){
         String colName = event.getColumn().getHeaderText();
         if(colName.equals("Werkstoff")){
-        	int absPosition = Integer.parseInt(event.getRowKey());
+        	int itemPosition = event.getRowIndex();
             List<Bauteil> s = p.getBauteile();
 			Material material = getMaterialService().getMaterialById(getMaterialId());
 	        //Iterate through all Bauteile of 1 Produkt to find the one changed
-			//For newly created objects RowKey returns temporary ID's in Datatable => Positions
-			//For existing objects RowKey returns uniqe DB Table ID
 	        for(Bauteil b : s){
-	        	if(!onCreate){
-	        		//onEdit
-	        		if(b.getId()!=absPosition) continue;
-	        	}else{
-	        		//onCreate
-	        		if(b.getPosition()!=absPosition) continue;
-	        	}
+	        	//On mismatch go next
+	        	if(b.getPosition()!=(itemPosition+1)) continue;
 	        	//Pass found Bauteil b
 	        	b.setMaterial(material);
 	        }
@@ -351,7 +344,7 @@ public class ProduktBean implements Serializable{
 		Arbeitsschritt a = new Arbeitsschritt();
 		//Splitting full clientID name
 		String[] source = actionEvent.getComponent().getClientId().split(":");
-		//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
+		//Differentiating between adding Arbeitsschritt in View (selectedProdukt) and in Dialog (newProdukt)
 		if(source[source.length-1].equals("asAddView")){
 			a.setPosition(getSelectedProdukt().getAschritte().size()+1); 
 			getSelectedProdukt().getAschritte().add(a);
@@ -362,6 +355,23 @@ public class ProduktBean implements Serializable{
 		//Reset SelectOneMenu's starting value
 		setWerkzeugId(0); 
 		
+	}
+	
+	//Update Bauteil Values in Model
+	private void updateArbeitsschritte(Produkt p, CellEditEvent event){
+        String colName = event.getColumn().getHeaderText();
+        if(colName.equals("Werkstoff")){
+        	int itemPosition = event.getRowIndex();
+            List<Arbeitsschritt> s = p.getAschritte();
+			Werkzeug werkzeug = getWerkzeugService().getWerkzeugById(getWerkzeugId());
+	        //Iterate through all Arbeitsschritte of 1 Produkt to find the one changed
+	        for(Arbeitsschritt a : s){
+	        	//On mismatch go next
+	        	if(a.getPosition()!=(itemPosition+1)) continue;
+	        	//Pass found Bauteil b
+	        	a.setWerkzeug(werkzeug);
+	        }
+        }
 	}
 	
 	private void updateItemPosition(int delPos, ArrayList<DTItem> items){

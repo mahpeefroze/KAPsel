@@ -229,7 +229,7 @@
 								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
 
 									
-								<p:ajax event="cellEdit" listener="#{produktBean.onProduktEdit}" update="nav_form"/>	
+								<p:ajax event="cellEdit" listener="#{produktBean.onBauteileEdit}" update="nav_form"/>	
 
 								<p:column headerText="#{labels.position}" style="width: 30px;">
 									<h:outputText value="#{item.position}" />
