@@ -23,23 +23,23 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="ui-ribbonicon-new"
+						<p:commandButton value="New" icon="fa fa-user-plus"
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
-						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
+						<p:commandButton value="Edit" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
-						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
+						<p:commandButton value="Delete" icon="fa fa-remove"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton value="To PDF" icon="ui-ribbonicon-edit"
+						<p:commandButton value="To PDF" icon="fa fa-file-pdf-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
-						<p:commandButton value="To Word" icon="ui-ribbonicon-edit"
+						<p:commandButton value="To Word" icon="fa fa-file-word-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton value="Print" icon="ui-ribbonicon-print"
+						<p:commandButton value="Print" icon="fa fa-print"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 					
@@ -58,7 +58,7 @@
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<h:button value="#{labels.menu}" outcome="index"></h:button>
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index"/>
 					</p:ribbonGroup>
 
 				</p:tab>

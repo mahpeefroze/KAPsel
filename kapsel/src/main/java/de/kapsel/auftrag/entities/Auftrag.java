@@ -1,16 +1,25 @@
 package de.kapsel.auftrag.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import de.kapsel.global.ETypes;
 import de.kapsel.kunde.entities.Kunde;
+import de.kapsel.produkt.entities.Produkt;
 
 
 @Entity
@@ -22,14 +31,18 @@ public class Auftrag implements Serializable{
 	private long anr;
 	private String name;
 	private String text;
-	private String notizen;
 	private Kunde kunde;
-	private String status;
-	private String typ;
-	private Date termin;
-	private Date anfang;
-	//private Produkt produkt;
-	//private Leistung leistung;
+	private ETypes.AuftragS status;
+	private Date sollenddatum;
+	private Date startdatum;
+	private Date enddatum;
+	private int zeit;
+	private double preis;
+	private List<Produkt> produkte;
+	
+	private Timestamp erstDatum;
+	private Timestamp modDatum;
+	
 
 	//Annotations at accessor-methods tell hibernate to use them to change variables, so get/set logic is aplied
 	//As opposed to annotating the private Variables itself
@@ -85,71 +98,90 @@ public class Auftrag implements Serializable{
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	@Column(name="notes", nullable=true)
-	public String getNotizen() {
-		return notizen;
+	
+	@OneToMany(fetch = FetchType.EAGER)
+	public List<Produkt> getProdukte() {
+		return produkte;
 	}
 
-
-	public void setNotizen(String notizen) {
-		this.notizen = notizen;
+	public void setProdukte(List<Produkt> produkte) {
+		this.produkte = produkte;
+	}
+	
+	@Column(name="soll_enddatum")
+	public Date getSollenddatum() {
+		return sollenddatum;
 	}
 
-
-
-	@Column(name="termin", nullable=false)
-	public Date getTermin() {
-		return termin;
+	public void setSollenddatum(Date sollenddatum) {
+		this.sollenddatum = sollenddatum;
+	}
+	
+	@Column(name="startdatum")
+	public Date getStartdatum() {
+		return startdatum;
 	}
 
-	public void setTermin(Date termin) {
-		this.termin = termin;
+	public void setStartdatum(Date startdatum) {
+		this.startdatum = startdatum;
+	}
+	
+	@Column(name="enddatum")
+	public Date getEnddatum() {
+		return enddatum;
 	}
 
-	@Column(name="anfang", nullable=false)
-	public Date getAnfang() {
-		return anfang;
+	public void setEnddatum(Date enddatum) {
+		this.enddatum = enddatum;
 	}
-
-	public void setAnfang(Date anfang) {
-		this.anfang = anfang;
-	}
-
-	/*
-	public Produkt getProdukt() {
-		return produkt;
-	}
-
-	public void setProdukt(Produkt produkt) {
-		this.produkt = produkt;
-	}
-
-	public Leistung getLeistung() {
-		return leistung;
-	}
-
-	public void setLeistung(Leistung leistung) {
-		this.leistung = leistung;
-	}
-	*/
-
+	
 	@Column(name="status", nullable=false)
-	public String getStatus() {
+	public ETypes.AuftragS getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(ETypes.AuftragS status) {
 		this.status = status;
 	}
 
-	@Column(name="typ", nullable=false)
-	public String getTyp() {
-		return typ;
+	@Column(name="zeit", nullable=false)
+	public int getZeit() {
+		return zeit;
 	}
 
-	public void setTyp(String typ) {
-		this.typ = typ;
+	public void setZeit(int zeit) {
+		this.zeit = zeit;
+	}
+	
+	@Column(name="preis", nullable=false)
+	public double getPreis() {
+		return preis;
+	}
+
+	public void setPreis(double preis) {
+		this.preis = preis;
+	}
+	
+	
+
+	@CreationTimestamp
+	@Column(name="erst_datum", nullable=false)
+	public Timestamp getErstDatum() {
+		return erstDatum;
+	}
+
+	public void setErstDatum(Timestamp erstDatum) {
+		this.erstDatum = erstDatum;
+	}
+	
+	@UpdateTimestamp
+	@Column(name="mod_datum", nullable=false)
+	public Timestamp getModDatum() {
+		return modDatum;
+	}
+
+	public void setModDatum(Timestamp modDatum) {
+		this.modDatum = modDatum;
 	}
 
 	@Override

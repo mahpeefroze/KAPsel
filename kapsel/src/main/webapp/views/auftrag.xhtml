@@ -27,28 +27,28 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('newAuftrag').show();"/>
-						<p:commandButton value="Edit" icon="ui-ribbonicon-edit"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editAuftrag').show();" />
-						<p:commandButton value="Delete" icon="ui-ribbonicon-delete"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('delAuftrag').show();"/>
+						<p:commandButton value="New" icon="fa fa-user-plus"
+							styleClass="ui-ribbon-bigbutton" update="" oncomplete="PF('newAuftrag').show();"/>
+						<p:commandButton value="Edit" icon="fa fa-edit"
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editAuftrag').show();" /> 
+						<p:commandButton value="Delete" icon="fa fa-remove"
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton value="To PDF" icon="ui-ribbonicon-edit"
+						<p:commandButton value="To PDF" icon="fa fa-file-pdf-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
-						<p:commandButton value="To Word" icon="ui-ribbonicon-edit"
+						<p:commandButton value="To Word" icon="fa fa-file-word-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton value="Print" icon="ui-ribbonicon-edit"
+						<p:commandButton value="Print" icon="fa fa-print"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<h:button value="#{labels.menu}" outcome="index"></h:button>
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index"/>
 					</p:ribbonGroup>
 					
 				</p:tab>
@@ -56,7 +56,7 @@
 			</p:ribbon>
 			
 			<p:dialog header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
-				<ui:include src="/WEB-INF/includes/auftragNew.xhtml">
+				<ui:include src="/views/dialogs/auftragNew.xhtml">
 					<ui:param name="bean" value="#{auftragBean.newAuftrag}"/>
 				</ui:include>
 			    <hr></hr>
@@ -65,7 +65,7 @@
 			</p:dialog>
 			
 			<p:dialog header="Auftrag bearbeiten" modal="true" widgetVar="editAuftrag" minHeight="40" resizable="false">
-				<ui:include src="/WEB-INF/includes/auftragNew.xhtml" />
+				<ui:include src="/views/dialogs/auftragNew.xhtml" />
 			    <hr></hr>
 			    <p:commandButton value="OK" onclick="PF('editAuftrag').hide();"/>
 			    <p:commandButton value="Abbrechen" onclick="PF('editAuftrag').hide();"/>
@@ -113,7 +113,7 @@
 							<h:outputText value="#{item.name}" />
 						</p:column>
 						<p:column headerText="#{labels.datum}">
-							<h:outputText value="#{item.termin}">
+							<h:outputText value="#{item.sollenddatum}">
 								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputText>
 						</p:column>
@@ -160,7 +160,7 @@
 										</p:column>
 										<p:column>#end_datum</p:column>
 										<p:column>
-											<h:outputText value="#{auftragBean.selectedAuftrag.termin}">
+											<h:outputText value="#{auftragBean.selectedAuftrag.sollenddatum}">
 											<f:convertDateTime pattern="dd.MM.yyyy" />
 											</h:outputText>
 										</p:column>
@@ -176,12 +176,6 @@
 							<p:fieldset legend="#Beschreibung" toggleable="true"
 								toggleSpeed="800">
 								<h:outputText value="#{auftragBean.selectedAuftrag.text}"></h:outputText>
-							</p:fieldset>
-							<br></br>
-							<p:fieldset legend="#Notizen" toggleable="true" toggleSpeed="800"
-								collapsed="true">
-								<p:inputTextarea styleClass="fullWidth"
-									value="#{auftragBean.selectedAuftrag.notizen}"></p:inputTextarea>
 							</p:fieldset>
 							<br></br>
 						</p:tab>

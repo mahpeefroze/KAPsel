@@ -10,14 +10,14 @@
 			<p:column>#{labels.anr}:</p:column>
 			<p:column>#{auftragBean.selectedAuftrag.anr + 1}</p:column>
 			<p:column>#start_datum:</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" value="#{auftragBean.newAuftrag.anfang}"/></p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" value="#{auftragBean.newAuftrag.startdatum}"/></p:column>
 			<p:column rowspan="3">#Bild</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column><p:inputText value="#{auftragBean.newAuftrag.name}"/></p:column>
 			<p:column>#end_datum</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" pages="3" value="#{auftragBean.newAuftrag.termin}"/></p:column>
+			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.kunde}:</p:column>

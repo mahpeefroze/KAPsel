@@ -38,8 +38,14 @@ public class AuftragBean implements Serializable{
 
 	@PostConstruct
     public void init() {
-		setAuftraege(auftragService.getAuftraege());
-		setSelectedAuftrag(getAuftraege().get(0));
+		try{
+			setAuftraege(auftragService.getAuftraege());
+			setSelectedAuftrag(getAuftraege().get(0));
+		}catch(DataAccessException e) {
+			System.out.println(e.getStackTrace());
+		}catch(IndexOutOfBoundsException e){
+			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+		}
 	}
 
 	//Container for SingleSelectTable Items

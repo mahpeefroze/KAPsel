@@ -7,6 +7,10 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class ETypes {
 	
+	public AuftragS[] getAuftragS(){
+		return AuftragS.values();
+	}
+	
 	public KundeT[] getKundeT(){
 		return KundeT.values();
 	}
@@ -17,6 +21,15 @@ public class ETypes {
 	
 	public AschrittT[] getAschrittT(){
 		return AschrittT.values();
+	}
+	
+	public enum AuftragS{
+		offen,
+		bearbeitung,
+		gestoppt,
+		storniert,
+		abgeschloßen;
+		
 	}
 
 	public enum KundeT{
