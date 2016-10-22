@@ -14,11 +14,15 @@ public class ETypes {
 	public ProduktT[] getProduktT(){
 		return ProduktT.values();
 	}
+	
+	public AschrittT[] getAschrittT(){
+		return AschrittT.values();
+	}
 
 	public enum KundeT{
-		PRIVAT,
-		FIRMA,
-		OEFFENTLICH;
+		Privat,
+		Firma,
+		Öffentlich;
 	}
 	
 	public enum KundeStatus{
@@ -68,7 +72,7 @@ public class ETypes {
 		Sonstiges;
 	}
 	
-	public enum ASchrittT{
+	public enum AschrittT{
 		Maschinenarbeit,
 		Bankraum,
 		Montage;

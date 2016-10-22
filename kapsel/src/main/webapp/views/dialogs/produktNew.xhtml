@@ -15,7 +15,9 @@
 			<p:column>
 				<p:inputText value="#{produktBean.newProdukt.name}" />
 			</p:column>
-			<p:column rowspan="3">#Bild</p:column>
+			<p:column rowspan="3">
+				<p:fileUpload mode="advanced" dragDropSupport="false" sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+           </p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.pZeit}:</p:column>

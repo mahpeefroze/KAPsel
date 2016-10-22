@@ -31,7 +31,12 @@ body {
 }
 
 .fullWidth{
-	width: 100%;
+	width: 100% !important;
+	box-sizing: border-box;
+}
+
+.selectOneDT{
+	box-sizing: border-box;
 }
 
 #header {
@@ -94,9 +99,15 @@ hr {
 
 
 
+.ui-ribbon-bigbutton{
+	font-size: 30px !important;
+	width: 50px !important;
+	height: 60px !important;
+}
 
-
-
+.ui-ribbon-bigbutton .ui-icon {
+	margin-top: -22px !important;
+}
 
 
 

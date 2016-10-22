@@ -316,6 +316,30 @@ public class ProduktBean implements Serializable{
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void deleteItemView(ActionEvent actionEvent){
+		try{
+			//Splitting full clientID name
+			String[] source = actionEvent.getComponent().getClientId().split(":");
+			//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
+			if(source[source.length-1].equals("btDelView")){
+				updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getSelectedProdukt().getBauteile()));
+				getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
+				//Cascade somehow doesn't remove items from bauteile, need manual remove or else lots of dead records
+				//getBauteilService().deleteBauteil(getSelectedBauteil());
+			}else if(source[source.length-1].equals("asDelView")){
+				updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList(getSelectedProdukt().getAschritte()));
+				getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
+				//getArbeitsschrittService().deleteArbeitsschritt(getSelectedAschritt());
+			}
+			updateProdukt();
+		}catch(java.lang.IllegalArgumentException e){
+			System.out.println("selectedBauteil is empty");
+		}catch(java.lang.NullPointerException e){
+			System.out.println("selectedBauteil is empty Nullpointer");
+		}
+	}
+	
 	@SuppressWarnings({ "unchecked" , "rawtypes"})
 	public void deleteBauteilDlg(){
 		try{
@@ -328,15 +352,6 @@ public class ProduktBean implements Serializable{
 		}
 	}
 	
-	private void updateBauteilPosition(int delPos, Produkt p){
-		List<Bauteil> s = p.getBauteile();
-		for(Bauteil b:s){
-			if(b.getPosition()>delPos){
-				b.setPosition(b.getPosition()-1);
-			}
-		}
-	}
-
 
 	//--------------------------------------------ARBEITSSCHRITT SECTION-----------------------------------------------------//
 	
@@ -357,10 +372,17 @@ public class ProduktBean implements Serializable{
 		
 	}
 	
+	//Update Bauteil Values in Details View + DB
+	public void onArbeitsschritteEdit(CellEditEvent event){
+        updateArbeitsschritte(getSelectedProdukt(), event);
+        //Can only updated existing DB entries
+        updateProdukt();
+	}
+	
 	//Update Bauteil Values in Model
 	private void updateArbeitsschritte(Produkt p, CellEditEvent event){
         String colName = event.getColumn().getHeaderText();
-        if(colName.equals("Werkstoff")){
+        if(colName.equals("Werkzeug")){
         	int itemPosition = event.getRowIndex();
             List<Arbeitsschritt> s = p.getAschritte();
 			Werkzeug werkzeug = getWerkzeugService().getWerkzeugById(getWerkzeugId());

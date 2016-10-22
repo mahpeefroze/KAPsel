@@ -32,16 +32,6 @@ public class KundeBean implements Serializable{
 	private boolean editType=false;
 	
 	
-	private String newName;
-	public String getNewName() {
-		return newName;
-	}
-
-	public void setNewName(String newName) {
-		this.newName = newName;
-	}
-	
-	
 	@ManagedProperty(value="#{kundeService}")
 	private IKundeService kundeService;
 	
@@ -64,7 +54,7 @@ public class KundeBean implements Serializable{
 		//Clear newKunde contents
 		this.newKunde = new Kunde();
 		//Get list items
-		setKunden(kundeService.getKunden());
+		setKunden(getKundeService().getKunden());
 		//Intital data table selection
 		setSelectedKunde(getKunden().get(0));
 		//Initiate nested Entity or else null will be returned OR try hibernate fetch annotation in model class
@@ -171,7 +161,6 @@ public class KundeBean implements Serializable{
 	}
 	
 	public void addKunde(){
-
 		try {
 			this.newKunde.setKnr(createKnr());
 			KGruppe kGruppe = getkGruppeService().getKGruppeById(kGruppeId);

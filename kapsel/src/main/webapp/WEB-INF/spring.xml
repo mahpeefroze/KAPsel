@@ -41,6 +41,8 @@
         </property>
     </bean>
     
+    <bean id="testBean" class="de.kapsel.global.beans.TestBean"/>
+    
    	
    	<!-- USER DECLARATION + [SCHEMA] -->
 	<!-- Model Declaration -->
