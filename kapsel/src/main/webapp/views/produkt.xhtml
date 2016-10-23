@@ -24,12 +24,12 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="fa fa-file-text-o"
+						<p:commandButton value="New" icon="fa fa-codepen"
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
 						<p:commandButton value="Edit" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
-						<p:commandButton value="Delete" icon="fa fa-remove"
-							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
+						<p:commandButton value="Delete" icon="fa fa-trash"
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();" disabled="#{produktBean.emptyList}"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -298,7 +298,7 @@
 	
 	
 		
-	<p:dialog id="produktNewDlg" header="Neues Produkt" modal="true" widgetVar="newProdukt" style="min-width: 1000px; max-width: 1000px;" minHeight="40" resizable="false">
+	<p:dialog id="produktNewDlg" header="Neues Produkt" modal="true" widgetVar="newProdukt" style="max-width: 3000px; minHeight: 40px;"  resizable="false">
 			<ui:include src="/views/dialogs/produktNew.xhtml"/>
 	</p:dialog>
 

@@ -12,6 +12,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.Adresse;
+import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.services.IAdresseService;
 import de.kapsel.kunde.entities.KGruppe;
 import de.kapsel.kunde.entities.Kunde;
@@ -20,7 +21,7 @@ import de.kapsel.kunde.services.IKundeService;
 
 @ManagedBean
 @ViewScoped
-public class KundeBean implements Serializable{
+public class KundeBean extends AbstractModulBean implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
@@ -28,9 +29,6 @@ public class KundeBean implements Serializable{
 	private Kunde selectedKunde;
 	private Kunde newKunde;
 	private long kGruppeId;
-	private boolean editMode=false;
-	private boolean editType=false;
-	
 	
 	@ManagedProperty(value="#{kundeService}")
 	private IKundeService kundeService;
@@ -51,20 +49,28 @@ public class KundeBean implements Serializable{
 
 	@PostConstruct
     public void init() {
-		//Clear newKunde contents
-		this.newKunde = new Kunde();
-		//Get list items
-		setKunden(getKundeService().getKunden());
-		//Intital data table selection
-		setSelectedKunde(getKunden().get(0));
-		//Initiate nested Entity or else null will be returned OR try hibernate fetch annotation in model class
+		try{
+			setKunden(getKundeService().getKunden());
+			setSelectedKunde(getKunden().get(0));
+			setEmptyList(false);
+		}catch (DataAccessException e){
+			System.out.println(e.getStackTrace());
+		}catch(IndexOutOfBoundsException e){
+			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			setEmptyList(true);
+		}
+		resetNewKunde();
+	}
+	
+	//newKunde
+	public void resetNewKunde(){
+		setNewKunde(new Kunde());
 		getNewKunde().setAdresse(new Adresse());
-		//Reset DropDown Label
 		setkGruppeId(0);
 	}
 
 	
-	//Getter and Setter for the Fields
+	//region Getter/Setter
 	//Container for SingleSelectTable Items
 	public List<Kunde> getKunden() {
 		return kunden;
@@ -101,24 +107,6 @@ public class KundeBean implements Serializable{
 		this.kGruppeId = kGruppeId;
 	}
 
-	//editMode/viewMode == 1/0
-	public boolean isEditMode() {
-		return editMode;
-	}
-
-	public void setEditMode(boolean editMode) {
-		this.editMode = editMode;
-	}
-	
-	//For render switch editType: 0 = create [newKunde], 1 = edit [selectedKunde]
-	public boolean isEditType() {
-		return editType;
-	}
-
-	public void setEditType(boolean editType) {
-		this.editType = editType;
-	}
-
 	//Getter and Setter for the Services
 	public IKundeService getKundeService() {
 		return kundeService;
@@ -143,11 +131,14 @@ public class KundeBean implements Serializable{
 	public void setAdresseService(IAdresseService adresseService) {
 		this.adresseService = adresseService;
 	}
+	
+	//endregion Getter/Setter
 
 	//Load data of specific Item into details-table; not called on page load -> additional load in init()
 	public void loadKunde(SelectEvent event) {
 		setSelectedKunde((Kunde) event.getObject());
     }
+	
 	
 	//Basic strategy for creating new KundenNr, get highest existing and increment it by 1
 	public long createKnr(){
@@ -162,14 +153,14 @@ public class KundeBean implements Serializable{
 	
 	public void addKunde(){
 		try {
-			this.newKunde.setKnr(createKnr());
-			KGruppe kGruppe = getkGruppeService().getKGruppeById(kGruppeId);
-			this.newKunde.setGruppe(kGruppe);
+			getNewKunde().setKnr(createKnr());
+			KGruppe kGruppe = getkGruppeService().getKGruppeById(getkGruppeId());
+			getNewKunde().setGruppe(kGruppe);
 			//Only for testing purposes, later on every field needs to be filled !!!!!!!!!!!!!!!!!!!!!!!!
-			if(this.newKunde.getAdresse().getId()==0){
-				this.newKunde.setAdresse(getAdresseService().getAdresseById(2));
+			if(getNewKunde().getAdresse().getId()==0){
+				getNewKunde().setAdresse(getAdresseService().getAdresseById(2));
 			}
-			getKundeService().addKunde(this.newKunde);
+			getKundeService().addKunde(getNewKunde());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
@@ -180,22 +171,20 @@ public class KundeBean implements Serializable{
 	}
 
 	public void updateKunde(){
-		getKundeService().updateKunde(this.selectedKunde);
+		getKundeService().updateKunde(getSelectedKunde());
 		cancelEdit();
 	}
 	
 	public void setEdit(boolean type){
 		setEditMode(true);
-		setEditType(type);
 	}
 	
 	public void cancelEdit(){
 		setEditMode(false);
-		setEditType(false);
 	}
 
 	public void deleteKunde(){
-		getKundeService().deleteKunde(this.selectedKunde);
+		getKundeService().deleteKunde(getSelectedKunde());
 		init();
 	}
 

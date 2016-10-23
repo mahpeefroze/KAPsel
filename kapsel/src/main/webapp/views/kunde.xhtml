@@ -27,7 +27,7 @@
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
 						<p:commandButton value="Edit" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
-						<p:commandButton value="Delete" icon="fa fa-remove"
+						<p:commandButton value="Delete" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
 
@@ -43,14 +43,14 @@
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 					
-					<p:ribbonGroup label="" rendered="#{kundeBean.editMode and !kundeBean.editType}">
+					<p:ribbonGroup label="" rendered="#{kundeBean.editMode}">
 						<p:commandButton value="OK" icon="ui-ribbonicon-ok"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick=""/>
 						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.cancelEdit()}"/>
 					</p:ribbonGroup>
 					
-					<p:ribbonGroup label="" rendered="#{kundeBean.editMode and kundeBean.editType}">
+					<p:ribbonGroup label="" rendered="#{kundeBean.editMode}">
 						<p:commandButton value="Edit" icon="ui-ribbonicon-new"
 							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.updateKunde()}"/>
 						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
@@ -121,7 +121,7 @@
 							
 							<br></br>
 							<!-- Edit Kunde -->
-							<ui:fragment rendered="#{kundeBean.editMode and kundeBean.editType}">
+							<ui:fragment rendered="#{kundeBean.editMode}">
 								<ui:include src="/views/includes/kundeNewEdit.xhtml">
 									<ui:param name="eKunde" value="#{kundeBean.selectedKunde}"/>
 									<ui:param name="type" value="edit"/>
@@ -129,7 +129,7 @@
 							</ui:fragment>
 							
 							<!-- New Kunde -->
-							<ui:fragment rendered="#{kundeBean.editMode and !kundeBean.editType}">
+							<ui:fragment rendered="#{kundeBean.editMode}">
 								<ui:include src="/views/includes/kundeNewEdit.xhtml">
 									<ui:param name="eKunde" value="#{kundeBean.newKunde}"/>
 									<ui:param name="type" value="new"/>

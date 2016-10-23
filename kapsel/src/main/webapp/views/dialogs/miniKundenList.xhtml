@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:form id="miniKListePanel">
+	<p:dataTable id="miniKListe" var="item" value="#{kundeBean.kunden}"
+		selectionMode="single" selection="#{auftragBean.newAuftrag.kunde}"
+		rowKey="#{item.knr}" emptyMessage="#{labels.norecords}" sortBy="#{item.knr}">
+		
+		<p:ajax event="rowSelect" update=":dlgNewAuftragPanel"/>
+							
+		<p:column headerText="#{labels.k_nr}" >
+			<h:outputText value="#{item.knr}" style="width:50px;" />
+		</p:column>
+		<p:column headerText="#{labels.nachname}">
+			<h:outputText value="#{item.name}" />
+		</p:column>
+		<p:column headerText="#{labels.typ}">
+			<h:outputText value="#{item.typ}" />
+		</p:column>
+	</p:dataTable>
+	</h:form>
+
+
+</ui:composition>

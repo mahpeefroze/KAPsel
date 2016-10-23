@@ -25,3 +25,11 @@
 .ui-accordion-content{
 	background-color: rgba(56, 142, 166, 0.2);
 }
+
+.ui-inputfield.ui-widget.ui-state-default.ui-corner-all.hasDatepicker{
+	width: 155px;
+}
+
+#miniKListeDlg{
+	width: 500px !important;
+}

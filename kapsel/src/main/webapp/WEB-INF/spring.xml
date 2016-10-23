@@ -43,6 +43,7 @@
     
     <bean id="testBean" class="de.kapsel.global.beans.TestBean"/>
     
+    
    	
    	<!-- USER DECLARATION + [SCHEMA] -->
 	<!-- Model Declaration -->
@@ -59,15 +60,6 @@
 	</bean>
 	
 	
-	<!-- AUFTRAG DECLARATION -->
-	<bean id="auftrag" class="de.kapsel.auftrag.entities.Auftrag" />
-	<bean id="auftragService" class="de.kapsel.auftrag.services.AuftragService">
-		<property name="auftragDAO" ref="auftragDAO" />
-	</bean>
-	<bean id="auftragDAO" class="de.kapsel.auftrag.dao.AuftragDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
 	<!-- KUNDE DECLARATION -->
 	<bean id="kunde" class="de.kapsel.kunde.entities.Kunde"/>
 	<bean id="kundeService" class="de.kapsel.kunde.services.KundeService">
@@ -76,7 +68,18 @@
 	<bean id="kundeDAO" class="de.kapsel.kunde.dao.KundeDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+
 	
+	<!-- AUFTRAG DECLARATION -->
+	<bean id="auftrag" class="de.kapsel.auftrag.entities.Auftrag" />
+	<bean id="auftragService" class="de.kapsel.auftrag.services.AuftragService">
+		<property name="auftragDAO" ref="auftragDAO" />
+	</bean>
+	<bean id="auftragDAO" class="de.kapsel.auftrag.dao.AuftragDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+    
+    
 	<!-- KUNDENGRUPPE DECLARATION -->
 	<bean id="kgruppe" class="de.kapsel.kunde.entities.KGruppe" />
 	<bean id="kgruppeService" class="de.kapsel.kunde.services.KGruppeService">

@@ -27,12 +27,12 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="fa fa-user-plus"
-							styleClass="ui-ribbon-bigbutton" update="" oncomplete="PF('newAuftrag').show();"/>
+						<p:commandButton value="New" icon="fa fa-file-text-o"
+							styleClass="ui-ribbon-bigbutton" update="auftragNewDlg" oncomplete="PF('newAuftrag').show();"/>
 						<p:commandButton value="Edit" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editAuftrag').show();" /> 
-						<p:commandButton value="Delete" icon="fa fa-remove"
-							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();"/>
+							styleClass="ui-ribbon-bigbutton" onclick="" /> 
+						<p:commandButton value="Delete" icon="fa fa-trash"
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();" disabled="#{auftragBean.emptyList}"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -54,29 +54,6 @@
 				</p:tab>
 
 			</p:ribbon>
-			
-			<p:dialog header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
-				<ui:include src="/views/dialogs/auftragNew.xhtml">
-					<ui:param name="bean" value="#{auftragBean.newAuftrag}"/>
-				</ui:include>
-			    <hr></hr>
-			    <p:commandButton value="OK" onclick="PF('dlg1').hide();"/>
-			    <p:commandButton value="Abbrechen" onclick="PF('dlg1').hide();"/>
-			</p:dialog>
-			
-			<p:dialog header="Auftrag bearbeiten" modal="true" widgetVar="editAuftrag" minHeight="40" resizable="false">
-				<ui:include src="/views/dialogs/auftragNew.xhtml" />
-			    <hr></hr>
-			    <p:commandButton value="OK" onclick="PF('editAuftrag').hide();"/>
-			    <p:commandButton value="Abbrechen" onclick="PF('editAuftrag').hide();"/>
-			</p:dialog>
-			
-			<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
-				<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
-			    <hr></hr>
-			    <p:commandButton value="#{labels.ja}" onclick="PF('delAuftrag').hide();"/>
-			    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
-			</p:dialog>
 			
 		</h:form>
 		
@@ -291,7 +268,12 @@
 					</p:accordionPanel>
 
 					<hr></hr>
-
+					<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
+					    <hr></hr>
+					    <p:commandButton value="#{labels.ja}" action="#{auftragBean.deleteAuftrag()}" update="nav_form sect_form" oncomplete="PF('delAuftrag').hide();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
+					</p:dialog>
 
 				</div>
 			</div>
@@ -300,6 +282,9 @@
 
 	<div id="footer"></div>
 
-
+	<p:dialog id="auftragNewDlg" header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
+		<ui:include src="/views/dialogs/auftragNew.xhtml"/>
+	</p:dialog>
+	
 </body>
 </html>

@@ -6,7 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-	<h:form id="dlgPanel">
+	<h:form id="dlgNewProduktPanel">
 	<p:panelGrid styleClass="fullWidth">
 		<p:row>
 			<p:column>#{labels.pnr}:</p:column>
@@ -42,7 +42,7 @@
 		<p:row>
 			<!-- Bezeichnungsfeld -->
 			<p:column colspan="4">
-				<p:inputTextarea styleClass="fullWidth" value="#{produktBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."></p:inputTextarea>
+				<p:inputTextarea styleClass="fullWidth" value="#{produktBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."/>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -125,10 +125,14 @@
 			</p:column>
 		</p:row>
 	</p:panelGrid>
+	
+	
+	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgNewProduktPanel nav_form" oncomplete="PF('newProdukt').hide();" />
+	<p:commandButton value="Abbrechen" action="#{produktBean.resetNewProdukt()}" update="dlgNewProduktPanel" oncomplete="PF('newProdukt').hide();" />
+	
 	</h:form>
 
-	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgPanel nav_form" oncomplete="PF('newProdukt').hide();" />
-	<p:commandButton value="Abbrechen" action="#{produktBean.resetNewProdukt()}" update="dlgPanel" oncomplete="PF('newProdukt').hide();" />
+	
 
 
 </ui:composition>

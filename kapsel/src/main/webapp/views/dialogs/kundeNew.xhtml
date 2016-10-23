@@ -6,7 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-	<h:form id="dlgKundePanel">
+	<h:form id="dlgNewKundePanel">
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.knr}:</p:column>
@@ -23,7 +23,7 @@
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
-				<p:inputText value="#{kundeBean.newKunde.name}" required="true" />
+				<p:inputText value="#{kundeBean.newKunde.name}"/>
 			</p:column>
 			<p:column>#Gruppe:</p:column>
 			<p:column>
@@ -36,7 +36,7 @@
 		<p:row>
 			<p:column>#{labels.ansprechPartner}:</p:column>
 			<p:column>
-				<p:inputText value="#{kundeBean.newKunde.APartner}" required="true" />
+				<p:inputText value="#{kundeBean.newKunde.APartner}" />
 			</p:column>
 			<p:column>#{labels.rabatt}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.rabatt}"/></p:column>
@@ -79,14 +79,15 @@
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgKundePanel nav_form" oncomplete="PF('newKunde').hide();">
+	
+	
+	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgNewKundePanel nav_form" oncomplete="PF('newKunde').hide();">
 		<p:resetInput target="newKgruppeSelect" />
 	</p:commandButton>
+	<p:commandButton value="Abbrechen" action="#{kundeBean.resetNewKunde()}" update="dlgNewKundePanel" oncomplete="PF('newKunde').hide();" />
 	</h:form>
 	
-	<p:commandButton value="Abbrechen" update="dlgKundePanel" oncomplete="PF('newKunde').hide();" />
 	
-
 </ui:composition>
 
 

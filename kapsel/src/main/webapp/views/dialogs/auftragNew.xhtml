@@ -4,31 +4,58 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-
+	
+	<h:form id="dlgNewAuftragPanel">
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.anr}:</p:column>
 			<p:column>#{auftragBean.selectedAuftrag.anr + 1}</p:column>
-			<p:column>#start_datum:</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" value="#{auftragBean.newAuftrag.startdatum}"/></p:column>
-			<p:column rowspan="3">#Bild</p:column>
+			<p:column>#{labels.erstDatum}:</p:column>
+			<p:column colspan="2">
+				<h:outputText value="#{currentDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" type="date"/>
+				</h:outputText>
+			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
-			<p:column><p:inputText value="#{auftragBean.newAuftrag.name}"/></p:column>
-			<p:column>#end_datum</p:column>
-			<p:column><p:calendar showOn="button" pattern="dd.mm.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}"/></p:column>
+			<p:column><p:inputText value="#{auftragBean.newAuftrag.name}" style="width:200px;"/></p:column>
+			<p:column>#{labels.kunde}:</p:column>
+			<p:column>
+				<h:outputText value="#{auftragBean.newAuftrag.kunde.name}"/>
+			</p:column>
+			<p:column  style="width:40px;">
+				<p:commandButton icon="fa fa-user-plus" oncomplete="PF('kundeSelect').show();"/>
+			</p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.kunde}:</p:column>
-			<p:column><h:outputText value="#{auftragBean.newAuftrag.kunde.name}" /></p:column>
+			<p:column>#{labels.terminL}:</p:column>
+			<p:column ><p:calendar showOn="button" pattern="dd.MM.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}" /></p:column>
 			<p:column>#{labels.verantwortlichMA}:</p:column>
 			<p:column></p:column>
+			<p:column></p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="5">
+				<p:inputTextarea styleClass="fullWidth" value="#{auftragBean.newAuftrag.text}"  placeholder="Kurze Beschreibung des Produkts..."/>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.zeit}:</p:column>
+			<p:column ><p:inputText value="#{auftragBean.newAuftrag.zeit}"/></p:column>
+			<p:column>#{labels.preis}:</p:column>
+			<p:column colspan="2"><p:inputText value="#{auftragBean.newAuftrag.preis}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-
-
-
+	<p:commandButton value="OK" action="#{auftragBean.addAuftrag()}" update="dlgNewAuftragPanel nav_form" oncomplete="PF('newAuftrag').hide();" />
+	<p:commandButton value="Abbrechen" action="#{auftragBean.resetNewAuftrag()}" update="dlgNewAuftragPanel" oncomplete="PF('newAuftrag').hide();" />	
+	</h:form>
+	
+	<p:dialog id="miniKListeDlg" header="Kunden auswählen"  widgetVar="kundeSelect" minHeight="40" resizable="false" modal="true" appendTo="@(body)">
+		<ui:include src="/views/dialogs/miniKundenList.xhtml"/>
+	</p:dialog>
+	
+	
 
 </ui:composition>
 

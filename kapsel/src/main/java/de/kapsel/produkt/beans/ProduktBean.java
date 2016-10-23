@@ -15,6 +15,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.DTItem;
+import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
 import de.kapsel.produkt.entities.Material;
@@ -28,7 +29,7 @@ import de.kapsel.produkt.services.IWerkzeugService;
 
 @ManagedBean
 @ViewScoped
-public class ProduktBean implements Serializable{
+public class ProduktBean extends AbstractModulBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private List<Produkt> produkte;
@@ -39,6 +40,7 @@ public class ProduktBean implements Serializable{
 	private boolean stuecklisteCB;
 	private long materialId;
 	private long werkzeugId;
+	private boolean emptyList;
 
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
@@ -55,10 +57,8 @@ public class ProduktBean implements Serializable{
 	@ManagedProperty(value="#{werkzeugService}")
 	private IWerkzeugService werkzeugService;
 	
-	//Gather Items to fill the table
 	public ProduktBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
-		this.newProdukt = new Produkt();
 	}
 	
 	//Prepare data for first display or update after insert/delete
@@ -67,13 +67,14 @@ public class ProduktBean implements Serializable{
 		try{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
+			setEmptyList(false);
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			setEmptyList(true);
 		}
-		
-		//Clearing newProudukt Dialog fields
+		//Clearing newProdukt Dialog fields
 		resetNewProdukt();
 	}
 	
@@ -84,9 +85,10 @@ public class ProduktBean implements Serializable{
 		getNewProdukt().setAschritte(new ArrayList<Arbeitsschritt>());
 		setMaterialId(0);
 		setWerkzeugId(0);
-		stuecklisteCB=false;
+		setStuecklisteCB(false);
 	}
 
+	//region Getters/Setters
 	public Produkt getNewProdukt() {
 		return newProdukt;
 	}
@@ -196,11 +198,21 @@ public class ProduktBean implements Serializable{
 	public void setWerkzeugId(long werkzeugId) {
 		this.werkzeugId = werkzeugId;
 	}
+	
+	public boolean isEmptyList() {
+		return emptyList;
+	}
+
+	public void setEmptyList(boolean emptyList) {
+		this.emptyList = emptyList;
+	}
+	
+	//endregion Getters/Setters
+	
 
 	//Load data of specific Item into details-table; not called on page load -> additional load in init()
 	public void loadProdukt(SelectEvent event) {
 		setSelectedProdukt((Produkt) event.getObject());
-
     }
 		
 		//Basic strategy for creating new ProduktNr, get highest existing and icrement it by 1
@@ -222,9 +234,7 @@ public class ProduktBean implements Serializable{
 
 
 	public void addProdukt(){
-
 		try {
-
 			//Implement logic for creating new PNR and also put it
 			getNewProdukt().setPnr(createPnr());
 			//If stueckliste checkbox unchecked
@@ -236,7 +246,6 @@ public class ProduktBean implements Serializable{
 			e.printStackTrace();
 		}
 		init();
-
 	}
 	
 	public void updateProdukt(){
