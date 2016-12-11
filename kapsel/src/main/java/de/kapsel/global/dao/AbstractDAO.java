@@ -52,10 +52,10 @@ public abstract class AbstractDAO<T extends Serializable>{
 	}
 
 	public T getItemByName(String name) {
-		String query="from "+getTName()+" where name=?";
+		String query="from "+getTName()+" where name=:nameParam";
 		List list = sessionFactory.getCurrentSession()
                 .createQuery(query)
-                .setParameter(0, name).list();
+                .setString("nameParam", name).list();
 		if(!list.isEmpty()){
 			return (T)list.get(0);
 		}
@@ -65,8 +65,8 @@ public abstract class AbstractDAO<T extends Serializable>{
 	public T getItemById(long id) {
 
 		List list = sessionFactory.getCurrentSession()
-                .createQuery("from "+getTName()+" where id=?")
-                .setParameter(0, id).list();
+                .createQuery("from "+getTName()+" where id=:idParam")
+                .setLong("idParam", id).list();
 		if(!list.isEmpty()){
 			return (T)list.get(0);
 		}

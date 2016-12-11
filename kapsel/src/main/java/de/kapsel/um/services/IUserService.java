@@ -12,7 +12,7 @@ public interface IUserService {
 
     public abstract void deleteUser(User user);
 
-    public abstract User getUserByUsername(User user);
+    public abstract User getUserByUsername(String name);
 
     public abstract User getUserById(long id);
 

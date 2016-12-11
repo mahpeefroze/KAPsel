@@ -6,6 +6,13 @@
 
 	<display-name>KAPsel</display-name>
 
+	
+	<!-- Font Icons -->
+	<context-param>
+	    <param-name>primefaces.FONT_AWESOME</param-name>
+	    <param-value>true</param-value>
+	</context-param>
+
 	<!-- Spring Context Configuration' s Path definition -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -13,12 +20,6 @@
             /WEB-INF/spring.xml
          </param-value>
 	</context-param>
-	
-	<context-param>
-	    <param-name>primefaces.FONT_AWESOME</param-name>
-	    <param-value>true</param-value>
-	</context-param>
-	
 	<!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
     <listener>
     	<listener-class>
@@ -39,7 +40,7 @@
 
 	<!-- Welcome Page -->
 	<welcome-file-list>
-		<welcome-file>home.xhtml</welcome-file>
+		<welcome-file>/views/home.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- JSF Servlet is defined to container -->

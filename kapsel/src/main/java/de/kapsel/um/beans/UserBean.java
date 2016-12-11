@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.faces.bean.SessionScoped;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.um.User;
@@ -17,6 +17,7 @@ import de.kapsel.um.services.IUserService;
 
 
 @ManagedBean
+@SessionScoped
 public class UserBean implements Serializable{
 
 
@@ -26,24 +27,36 @@ public class UserBean implements Serializable{
 	@ManagedProperty(value="#{userService}")
 	private IUserService userService;
 
-
-	@Id
-	@GeneratedValue
-	private Integer id;
-	private String name;
-	private String password;
-	@OneToMany
-	private List<User> userList;
-
+	private User selectedUser;
+	private User loginUser;
+	private User newUser;
+	private List<User> users;
+	private long id;
+	private String passwordNew;
+	private boolean resPassword;
+	
+	
+	@PostConstruct
+	public void init(){
+		try {
+			setUsers(getUserService().getUsers());
+			setSelectedUser(getUsers().get(0));
+			setResPassword(false);
+			setLoginUser(new User());
+			setNewUser(new User());
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}catch(IndexOutOfBoundsException e){
+			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+		}	
+	}
 
 	//REGISTER USER
 	public String addUser(){
 
 		try {
-			User user = new User();
-			user.setName(getName());
-			user.setPassword(hashPassword());
-			getUserService().addUser(user);
+			getNewUser().setPassword("");
+			getUserService().addUser(getNewUser());
 			return "success";
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -52,55 +65,68 @@ public class UserBean implements Serializable{
 		return "error";
 
 	}
+	
+	public void updateUser(User user){
+		getUserService().updateUser(user);
+	}
+	
+	public void deleteUser(){
+		getUserService().deleteUser(getSelectedUser());
+	}
+	
+	public void loadUser(SelectEvent event) {
+		setSelectedUser((User) event.getObject());
 
+    }
+	
+	
 	//LOGIN CONTROL
 	public String loginUser(){
 
 		try {
-			User user = new User();
-			User dbuser = new User();
-			user.setName(getName());
-			user.setPassword(hashPassword());
-			dbuser = getUserService().getUserByUsername(user);
-			if(dbuser!=null){
-				if(dbuser.getPassword().equals(hashPassword())){
-					return "success";
-				}else{
-					return "error";
+			User dbUser = getUserService().getUserByUsername(getLoginUser().getName());
+			if(dbUser!=null){
+				String dbPassword=dbUser.getPassword();
+				if(dbPassword.equals("")){
+					setLoginUser(dbUser);
+					setResPassword(true);
+				}else if(dbPassword.equals(hashPassword(getLoginUser().getPassword()))){
+					setLoginUser(dbUser);
+					return "index.xhtml?faces-redirect=true";
 				}
 			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 
-		return "error";
+		return "home.xhtml?faces-redirect=true";
 	}
-
-
-	//Reset Input Fields
-	public void reset() {
-        this.setName("");
-        this.setPassword("");
-    }
-
-	public List<User> getUserList() {
-        userList = new ArrayList<User>();
-        userList.addAll(this.userService.getUsers());
-        return userList;
-    }
-
-	public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
-
+	
+	public String logoutUser(){
+		init();
+		return "home.xhtml?faces-redirect=true";
+	}
+	
 	//Hash Password - TODO
-	private String hashPassword(){
-		String hashed = getPassword();
+	private String hashPassword(String password){
+		String hashed = password;
 		return hashed;
 	}
-
-
+	
+	//Create new password on first login/login after reset
+	public void createPassword(){
+		getLoginUser().setPassword(hashPassword(getPasswordNew()));
+		updateUser(getLoginUser());
+		setResPassword(false);
+	}
+	
+	//Reset password in control panel
+	public void resetPassword(){
+		getSelectedUser().setPassword("");
+		updateUser(getSelectedUser());
+	}
 
 
 	//Getter und Setter fur ManagedProperty
@@ -112,37 +138,67 @@ public class UserBean implements Serializable{
         this.userService = userService;
     }
 
+	public List<User> getUsers() {
+        users = new ArrayList<User>();
+        users.addAll(this.userService.getUsers());
+        return users;
+    }
 
-
-
-
+	public void setUsers(List<User> userList) {
+        this.users = userList;
+    }
 
 	//Getter und Setter fur xhtml Seite
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
+    
+	public User getSelectedUser() {
+		return selectedUser;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSelectedUser(User selectedUser) {
+		this.selectedUser = selectedUser;
 	}
 
-	public String getPassword() {
-		return password;
+	public User getNewUser() {
+		return newUser;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setNewUser(User newUser) {
+		this.newUser = newUser;
 	}
 
+	public User getLoginUser() {
+		return loginUser;
+	}
 
+	public void setLoginUser(User loginUser) {
+		this.loginUser = loginUser;
+	}
+
+	public String getPasswordNew() {
+		return passwordNew;
+	}
+
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
+	}
+
+	public boolean isResPassword() {
+		return resPassword;
+	}
+
+	public void setResPassword(boolean resPassword) {
+		this.resPassword = resPassword;
+	}
+
+	
+	
 
 
 

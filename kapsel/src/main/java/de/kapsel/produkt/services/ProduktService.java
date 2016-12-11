@@ -12,7 +12,7 @@ import de.kapsel.produkt.entities.Produkt;
 public class ProduktService implements IProduktService{
 
 	//Injection ProduktDAO
-	@ManagedProperty(value="#{produktDAO}")
+	//@ManagedProperty(value="#{produktDAO}")
 	private IProduktDAO produktDAO;
 
 	public IProduktDAO getProduktDAO() {

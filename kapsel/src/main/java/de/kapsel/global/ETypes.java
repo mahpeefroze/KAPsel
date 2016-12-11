@@ -23,6 +23,10 @@ public class ETypes {
 		return AschrittT.values();
 	}
 	
+	public UserT[] getUserT(){
+		return UserT.values();
+	}
+	
 	public enum AuftragS{
 		offen,
 		bearbeitung,
@@ -46,9 +50,8 @@ public class ETypes {
 	public enum UserT{
 		ADMIN,
 		MOD,
-		SYSUSER,
-		DBUSER,
-		GAST;
+		ADVUSER,
+		SYSUSER;
 	}
 
 	public enum ETables{

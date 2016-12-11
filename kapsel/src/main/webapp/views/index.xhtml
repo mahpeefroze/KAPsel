@@ -14,15 +14,17 @@
 
 </h:head>
 <h:body>
-	
+	<div id="logout" style="float:right;">
+	<p:commandLink value="Logout" action="#{userBean.logoutUser()}"/>
+	</div>
 	<div id="main_nav" class="centered">
 		<h:form>
 			<h:panelGrid columns="3">
-				<h:commandButton action="kunde" class="button_splash kunde_splash"/>
-				<h:commandButton action="auftrag" class="button_splash auftrag_splash"/>
-				<h:commandButton action="produkt" class="button_splash produkt_splash"/>
+				<h:commandButton action="kunde?faces-redirect=true" class="button_splash kunde_splash"/>
+				<h:commandButton action="auftrag?faces-redirect=true" class="button_splash auftrag_splash"/>
+				<h:commandButton action="produkt?faces-redirect=true" class="button_splash produkt_splash"/>
 				<h:commandButton action="stats" class="button_splash statistik_splash"/>
-				<h:commandButton action="setup" class="button_splash einstellung_splash"/>
+				<h:commandButton action="settings?faces-redirect=true" class="button_splash einstellung_splash"/>
 				<h:commandButton action="lager" class="button_splash lager_splash"/>
 			</h:panelGrid>
 			<br/>

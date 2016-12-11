@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:outputStylesheet name="global.css" library="css"/>
+<h:outputStylesheet name="login.css" library="css"/>  
+
+<h:head>
+
+<title>#{labels.progName} #{labels.login}</title>
+
+</h:head>
+
+<body> 
+
+	<h:form id="loginPanel" styleClass="centered">
+	
+	<h:panelGrid columns="3">
+		
+		#{labels.userName}
+		<h:inputText value="#{userBean.loginUser.name}" id="username" required="true" requiredMessage="#{errors.requiredField}"/>
+		<h:message for="username" styleClass="errorMessage" />
+	
+		#{labels.password}
+		<h:inputSecret value="#{userBean.loginUser.password}" id="password" required="true" requiredMessage="#{errors.requiredField}"/>
+		<h:message for="password" styleClass="errorMessage" />
+	
+	</h:panelGrid>
+	
+		<p:commandButton value="#{labels.login}" update="createPasswordDlg" action="#{userBean.loginUser()}"/>
+	
+	
+	
+	</h:form>
+
+	<p:dialog styleClass="createPW" id="createPasswordDlg" visible="#{userBean.resPassword}" header="Passwort erstellen" modal="true" appendTo="@(body)" widgetVar="createPassword" minHeight="40" resizable="false">
+		<ui:include src="/views/dialogs/createPassword.xhtml"/>
+	</p:dialog>
+
+</body> 
+</html>

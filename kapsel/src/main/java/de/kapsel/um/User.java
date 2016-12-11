@@ -8,20 +8,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import de.kapsel.global.ETypes;
+
 @Entity
 @Table(name = "users")
 public class User implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
-	public static final String tname="users";
 	private long id;
+	private ETypes.UserT role;
+	private String username;
 	private String name;
 	private String password;
 
 	@Id
 	@GeneratedValue
-	@Column(name="id", nullable=false, unique=true, length=11)
+	@Column(name="id", nullable=false, unique=true)
 	public long getId() {
 		return id;
 	}
@@ -29,8 +32,26 @@ public class User implements Serializable{
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	@Column(name="role", nullable=false, unique=false)
+	public ETypes.UserT getRole() {
+		return role;
+	}
 
-	@Column(name="name", unique=true, length=20, nullable=true)
+	public void setRole(ETypes.UserT role) {
+		this.role = role;
+	}
+	
+	@Column(name="username", nullable=false, unique=true)
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@Column(name="name", unique=false, nullable=true)
 	public String getName() {
 		return name;
 	}
@@ -39,7 +60,7 @@ public class User implements Serializable{
 		this.name = name;
 	}
 
-	@Column(name="password", length=20, nullable=true)
+	@Column(name="password", nullable=false)
 	public String getPassword() {
 		return password;
 	}

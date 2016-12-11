@@ -45,7 +45,7 @@
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index"/>
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
 					</p:ribbonGroup>
 
 				</p:tab>
@@ -251,6 +251,7 @@
 						               <f:facet name="output"><h:outputText value="#{item.typ}" /></f:facet>
 										<f:facet name="input">
 										<p:selectOneMenu id="asTypSelect" value="#{item.typ}" styleClass="fullWidth">
+											<f:selectItem itemLabel="Typ auswählen" itemValue="" noSelectionOption="true" />
 											<f:selectItems value="#{eTypes.aschrittT}"/>
 										</p:selectOneMenu>
 										</f:facet>
@@ -261,7 +262,7 @@
 						               <f:facet name="output"><h:outputText value="#{item.werkzeug.name}" /></f:facet>
 										<f:facet name="input">
 										<p:selectOneMenu id="werkzeugSelect" value="#{produktBean.werkzeugId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
-											<f:selectItem itemLabel="Werkzeug auswaehlen" itemValue="" noSelectionOption="true" />
+											<f:selectItem itemLabel="Werkzeug auswählen" itemValue="" noSelectionOption="true" />
 											<f:selectItems value="#{werkzeugBean.werkzeuge}" var="wz" itemLabel="#{wz.name} | #{wz.stundensatz} #{labels.waehrung}/#{labels.stundeH}" itemValue="#{wz.id}"/>				
 										</p:selectOneMenu>
 										</f:facet>

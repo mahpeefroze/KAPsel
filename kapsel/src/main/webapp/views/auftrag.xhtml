@@ -48,7 +48,7 @@
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index"/>
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
 					</p:ribbonGroup>
 					
 				</p:tab>
@@ -195,7 +195,7 @@
 
 							<p:tabView>
 								<p:tab title="Übersicht">
-									<h:outputText value="Alle aktuelle Versionen von Dateien" />
+									<h:outputText value="Aktuelle Versionen von Dateien" />
 									<p:panelGrid>
 										<p:row>
 											<p:column>Angebot</p:column>
@@ -234,11 +234,8 @@
 								<p:tab title="Rechnung">
 									<h:outputText value="End/gesamtrechnung für die Bestellung" />
 								</p:tab>
-								<p:tab title="Brief">
+								<p:tab title="Briefe und Gesprächsprotokolle">
 									<h:outputText value="Briefe an und von Kunden" />
-								</p:tab>
-								<p:tab title="Gesprächsprotokolle">
-									<h:outputText value="Dolor" />
 								</p:tab>
 								<p:tab title="Lieferschein">
 									<h:outputText value="Lieferschein für Kunden" />

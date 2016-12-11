@@ -12,6 +12,14 @@
 	<!-- Data Source Declaration, kapselDS defined with WildFly WebConsole -->
     <jee:jndi-lookup id="dataSource" jndi-name="java:/jdbc/kapselDS"/>
 	
+	<!-- Enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+ 
+    <!-- Transaction Manager is defined -->
+    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+       <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+	
 	<!-- Session Factory Declaration -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -143,12 +151,4 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
     
-    <!-- Enable the configuration of transactional behavior based on annotations -->
-    <tx:annotation-driven transaction-manager="txManager"/>
- 
-    <!-- Transaction Manager is defined -->
-    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-       <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
 </beans>

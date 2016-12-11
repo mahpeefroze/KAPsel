@@ -26,7 +26,7 @@
 						<p:commandButton value="New" icon="fa fa-user-plus"
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
 						<p:commandButton value="Edit" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="PF('editKunde').show();" /> 
+							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
 						<p:commandButton value="Delete" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
@@ -58,7 +58,7 @@
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index"/>
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
 					</p:ribbonGroup>
 
 				</p:tab>
@@ -228,11 +228,13 @@
 					    <p:commandButton value="#{labels.nein}" onclick="PF('delKunde').hide();"/>
 					</p:dialog>
 					
+					<!-- 
 					<p:dialog id="editKunde" header="Kunden bearbeiten" modal="true" widgetVar="editKunde" minHeight="40" resizable="false">
 						<h:form>
 						<ui:include src="/views/dialogs/kundeEdit.xhtml"/>
 						</h:form>
 					</p:dialog>
+					 -->
 	
 				</div>
 			</div>

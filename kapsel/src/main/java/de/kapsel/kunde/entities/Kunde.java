@@ -83,7 +83,8 @@ public class Kunde implements Serializable {
 	public void setGruppe(KGruppe gruppe) {
 		this.gruppe = gruppe;
 	}
-
+	
+	//Cascade not ALL -> in order not to delete default address, actually breaking the ono-to-one concept
 	@OneToOne(cascade=CascadeType.MERGE)
 	public Adresse getAdresse() {
 		return adresse;

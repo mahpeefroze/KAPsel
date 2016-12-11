@@ -173,6 +173,8 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		init();
 	}
 
-
+	public void clearKundeSelection(){
+		getNewAuftrag().setKunde(new Kunde());
+	}
 
 }

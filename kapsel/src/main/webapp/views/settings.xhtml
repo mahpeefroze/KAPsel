@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:outputStylesheet name="global.css" library="css" />
+<h:outputStylesheet name="settings.css" library="css" />
+
+<h:head>
+
+	<title>#{labels.progName} #{labels.settings}</title>
+
+</h:head>
+
+<body>
+
+	<div id="header" class="float_frame">
+		<h:form id="ribbon">
+			<p:ribbon>
+				<p:tab title="#{labels.settings}">
+					<p:ribbonGroup>
+						<h1>#{labels.settings}</h1>
+					</p:ribbonGroup>
+					<p:ribbonGroup label="Optionen" style="float: right;">
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home"
+							styleClass="ui-ribbon-bigbutton"
+							action="index?faces-redirect=true" />
+					</p:ribbonGroup>
+
+				</p:tab>
+
+			</p:ribbon>
+		</h:form>
+
+
+	</div>
+
+
+	<div id="middle">
+		<p:accordionPanel id="settingsPanel" multiple="false">
+
+			<!-- User Settings -->
+			<p:tab id="userTab" title="#{labels.settingsUser}">
+				
+				<h:form id="nav_form_1">
+					<div id="nav_container_1">
+						<div id="nav_1" class="float_frame">
+
+							<p:dataTable id="userDT" var="item"
+								value="#{userBean.users}" selectionMode="single"
+								selection="#{userBean.selectedUser}" rowKey="#{item.id}"
+								emptyMessage="#{labels.norecords}">
+								<f:facet name="header">#{labels.userListe}</f:facet>
+
+								<p:ajax event="rowSelect" listener="#{userBean.loadUser}" update=":settingsPanel:sect_form_1" />
+
+								<p:column headerText="#{labels.id}" style="width:40px;">
+									<h:outputText value="#{item.id}" />
+								</p:column>
+								<p:column headerText="#{labels.nachname}">
+									<h:outputText value="#{item.name}" />
+								</p:column>
+							</p:dataTable>
+
+							<hr></hr>
+						</div>
+					</div>
+				</h:form>
+
+				<!-- RECHTE SEITE -->
+				<h:form id="sect_form_1">
+					<div id="section_container_1">
+						<div id="section_1" class="float_frame">
+						<p:panelGrid>
+								<p:row>
+									<p:column>#{labels.id}</p:column>
+									<p:column>#{userBean.selectedUser.id}</p:column>
+									<p:column colspan="2"/>
+								</p:row>
+
+								<p:row>
+									<p:column>#{labels.nachname}</p:column>
+									<p:column>#{userBean.selectedUser.name}</p:column>
+									<p:column>#{labels.userRole}</p:column>
+									<p:column>
+									
+									<p:selectOneMenu disabled="true" id="userRoleSelect" value="#{userBean.selectedUser.role}" style="width:150px">
+										<f:selectItem itemLabel="#{labels.userRole}" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{eTypes.userT}" var="typ" itemLabel="#{typ}" itemValue="#{userT}" />
+									</p:selectOneMenu>
+									
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>#{labels.userName}</p:column>
+									<p:column>#{userBean.selectedUser.username}</p:column>
+									<p:column colspan="2">
+										<p:commandButton value="#{labels.passwordReset}" action="#{userBean.resetPassword()}"/>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						
+						
+						</div>
+					</div>
+				</h:form>
+
+
+			</p:tab>
+
+			<!-- Kunden Settings -->
+			<p:tab title="#{labels.settingsKunde}">
+			</p:tab>
+
+
+			<!-- Produkte Settings -->
+			<p:tab title="#{labels.settingsProdukt}">
+			</p:tab>
+
+			<!-- Other Settings -->
+			<p:tab title="#{labels.settingsOther}">
+			</p:tab>
+
+
+		</p:accordionPanel>
+
+
+	</div>
+
+</body>
+</html>

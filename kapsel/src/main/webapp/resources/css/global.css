@@ -51,26 +51,26 @@ body {
 	height:700px;
 }
 
-#nav_container {
+div[id^="nav_container"] {
     line-height:30px;
     float:left;
     width:30%;
     height:100%;
 }
 
-#nav {
+div[id^="nav"] {
     background-color:#eeeeee;
     height: 678px;
 	}
 	
-#section_container {
+div[id^="section_container"] {
 	position:relative;
     float:left;
 	width:70%;
 	height:100%;
 }
 	
-#section {
+div[id^="section"] {
     height: 678px;
 }
 

@@ -47,8 +47,8 @@ public class UserService implements IUserService{
 
 	@Override
 	@Transactional(readOnly = false)
-	public User getUserByUsername(User user){
-		return userDAO.getItemByName(user.getName());
+	public User getUserByUsername(String name){
+		return userDAO.getItemByName(name);
 	}
 
 	@Override
