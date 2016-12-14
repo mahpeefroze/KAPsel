@@ -1,10 +1,10 @@
 package de.kapsel.global;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean
-@ApplicationScoped
+@RequestScoped
 public class ETypes {
 	
 	public AuftragS[] getAuftragS(){

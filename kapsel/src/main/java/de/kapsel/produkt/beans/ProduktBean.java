@@ -15,6 +15,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.DTItem;
+import de.kapsel.global.SessionUtils;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
@@ -68,6 +69,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
+			System.out.println(SessionUtils.getUser());
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){

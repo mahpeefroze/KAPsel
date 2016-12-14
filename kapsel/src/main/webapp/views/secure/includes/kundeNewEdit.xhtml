@@ -6,14 +6,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-	<h:form id="dlgNewKundePanel">
+
 	<p:panelGrid>
 		<p:row>
-			<p:column>#{labels.knr}:</p:column>
+			<p:column>#{labels.knr}</p:column>
 			<p:column>#{kundeBean.createKnr()}</p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
-				<p:selectOneMenu id="newKtypSelect" value="#{kundeBean.newKunde.typ}" style="width:200px">
+				<p:selectOneMenu id="#{type}_newKtypSelect" value="#{eKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
 				</p:selectOneMenu>
@@ -23,11 +23,11 @@
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
-				<p:inputText value="#{kundeBean.newKunde.name}"/>
+				<p:inputText value="#{eKunde.name}" required="true" />
 			</p:column>
 			<p:column>#Gruppe:</p:column>
 			<p:column>
-				<p:selectOneMenu id="newKgruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
+				<p:selectOneMenu id="#{type}_kGruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
 					<f:selectItem itemLabel="Gruppe | Rabatt" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{kGruppeBean.kGruppen}" var="kGruppe" itemLabel="#{kGruppe.name} | #{kGruppe.rabatt}%" itemValue="#{kGruppe.id}" />
 				</p:selectOneMenu>
@@ -36,14 +36,10 @@
 		<p:row>
 			<p:column>#{labels.ansprechPartner}:</p:column>
 			<p:column>
-				<p:inputText value="#{kundeBean.newKunde.APartner}" />
+				<p:inputText value="#{eKunde.APartner}" required="true" />
 			</p:column>
 			<p:column>#{labels.rabatt}:</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.rabatt}"/></p:column>
-		</p:row>
-		<p:row>
-			<p:column colspan="2">#{labels.status}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.status}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.rabatt}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>
@@ -55,39 +51,31 @@
 		</p:row>
 		<p:row>
 			<p:column>#{labels.strasse}:</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.strasse}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.strasse}"/></p:column>
 			<p:column>#{labels.email}</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.email}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.email}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.hausnr}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.hausnr}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.hausnr}"/></p:column>
 			<p:column>#{labels.telNr}</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.telefon}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.telefon}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.plz}/#{labels.stadt}</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.plz}"/>/</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.stadt}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.plz}"/>/</p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.stadt}"/></p:column>
 			<p:column>#{labels.mobil}</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.mobil}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.mobil}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.land}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.land}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.land}"/></p:column>
 			<p:column>#{labels.web}</p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.web}"/></p:column>
+			<p:column><p:inputText value="#{eKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-	
-	
-	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgNewKundePanel nav_form" oncomplete="PF('newKunde').hide();">
-		<p:resetInput target="newKgruppeSelect" />
-	</p:commandButton>
-	<p:commandButton value="Abbrechen" action="#{kundeBean.resetNewKunde()}" update="dlgNewKundePanel" oncomplete="PF('newKunde').hide();" />
-	</h:form>
-	
-	
+
 </ui:composition>
 
 

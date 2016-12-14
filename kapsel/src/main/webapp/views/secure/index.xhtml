@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
 
 <h:outputStylesheet name="global.css" library="css"/>
 <h:outputStylesheet name="images.css" library="css"/> 
@@ -15,7 +16,8 @@
 </h:head>
 <h:body>
 	<div id="logout" style="float:right;">
-	<p:commandLink value="Logout" action="#{userBean.logoutUser()}"/>
+	<h:outputText value="Hi, #{user}" /><br></br>
+	<p:commandLink value="Logout" action="#{loginBean.logoutUser()}" style="float:right; font-size:0.8em;"/>
 	</div>
 	<div id="main_nav" class="centered">
 		<h:form>
@@ -23,9 +25,9 @@
 				<h:commandButton action="kunde?faces-redirect=true" class="button_splash kunde_splash"/>
 				<h:commandButton action="auftrag?faces-redirect=true" class="button_splash auftrag_splash"/>
 				<h:commandButton action="produkt?faces-redirect=true" class="button_splash produkt_splash"/>
-				<h:commandButton action="stats" class="button_splash statistik_splash"/>
+				<h:commandButton disabled="true" class="button_splash statistik_splash"/>
 				<h:commandButton action="settings?faces-redirect=true" class="button_splash einstellung_splash"/>
-				<h:commandButton action="lager" class="button_splash lager_splash"/>
+				<h:commandButton disabled="true" class="button_splash lager_splash"/>
 			</h:panelGrid>
 			<br/>
 			<h:commandButton value="Testseite" action="testpage"/>

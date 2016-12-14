@@ -18,9 +18,10 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private long id;
 	private ETypes.UserT role;
-	private String username;
+	private String fullname;
 	private String name;
 	private String password;
+	private byte[] salt;
 
 	@Id
 	@GeneratedValue
@@ -42,16 +43,16 @@ public class User implements Serializable{
 		this.role = role;
 	}
 	
-	@Column(name="username", nullable=false, unique=true)
-	public String getUsername() {
-		return username;
+	@Column(name="fullname", nullable=true, unique=false)
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
-	@Column(name="name", unique=false, nullable=true)
+	@Column(name="name", nullable=false, unique=true)
 	public String getName() {
 		return name;
 	}
@@ -67,6 +68,15 @@ public class User implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	@Column(name="salt", nullable=false)
+	public byte[] getSalt() {
+		return salt;
+	}
+
+	public void setSalt(byte[] salt) {
+		this.salt = salt;
 	}
 
 	@Override

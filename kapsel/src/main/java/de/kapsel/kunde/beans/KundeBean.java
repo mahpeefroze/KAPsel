@@ -39,7 +39,6 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{adresseService}")
 	private IAdresseService adresseService;
 	
-	//Gather Items to fill the table
 	public KundeBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
 		//setKunden(kundeService.getKunden()); -> Moved to postconstruct init()

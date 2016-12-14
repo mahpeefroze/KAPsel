@@ -1,9 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
 	
 	<h:form id="dlgNewAuftragPanel">
 	<p:panelGrid>
@@ -52,7 +51,7 @@
 	</h:form>
 	
 	<p:dialog id="miniKListeDlg" header="Kunden auswählen"  widgetVar="kundeSelect" minHeight="40" resizable="false" modal="true" appendTo="@(body)">
-		<ui:include src="/views/dialogs/miniKundenList.xhtml"/>
+		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml"/>
 	</p:dialog>
 	
 	

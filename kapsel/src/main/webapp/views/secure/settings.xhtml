@@ -81,7 +81,7 @@
 								</p:row>
 
 								<p:row>
-									<p:column>#{labels.nachname}</p:column>
+									<p:column>#{labels.userName}</p:column>
 									<p:column>#{userBean.selectedUser.name}</p:column>
 									<p:column>#{labels.userRole}</p:column>
 									<p:column>
@@ -94,8 +94,8 @@
 									</p:column>
 								</p:row>
 								<p:row>
-									<p:column>#{labels.userName}</p:column>
-									<p:column>#{userBean.selectedUser.username}</p:column>
+									<p:column>#{labels.nachname}</p:column>
+									<p:column>#{userBean.selectedUser.fullname}</p:column>
 									<p:column colspan="2">
 										<p:commandButton value="#{labels.passwordReset}" action="#{userBean.resetPassword()}"/>
 									</p:column>
