@@ -15,6 +15,10 @@ public class ETypes {
 		return KundeT.values();
 	}
 	
+	public KundeStatus[] getKundeStatus(){
+		return KundeStatus.values();
+	}
+	
 	public ProduktT[] getProduktT(){
 		return ProduktT.values();
 	}
@@ -28,11 +32,11 @@ public class ETypes {
 	}
 	
 	public enum AuftragS{
-		offen,
-		bearbeitung,
-		gestoppt,
-		storniert,
-		abgeschloßen;
+		Offen,
+		Bearbeitung,
+		Gestoppt,
+		Storniert,
+		Abgeschloßen;
 		
 	}
 
@@ -43,8 +47,8 @@ public class ETypes {
 	}
 	
 	public enum KundeStatus{
-		aktiv,
-		gesperrt;
+		Aktiv,
+		Gesperrt;
 	}
 
 	public enum UserT{
@@ -71,15 +75,16 @@ public class ETypes {
 		Lack,
 		Öl,
 		Beschlag,
+		Verbindungsmittel,
 		Sonstiges;
 	}
 	
 	public enum UnitT{
 		kg,
-		g,
 		l,
 		m2,
-		m3;
+		m3,
+		pcs;
 	}
 	
 	public enum ProduktT{

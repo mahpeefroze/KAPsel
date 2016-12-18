@@ -35,8 +35,9 @@
                 <value>de.kapsel.produkt.entities.Arbeitsschritt</value>
                 <value>de.kapsel.produkt.entities.Werkzeug</value>
                 <!-- Utils/Globals -->
-                <value>de.kapsel.um.User</value> 
-                <value>de.kapsel.global.Adresse</value>
+                <value>de.kapsel.global.entities.User</value> 
+                <value>de.kapsel.global.entities.Adresse</value>
+                <value>de.kapsel.global.entities.Utils</value>
             </list>
         </property>
         
@@ -51,45 +52,28 @@
     
     <bean id="testBean" class="de.kapsel.global.beans.TestBean"/>
     
-    
-   	
-   	<!-- USER DECLARATION + [SCHEMA] -->
-	<!-- Model Declaration -->
-	<bean id="user" class="de.kapsel.um.User" />
-
-	<!-- Service Declaration -->
-	<bean id="userService" class="de.kapsel.um.services.UserService">
-		<property name="userDAO" ref="userDAO" />
-	</bean>
-
-	<!-- DAO Declaration -->
-	<bean id="userDAO" class="de.kapsel.um.dao.UserDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
 	
 	<!-- KUNDE DECLARATION -->
-	<bean id="kunde" class="de.kapsel.kunde.entities.Kunde"/>
+	<!-- Service Declaration -->
 	<bean id="kundeService" class="de.kapsel.kunde.services.KundeService">
 		<property name="kundeDAO" ref="kundeDAO" />
 	</bean>
+	<!-- DAO Declaration -->
 	<bean id="kundeDAO" class="de.kapsel.kunde.dao.KundeDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-
+	
 	
 	<!-- AUFTRAG DECLARATION -->
-	<bean id="auftrag" class="de.kapsel.auftrag.entities.Auftrag" />
 	<bean id="auftragService" class="de.kapsel.auftrag.services.AuftragService">
 		<property name="auftragDAO" ref="auftragDAO" />
 	</bean>
 	<bean id="auftragDAO" class="de.kapsel.auftrag.dao.AuftragDAO">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-    
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    	
     
 	<!-- KUNDENGRUPPE DECLARATION -->
-	<bean id="kgruppe" class="de.kapsel.kunde.entities.KGruppe" />
 	<bean id="kgruppeService" class="de.kapsel.kunde.services.KGruppeService">
 		<property name="kgruppeDAO" ref="kgruppeDAO" />
 	</bean>
@@ -98,7 +82,6 @@
 	</bean>
 	
 	<!-- PRODUKT DECLARATION -->
-	<bean id="produkt" class="de.kapsel.produkt.entities.Produkt" />
 	<bean id="produktService" class="de.kapsel.produkt.services.ProduktService">
 		<property name="produktDAO" ref="produktDAO" />
 	</bean>
@@ -107,7 +90,6 @@
 	</bean>
 	
 	<!-- BAUTEIL DECLARATION -->
-	<bean id="bauteil" class="de.kapsel.produkt.entities.Bauteil" />
 	<bean id="bauteilService" class="de.kapsel.produkt.services.BauteilService">
 		<property name="bauteilDAO" ref="bauteilDAO" />
 	</bean>
@@ -116,7 +98,6 @@
 	</bean>
 	
 	<!-- MATERIAL DECLARATION -->
-	<bean id="material" class="de.kapsel.produkt.entities.Material" />
 	<bean id="materialService" class="de.kapsel.produkt.services.MaterialService">
 		<property name="materialDAO" ref="materialDAO" />
 	</bean>
@@ -125,7 +106,6 @@
 	</bean>
 	
 	<!-- ARBEITSSCHRITT DECLARATION -->
-	<bean id="arbeitsschritt" class="de.kapsel.produkt.entities.Arbeitsschritt" />
 	<bean id="arbeitsschrittService" class="de.kapsel.produkt.services.ArbeitsschrittService">
 		<property name="arbeitsschrittDAO" ref="arbeitsschrittDAO" />
 	</bean>
@@ -134,7 +114,6 @@
 	</bean>
 	
 	<!-- WERKZEUG DECLARATION -->
-	<bean id="werkzeug" class="de.kapsel.produkt.entities.Werkzeug" />
 	<bean id="werkzeugService" class="de.kapsel.produkt.services.WerkzeugService">
 		<property name="werkzeugDAO" ref="werkzeugDAO" />
 	</bean>
@@ -142,12 +121,27 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
-	<!-- Adresse DECLARATION -->
-	<bean id="adresse" class="de.kapsel.global.Adresse" />
+   	<!-- USER DECLARATION -->
+	<bean id="userService" class="de.kapsel.global.services.UserService">
+		<property name="userDAO" ref="userDAO" />
+	</bean>
+	<bean id="userDAO" class="de.kapsel.global.dao.UserDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- ADRESSE DECLARATION -->
 	<bean id="adresseService" class="de.kapsel.global.services.AdresseService">
 		<property name="adresseDAO" ref="adresseDAO" />
 	</bean>
 	<bean id="adresseDAO" class="de.kapsel.global.dao.AdresseDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+    
+   	<!-- UTILS DECLARATION -->
+	<bean id="utilsService" class="de.kapsel.global.services.UtilsService">
+		<property name="utilsDAO" ref="utilsDAO" />
+	</bean>
+	<bean id="utilsDAO" class="de.kapsel.global.dao.UtilsDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
     

@@ -2,25 +2,22 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.dao.IMaterialDAO;
+import de.kapsel.global.dao.IGenericDAO;
 import de.kapsel.produkt.entities.Material;
 
 public class MaterialService implements IMaterialService {
 
 
 	//Injection MaterialDAO
-	@ManagedProperty(value="#{materialDAO}")
-	private IMaterialDAO materialDAO;
+	private IGenericDAO<Material> materialDAO;
 
-	public IMaterialDAO getMaterialDAO() {
+	public IGenericDAO<Material> getMaterialDAO() {
 		return materialDAO;
 	}
 
-	public void setMaterialDAO(IMaterialDAO materialDAO) {
+	public void setMaterialDAO(IGenericDAO<Material> materialDAO) {
 		this.materialDAO = materialDAO;
 	}
 	

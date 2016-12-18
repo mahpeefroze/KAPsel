@@ -5,20 +5,37 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-
-
+	
+	
+	<p:panelGrid styleClass="fullWidth">
+		<p:row>
+			<p:column>
+				<h:outputText value="#{kundeBean.selectedKunde.name}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{labels.status}:" styleClass="alignRight statusbox"/>
+			</p:column>
+			<p:column style="width:150px;">
+				<p:selectOneMenu id="edit_kundeStatusSelect" value="#{eKunde.status}" style="width:100px" styleClass="alignRight">
+					<f:selectItem itemLabel="#{labels.status}" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.kundeStatus}" var="typ" itemLabel="#{typ}" itemValue="#{kundeStatus}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+	<p:spacer/>
+	<p:fieldset style="margin-bottom:10px;">
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.knr}</p:column>
 			<p:column>#{kundeBean.createKnr()}</p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
-				<p:selectOneMenu id="#{type}_newKtypSelect" value="#{eKunde.typ}" style="width:200px">
+				<p:selectOneMenu id="edit_newKtypSelect" value="#{eKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
 				</p:selectOneMenu>
 			</p:column>
-			<p:column rowspan="3">#Bild</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
@@ -27,7 +44,7 @@
 			</p:column>
 			<p:column>#Gruppe:</p:column>
 			<p:column>
-				<p:selectOneMenu id="#{type}_kGruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
+				<p:selectOneMenu id="edit_kGruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
 					<f:selectItem itemLabel="Gruppe | Rabatt" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{kGruppeBean.kGruppen}" var="kGruppe" itemLabel="#{kGruppe.name} | #{kGruppe.rabatt}%" itemValue="#{kGruppe.id}" />
 				</p:selectOneMenu>
@@ -41,10 +58,10 @@
 			<p:column>#{labels.rabatt}:</p:column>
 			<p:column><p:inputText value="#{eKunde.rabatt}"/></p:column>
 		</p:row>
-		<p:row>
-			<p:column>
-			</p:column>
-		</p:row>
+	</p:panelGrid>
+	</p:fieldset>
+	<p:fieldset toggleable="false">
+	<p:panelGrid>
 		<p:row>
 			<p:column colspan="3">#{labels.adresse}</p:column>
 			<p:column colspan="2">#{labels.kontakt}</p:column>
@@ -75,6 +92,7 @@
 			<p:column><p:inputText value="#{eKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
+	</p:fieldset>
 
 </ui:composition>
 

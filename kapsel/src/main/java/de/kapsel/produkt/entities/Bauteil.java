@@ -20,7 +20,7 @@ public class Bauteil implements DTItem, Serializable, Comparable<Bauteil>{
 	private long id;
 	private int position=0;
 	private String name="";
-	private int menge=1;
+	private double menge=1;
 	private double laenge=0;
 	private double breite=0;
 	private double dicke=0;
@@ -55,10 +55,10 @@ public class Bauteil implements DTItem, Serializable, Comparable<Bauteil>{
 	}
 	
 	@Column(name="menge", nullable=false)
-	public int getMenge() {
+	public double getMenge() {
 		return menge;
 	}
-	public void setMenge(int menge) {
+	public void setMenge(double menge) {
 		this.menge = menge;
 	}
 	

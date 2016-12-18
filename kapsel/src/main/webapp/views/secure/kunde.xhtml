@@ -17,44 +17,37 @@
 	<div id="header" class="float_frame">
 		<h:form id="ribbon_form">
 			<p:ribbon>
-				<p:tab title="#{labels.kunde}">
+				<p:tab title="#{labels.kunde}" id="ribbonMenu">
 					<p:ribbonGroup>
 						<h1>#{labels.kunde}</h1>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="fa fa-user-plus"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-user-plus"
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
-						<p:commandButton value="Edit" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
-						<p:commandButton value="Delete" icon="fa fa-trash"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{kundeBean.enableEditMode()}" /> 
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{kundeBean.editMode}">
+						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="processSectForm()" />
+						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{kundeBean.cancelEditMode()}" process="@this"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
 						<p:commandButton value="To PDF" icon="fa fa-file-pdf-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
+							styleClass="ui-ribbon-bigbutton" />
 						<p:commandButton value="To Word" icon="fa fa-file-word-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
+							styleClass="ui-ribbon-bigbutton" />
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.print}">
 						<p:commandButton value="Print" icon="fa fa-print"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup label="" rendered="#{kundeBean.editMode}">
-						<p:commandButton value="OK" icon="ui-ribbonicon-ok"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick=""/>
-						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.cancelEdit()}"/>
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup label="" rendered="#{kundeBean.editMode}">
-						<p:commandButton value="Edit" icon="ui-ribbonicon-new"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.updateKunde()}"/>
-						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="#{kundeBean.cancelEdit()}"/>
+							styleClass="ui-ribbon-bigbutton" />
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
@@ -113,90 +106,28 @@
 
 		<!-- RECHTE SEITE -->
 		<h:form id="sect_form">
+			<p:remoteCommand name="processSectForm" process="@form" update="sect_form" action="#{kundeBean.onEditComplete()}"/>
 			<div id="section_container">
 				<div id="section" class="float_frame">
 					<p:accordionPanel multiple="true">
 						<!-- Kundendetails -->
 						<p:tab title="#{labels.kundenDetail}">
 							
-							<br></br>
-							<!-- Edit Kunde -->
+							<p:spacer/>
+							
+							<!-- Edit Mode -->
 							<ui:fragment rendered="#{kundeBean.editMode}">
-								<ui:include src="/views/includes/kundeNewEdit.xhtml">
+								<ui:include src="/views/secure/includes/kundeEdit.xhtml">
 									<ui:param name="eKunde" value="#{kundeBean.selectedKunde}"/>
-									<ui:param name="type" value="edit"/>
 								</ui:include>
 							</ui:fragment>
 							
-							<!-- New Kunde -->
-							<ui:fragment rendered="#{kundeBean.editMode}">
-								<ui:include src="/views/includes/kundeNewEdit.xhtml">
-									<ui:param name="eKunde" value="#{kundeBean.newKunde}"/>
-									<ui:param name="type" value="new"/>
-								</ui:include>
+							<!-- Display Mode -->
+							<ui:fragment rendered="#{not kundeBean.editMode}">
+								<ui:include src="/views/secure/includes/kundeDisplay.xhtml"/>
 							</ui:fragment>
 							
-							
-							<h:panelGrid columns="2" styleClass="fullWidth">
-								<h:outputText value="#{kundeBean.selectedKunde.name}" />
-								<h:outputText id="statusbox" value="#{labels.status}: #{kundeBean.selectedKunde.status}" />
-							</h:panelGrid>
-							<br></br>
-							<p:fieldset style="margin-bottom:10px;">
-								<p:panelGrid>
-									<p:row>
-										<p:column>#{labels.knr}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.knr}</p:column>
-										<p:column>#{labels.typ}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.typ}</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.nachname}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.name}</p:column>
-										<p:column>#{labels.rabatt}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.gruppe.rabatt}%</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.ansprechPartner}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.APartner}</p:column>
-										<p:column>#{labels.gruppe}:</p:column>
-										<p:column>#{kundeBean.selectedKunde.gruppe.name}</p:column>
-									</p:row>
-								</p:panelGrid>
-							</p:fieldset>
-							<p:fieldset toggleable="false">
-								<p:panelGrid>
-									<p:row>
-										<p:column colspan="3">#{labels.adresse}</p:column>
-										<p:column colspan="2">#{labels.kontakt}</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.strasse}:</p:column>
-										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.strasse}</p:column>
-										<p:column>#{labels.email}</p:column>
-										<p:column>#{kundeBean.selectedKunde.adresse.email}</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.hausnr}</p:column>
-										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.hausnr}</p:column>
-										<p:column>#{labels.telNr}</p:column>
-										<p:column>#{kundeBean.selectedKunde.adresse.telefon}</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.plz}/#{labels.stadt}</p:column>
-										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.plz}/#{kundeBean.selectedKunde.adresse.stadt}</p:column>
-										<p:column>#{labels.mobil}</p:column>
-										<p:column>#{kundeBean.selectedKunde.adresse.mobil}</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.land}</p:column>
-										<p:column colspan="2">#{kundeBean.selectedKunde.adresse.land}</p:column>
-										<p:column>#{labels.web}</p:column>
-										<p:column>#{kundeBean.selectedKunde.adresse.web}</p:column>
-									</p:row>
-								</p:panelGrid>
-							</p:fieldset>
-							<br></br>
+							<p:spacer/>
 						</p:tab>
 
 						<!-- Korrespondenz -->
@@ -227,14 +158,6 @@
 					    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" update="nav_form sect_form" oncomplete="PF('delKunde').hide();"/>
 					    <p:commandButton value="#{labels.nein}" onclick="PF('delKunde').hide();"/>
 					</p:dialog>
-					
-					<!-- 
-					<p:dialog id="editKunde" header="Kunden bearbeiten" modal="true" widgetVar="editKunde" minHeight="40" resizable="false">
-						<h:form>
-						<ui:include src="/views/dialogs/kundeEdit.xhtml"/>
-						</h:form>
-					</p:dialog>
-					 -->
 	
 				</div>
 			</div>
@@ -247,10 +170,6 @@
 		
 	<p:dialog id="kundeNewDlg" header="Neuer Kunde" modal="true" widgetVar="newKunde" minHeight="40" resizable="false">
 			<ui:include src="/views/secure/dialogs/kundeNew.xhtml"/>
-			<!-- 
-			<ui:param name="selParam" value="4"/>
-			</ui:include>
-			 -->
 	</p:dialog>
 
 </body>

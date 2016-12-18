@@ -4,7 +4,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import de.kapsel.um.User;
+import de.kapsel.global.entities.User;
 
 public class SessionUtils {
 
@@ -18,24 +18,12 @@ public class SessionUtils {
 				.getExternalContext().getRequest();
 	}
 	
-	public static void setUser(User user){
-		getSession().setAttribute("user", user);
+	public static void setLoggedUser(User user){
+		getSession().setAttribute("loggedUser", user);
 	}
 	
-	public static String getUserName() {
-		return ((User) getSession().getAttribute("user")).getName();
-	}
-	
-	public static User getUser(){
-		return (User) getSession().getAttribute("user");
-	}
-
-	public static String getUserId() {
-		HttpSession session = getSession();
-		if (session != null)
-			return (String) session.getAttribute("userid");
-		else
-			return null;
+	public static User getLoggedUser(){
+		return (User) getSession().getAttribute("loggedUser");
 	}
 	
 }

@@ -1,26 +1,23 @@
-package de.kapsel.um.services;
+package de.kapsel.global.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.um.User;
-import de.kapsel.um.dao.IUserDAO;
+import de.kapsel.global.dao.IGenericDAO;
+import de.kapsel.global.entities.User;
 
 public class UserService implements IUserService{
 
 
 	//Injection UserDAO
-	@ManagedProperty(value="#{userDAO}")
-	private IUserDAO userDAO;
+	private IGenericDAO<User> userDAO;
 
-	public IUserDAO getUserDAO() {
+	public IGenericDAO<User> getUserDAO() {
 		return userDAO;
 	}
 
-	public void setUserDAO(IUserDAO userDAO) {
+	public void setUserDAO(IGenericDAO<User> userDAO) {
 		this.userDAO = userDAO;
 	}
 

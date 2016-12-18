@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<p:panelGrid columns="2" styleClass="fullWidth">
+		<h:outputText value="#{produktBean.selectedProdukt.name}" />
+	</p:panelGrid>
+	<br></br>
+	<p:fieldset style="margin-bottom:10px;">
+		<p:panelGrid>
+			<p:row>
+				<p:column>#{labels.pnr}:</p:column>
+				<p:column>#{produktBean.selectedProdukt.pnr}</p:column>
+				<p:column>#{labels.typ}:</p:column>
+				<p:column>
+					<p:selectOneMenu id="edit_newPtypSelect" value="#{produktBean.selectedProdukt.typ}" style="width:200px">
+						<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{eTypes.produktT}" var="typ" itemLabel="#{typ}" itemValue="#{produktT}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>#{labels.erstDatum}</p:column>
+				<p:column>
+					<h:outputText value="#{produktBean.selectedProdukt.erstDatum}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column colspan="4">
+					<p:fieldset legend="#Beschreibung" toggleable="false">
+						<p:inputTextarea value="#{produktBean.selectedProdukt.text}" styleClass="fullWidth"/>
+					</p:fieldset>
+				</p:column>
+				<p:column>#{labels.modDatum}:</p:column>
+				<p:column>
+					<h:outputText value="#{produktBean.selectedProdukt.modDatum}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>#{labels.preis}</p:column>
+				<p:column>
+					<p:inputText id="preisInput" value="#{produktBean.selectedProdukt.preis}">
+						<f:convertNumber maxFractionDigits="2"/>
+					</p:inputText>
+					<p:commandButton action="#{produktBean.calculatePrice}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
+				</p:column>
+				<p:column>#{labels.pZeit}</p:column>
+				<p:column>
+					<p:inputText id="zeitInput" value="#{produktBean.selectedProdukt.zeit}"/>
+					<p:commandButton action="#{produktBean.calculateTime}" update="zeitInput" icon="fa fa-calculator" title="#{labels.calcZeit}"/>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:fieldset>	
+
+</ui:composition>
+
+

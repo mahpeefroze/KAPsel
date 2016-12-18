@@ -15,7 +15,6 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.DTItem;
-import de.kapsel.global.SessionUtils;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
@@ -41,7 +40,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	private boolean stuecklisteCB;
 	private long materialId;
 	private long werkzeugId;
-	private boolean emptyList;
 
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
@@ -69,7 +67,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
-			System.out.println(SessionUtils.getUser());
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
@@ -201,14 +198,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		this.werkzeugId = werkzeugId;
 	}
 	
-	public boolean isEmptyList() {
-		return emptyList;
-	}
-
-	public void setEmptyList(boolean emptyList) {
-		this.emptyList = emptyList;
-	}
-	
 	//endregion Getters/Setters
 	
 
@@ -232,6 +221,52 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
 		}
 		return pnr + 1;
+	}
+	
+	public void calculatePrice(){
+		double price=0;
+		try{
+			if(!getSelectedProdukt().getAschritte().isEmpty()){
+				for(Arbeitsschritt a:getSelectedProdukt().getAschritte()){
+					price+=(a.getZeit()*a.getWerkzeug().getStundensatz()/60);
+				}
+			}
+			//Get Unit of Accounting for each Bauteil-Material and multiply it by the amount and price 
+			if(!getSelectedProdukt().getBauteile().isEmpty()){
+				for(Bauteil b:getSelectedProdukt().getBauteile()){
+					price+=b.getMenge()*getUoA(b)*b.getMaterial().getPreis();
+				}
+			}
+		}catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		getSelectedProdukt().setPreis(price);
+	}
+	
+	//Get Unit of Accounting for every Material
+	private double getUoA(Bauteil b){
+		switch(b.getMaterial().getEinheit()){
+			case kg: return 1;
+			case l: return 1;
+			case m2: return b.getLaenge()*b.getBreite()/(10E6);
+			case m3: return b.getLaenge()*b.getBreite()*b.getDicke()/(10E9);
+			case pcs: return 1;
+			default: return 0;
+		}
+	}
+	
+	public void calculateTime(){
+		int time=0;
+		try{
+			if(!getSelectedProdukt().getAschritte().isEmpty()){
+				for(Arbeitsschritt a:getSelectedProdukt().getAschritte()){
+					time+=a.getZeit();
+				}
+			}
+		}catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		getSelectedProdukt().setZeit(time);
 	}
 
 
@@ -260,7 +295,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	}
 	
 	
-	//--------------------------------------------BAUTEIL SECTION-----------------------------------------------------//
+	//region BAUTEIL SECTION-----------------------------------------------------//
 	
 	
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
@@ -363,8 +398,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		}
 	}
 	
+	//endregion
 
-	//--------------------------------------------ARBEITSSCHRITT SECTION-----------------------------------------------------//
+	//region ARBEITSSCHRITT SECTION-----------------------------------------------------//
 	
 	public void addArbeitsschritt(ActionEvent actionEvent){
 		Arbeitsschritt a = new Arbeitsschritt();
@@ -407,6 +443,8 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
         }
 	}
 	
+	//endregion
+	
 	private void updateItemPosition(int delPos, ArrayList<DTItem> items){
 		//if(o.getClass().equals(Bauteil.class)){}
 		for(DTItem t:items){
@@ -415,4 +453,21 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			}
 		}
 	}
+
+	@Override
+	public void onEditComplete() {
+		
+		updateProdukt();
+		setEditMode(false);
+		
+	}
+
+	@Override
+	public void cancelEditMode() {
+		// TODO Auto-generated method stub
+		setEditMode(false);
+	}
+	
+	
+	
 }

@@ -2,7 +2,7 @@ package de.kapsel.global.services;
 
 import java.util.List;
 
-import de.kapsel.global.Adresse;
+import de.kapsel.global.entities.Adresse;
 
 public interface IAdresseService {
 

@@ -18,6 +18,12 @@ public abstract class AbstractModulBean {
 		this.editMode = editMode;
 	}
 	
+	public void enableEditMode(){
+		setEditMode(true);
+	}
 	
+	public abstract void cancelEditMode();
+	
+	public abstract void onEditComplete();
 
 }

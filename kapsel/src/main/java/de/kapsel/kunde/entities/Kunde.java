@@ -11,8 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import de.kapsel.global.Adresse;
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.Adresse;
 
 @Entity
 @Table(name = "kunden")

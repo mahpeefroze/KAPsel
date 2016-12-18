@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.kapsel.global.beans.LoginBean;
+
 @WebFilter("/views/secure/*")
 public class LoginFilter implements Filter{
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -29,7 +30,8 @@ public class LoginFilter implements Filter{
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
         
-        if(session==null || session.getAttribute("user")==null){
+        if(session==null || ((LoginBean) session.getAttribute("loginBean")).isLogged()==false){
+        	//Maybe sent filled forms before redirect
         	response.sendRedirect(request.getContextPath() + "/views/home.xhtml");
         }else{
         	chain.doFilter(req, res);
@@ -40,7 +42,6 @@ public class LoginFilter implements Filter{
 	
 	@Override
 	public void destroy() {
-		
 		
 	}
 

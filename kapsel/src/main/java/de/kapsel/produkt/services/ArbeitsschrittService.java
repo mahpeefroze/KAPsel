@@ -2,24 +2,21 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.dao.IArbeitsschrittDAO;
+import de.kapsel.global.dao.IGenericDAO;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 
 public class ArbeitsschrittService implements IArbeitsschrittService{
 	
 	//Injection BauteilDAO
-	@ManagedProperty(value="#{arbeitsschrittDAO}")
-	private IArbeitsschrittDAO arbeitsschrittDAO;
+	private IGenericDAO<Arbeitsschritt> arbeitsschrittDAO;
 
-	public IArbeitsschrittDAO getArbeitsschrittDAO() {
+	public IGenericDAO<Arbeitsschritt> getArbeitsschrittDAO() {
 		return arbeitsschrittDAO;
 	}
 
-	public void setArbeitsschrittDAO(IArbeitsschrittDAO arbeitsschrittDAO) {
+	public void setArbeitsschrittDAO(IGenericDAO<Arbeitsschritt> arbeitsschrittDAO) {
 		this.arbeitsschrittDAO = arbeitsschrittDAO;
 	}
 	

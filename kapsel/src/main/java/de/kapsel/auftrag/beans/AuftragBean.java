@@ -54,6 +54,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			setAuftraege(auftragService.getAuftraege());
 			setSelectedAuftrag(getAuftraege().get(0));
 			setEmptyList(false);
+			setEditMode(false);
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
@@ -155,7 +156,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			//Implement logic for creating new ANR and also put it
 			getNewAuftrag().setAnr(createAnr());
 			//getNewAuftrag().setKunde(getKundeService().getKundeById(1));
-			getNewAuftrag().setStatus(ETypes.AuftragS.offen);
+			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
 			getNewAuftrag().setStartdatum(new Date());
 			getAuftragService().addAuftrag(getNewAuftrag());
 		} catch (DataAccessException e) {
@@ -175,6 +176,18 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	public void clearKundeSelection(){
 		getNewAuftrag().setKunde(new Kunde());
+	}
+
+	@Override
+	public void onEditComplete() {
+		setEditMode(false);
+		
+	}
+
+	@Override
+	public void cancelEditMode() {
+		// TODO Auto-generated method stub
+		setEditMode(false);
 	}
 
 }

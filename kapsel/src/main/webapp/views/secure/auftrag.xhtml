@@ -18,7 +18,7 @@
 
 	<!-- OBEN, HIER KOMMT DER RIBBON REIN -->
 	<div id="header" class="float_frame">
-		<h:form id="ribbon">
+		<h:form id="ribbon_form">
 			<p:ribbon>
 				<p:tab title="#{labels.auftrag}">
 					<p:ribbonGroup>
@@ -26,12 +26,19 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="fa fa-file-text-o"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="New" icon="fa fa-file-text-o"
 							styleClass="ui-ribbon-bigbutton" update="auftragNewDlg" oncomplete="PF('newAuftrag').show();"/>
-						<p:commandButton value="Edit" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" onclick="" /> 
-						<p:commandButton value="Delete" icon="fa fa-trash"
-							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();" disabled="#{auftragBean.emptyList}"/>
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="Edit" icon="fa fa-edit"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" action="#{auftragBean.enableEditMode()}" /> 
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.emptyList}" value="Delete" icon="fa fa-trash"
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();"/>
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{auftragBean.editMode}">
+						<p:commandButton value="OK" icon="ui-ribbonicon-ok"
+							styleClass="ui-ribbon-bigbutton" action="#{auftragBean.updateAuftrag()}"/>
+						<p:commandButton value="Abbrechen" icon="ui-ribbonicon-cancel"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" action="#{auftragBean.cancelEditMode()}"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">

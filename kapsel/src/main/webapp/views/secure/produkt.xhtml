@@ -5,7 +5,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
 
-<h:outputStylesheet name="global.css" library="css"/> 
+<h:outputStylesheet name="global.css" library="css"/>
+<h:outputStylesheet name="produkt.css" library="css"/> 
 
 <h:head>
 
@@ -24,12 +25,19 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton value="New" icon="fa fa-codepen"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-codepen"
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
-						<p:commandButton value="Edit" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" type="button" onclick="" /> 
-						<p:commandButton value="Delete" icon="fa fa-trash"
-							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();" disabled="#{produktBean.emptyList}"/>
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{produktBean.enableEditMode()}" /> 
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
+							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
+					</p:ribbonGroup>
+					
+					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{produktBean.editMode}">
+						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="processSectForm()"/>
+						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{produktBean.cancelEditMode()}"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -100,6 +108,7 @@
 		
 		<!-- RECHTE SEITE -->
 		<h:form id="sect_form">
+			<p:remoteCommand name="processSectForm" process="@form" update="sect_form" action="#{produktBean.onEditComplete()}"/>
 			<div id="section_container">
 				<div id="section" class="float_frame">
 					<p:accordionPanel multiple="true">
@@ -107,60 +116,30 @@
 
 						<!-- Produktdetails -->
 						<p:tab title="#{labels.prodDetail}">
-							<br></br>
-							<h:panelGrid columns="2" styleClass="fullWidth">
-								<h:outputText value="#{produktBean.selectedProdukt.name}" />
-								<h:outputText id="statusbox" value="#{labels.status}: " />
-							</h:panelGrid>
-							<br></br>
-							<p:fieldset style="margin-bottom:10px;">
-								<p:panelGrid>
-									<p:row>
-										<p:column>#{labels.pnr}:</p:column>
-										<p:column>#{produktBean.selectedProdukt.pnr}</p:column>
-										<p:column>#{labels.typ}:</p:column>
-										<p:column>#{produktBean.selectedProdukt.typ}</p:column>
-										<p:column>#{labels.erstDatum}</p:column>
-										<p:column>
-											<h:outputText value="#{produktBean.selectedProdukt.erstDatum}">
-												<f:convertDateTime pattern="dd.MM.yyyy" />
-											</h:outputText>
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column colspan="4">
-											<p:fieldset legend="#Beschreibung" toggleable="false">
-												<h:outputText value="#{produktBean.selectedProdukt.text}"></h:outputText>
-											</p:fieldset>
-										</p:column>
-										<p:column>#{labels.modDatum}:</p:column>
-										<p:column>
-											<h:outputText value="#{produktBean.selectedProdukt.modDatum}">
-												<f:convertDateTime pattern="dd.MM.yyyy" />
-											</h:outputText>
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column>#{labels.preis}</p:column>
-										<p:column>#{produktBean.selectedProdukt.preis}</p:column>
-										<p:column>#{labels.pZeit}</p:column>
-										<p:column>#{produktBean.selectedProdukt.zeit}</p:column>
-									</p:row>
-								</p:panelGrid>
-							</p:fieldset>
+							<p:spacer/>
+							
+							<!-- Edit Mode -->
+							<ui:fragment rendered="#{produktBean.editMode}">
+								<ui:include src="/views/secure/includes/produktEdit.xhtml"/>
+							</ui:fragment>
+							
+							<!-- Display Mode -->
+							<ui:fragment rendered="#{not produktBean.editMode}">
+								<ui:include src="/views/secure/includes/produktDisplay.xhtml"/>
+							</ui:fragment>
 
-							<br></br>
+							<p:spacer/>
 						</p:tab>
 
 						<!-- Stueckliste -->
 						<p:tab title="#{labels.stueckliste}">
 							<!-- Tabelle mit allen Produkten und Leistungen -->
 							
-							<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" icon="fa fa-plus" actionListener="#{produktBean.addBauteil}" />
-							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
+							<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addBauteil}" />
+							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
 							
 							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
 									
 								<p:ajax event="cellEdit" listener="#{produktBean.onBauteileEdit}" update="nav_form"/>	
@@ -222,11 +201,11 @@
 						<!-- Arbeitsplan -->
 						<p:tab title="#{labels.arbeitsplan}">
 							
-							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" icon="fa fa-plus" actionListener="#{produktBean.addArbeitsschritt}" />
-							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
+							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addArbeitsschritt}" />
+							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
 							
 							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.aschritte}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
 									
 								<p:ajax event="cellEdit" listener="#{produktBean.onArbeitsschritteEdit}" update="nav_form"/>

@@ -1,4 +1,4 @@
-package de.kapsel.um.beans;
+package de.kapsel.global.beans;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,8 +11,8 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.um.User;
-import de.kapsel.um.services.IUserService;
+import de.kapsel.global.entities.User;
+import de.kapsel.global.services.IUserService;
 
 
 @ManagedBean

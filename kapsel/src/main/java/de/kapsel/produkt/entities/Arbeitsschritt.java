@@ -21,7 +21,7 @@ public class Arbeitsschritt implements DTItem, Serializable, Comparable<Arbeitss
 	private long id;
 	private int position=0;
 	private String name="";
-	private double zeit=0;
+	private int zeit=0;
 	private String notiz="";
 	private ETypes.AschrittT typ;
 	private Werkzeug werkzeug;
@@ -54,10 +54,10 @@ public class Arbeitsschritt implements DTItem, Serializable, Comparable<Arbeitss
 	}
 	
 	@Column(name="zeit")
-	public double getZeit() {
+	public int getZeit() {
 		return zeit;
 	}
-	public void setZeit(double zeit) {
+	public void setZeit(int zeit) {
 		this.zeit = zeit;
 	}
 	

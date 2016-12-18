@@ -1,4 +1,4 @@
-package de.kapsel.global;
+package de.kapsel.global.entities;
 
 import java.io.Serializable;
 

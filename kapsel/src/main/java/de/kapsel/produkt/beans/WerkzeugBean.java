@@ -38,7 +38,7 @@ public class WerkzeugBean implements Serializable{
 		}
 	}
 
-
+	//region Getter & Setter
 	public Werkzeug getWerkzeug() {
 		return werkzeug;
 	}
@@ -77,6 +77,8 @@ public class WerkzeugBean implements Serializable{
 	public void setWerkzeugService(IWerkzeugService werkzeugService) {
 		this.werkzeugService = werkzeugService;
 	}
+	//endregion
+	
 	
 	
 	

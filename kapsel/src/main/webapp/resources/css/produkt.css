@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+
+.ui-button-icon-left.ui-icon.ui-c.fa.fa-calculator{
+	width: 30px;
+	height: 30px;
+	margin-left: -14px;
+	margin-top: -8px;
+}
+

@@ -2,24 +2,21 @@ package de.kapsel.global.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.global.Adresse;
-import de.kapsel.global.dao.IAdresseDAO;
+import de.kapsel.global.dao.IGenericDAO;
+import de.kapsel.global.entities.Adresse;
 
 public class AdresseService implements IAdresseService{
 
 	//Injection DAO
-	@ManagedProperty(value="#{adresseDAO}")
-	private IAdresseDAO adresseDAO;
+	private IGenericDAO<Adresse> adresseDAO;
 
-	public IAdresseDAO getKGruppeDAO() {
+	public IGenericDAO<Adresse> getKGruppeDAO() {
 		return adresseDAO;
 	}
 
-	public void setAdresseDAO(IAdresseDAO adresseDAO) {
+	public void setAdresseDAO(IGenericDAO<Adresse> adresseDAO) {
 		this.adresseDAO = adresseDAO;
 	}
 

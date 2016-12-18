@@ -13,13 +13,15 @@
 
 	<application>
 		<!-- JSF and Spring are integrated -->
+		<!-- It allows SpringBeans to be used with #{notation} inside xhtml pages -->
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<!-- Localised bundles with specified language properties files -->
 		<resource-bundle>
-			<base-name>properties/labels</base-name>
+			<base-name>properties/labelsDE</base-name>
 			<var>labels</var>
 		</resource-bundle>
 		<resource-bundle>
-			<base-name>properties/errors</base-name>
+			<base-name>properties/errorsDE</base-name>
 			<var>errors</var>
 		</resource-bundle>
 	</application>

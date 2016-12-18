@@ -16,9 +16,10 @@ import org.springframework.dao.DataAccessException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.context.RequestContext;
 
+import de.kapsel.global.ETypes;
 import de.kapsel.global.SessionUtils;
-import de.kapsel.um.User;
-import de.kapsel.um.services.IUserService;
+import de.kapsel.global.entities.User;
+import de.kapsel.global.services.IUserService;
 
 @ManagedBean
 @SessionScoped
@@ -32,7 +33,7 @@ public class LoginBean implements Serializable{
 	private User loginUser;
 	private String passwordNew;
 	private boolean resPassword;
-
+	private boolean logged;
 	
 	@ManagedProperty(value="#{userService}")
 	private IUserService userService;
@@ -73,15 +74,38 @@ public class LoginBean implements Serializable{
 	public void setResPassword(boolean resPassword) {
 		this.resPassword = resPassword;
 	}
-	//endregion
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
+	}
 	
+	
+	//endregion
+
+
+
 	@PostConstruct
 	public void init() {
 		try {
+			setLoginUser(new User());
 			clearUser();
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
+	}
+
+	//ADMIN 0, MOD 1, ADVUSER 2, SYSUSER 3
+	public boolean validateAccess(ETypes.UserT role){
+		try{
+			return getLoginUser().getRole().ordinal()>role.ordinal();
+		}catch (NullPointerException e){
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	//LOGIN CONTROL
@@ -99,11 +123,13 @@ public class LoginBean implements Serializable{
 				String userPassword = hashPassword(getLoginUser().getPassword(), dbUser.getSalt());
 				if(dbPassword.equals(userPassword)){
 					setLoginUser(dbUser);
-					SessionUtils.setUser(getLoginUser());
+					setLogged(true);
+					//SessionUtils.setLoggedUser(getLoginUser());
 					return success;
 				}else{
 					FacesMessage msg = new FacesMessage("Wrong password.");
 					msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+					RequestContext.getCurrentInstance().update("loginPanel:password");
 					FacesContext.getCurrentInstance().addMessage("loginPanel:password", msg);
 				}
 			}else{
@@ -169,8 +195,7 @@ public class LoginBean implements Serializable{
 			e.printStackTrace();
 		}
 		updateUser();
-		setResPassword(false);
-		setPasswordNew(null);
+		clearUser();
 	}
 	
 	private void updateUser() {
@@ -178,8 +203,8 @@ public class LoginBean implements Serializable{
 	}
 	
 	public void clearUser(){
-		setLoginUser(new User());
 		setResPassword(false);
+		setLogged(false);
 		setPasswordNew(null);
 	}
 	

@@ -16,7 +16,7 @@
 </h:head>
 <h:body>
 	<div id="logout" style="float:right;">
-	<h:outputText value="Hi, #{user}" /><br></br>
+	<h:outputText value="Hi, #{loginBean.loginUser.fullname}" /><br></br>
 	<p:commandLink value="Logout" action="#{loginBean.logoutUser()}" style="float:right; font-size:0.8em;"/>
 	</div>
 	<div id="main_nav" class="centered">
@@ -26,7 +26,7 @@
 				<h:commandButton action="auftrag?faces-redirect=true" class="button_splash auftrag_splash"/>
 				<h:commandButton action="produkt?faces-redirect=true" class="button_splash produkt_splash"/>
 				<h:commandButton disabled="true" class="button_splash statistik_splash"/>
-				<h:commandButton action="settings?faces-redirect=true" class="button_splash einstellung_splash"/>
+				<h:commandButton disabled="#{loginBean.validateAccess('MOD')}" action="settings?faces-redirect=true" class="button_splash einstellung_splash"/>
 				<h:commandButton disabled="true" class="button_splash lager_splash"/>
 			</h:panelGrid>
 			<br/>

@@ -1,4 +1,4 @@
-package de.kapsel.um;
+package de.kapsel.global.entities;
 
 import java.io.Serializable;
 
@@ -82,7 +82,7 @@ public class User implements Serializable{
 	@Override
 	public String toString(){
 
-		String user = "ID: " + getId() + ", Name: " + getName() + ", Password: " + getPassword();
+		String user = "ID: " + getId() + ", Name: " + getName() + ", Role: " + getRole();
 
 		return user;
 	}

@@ -2,23 +2,20 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.dao.IWerkzeugDAO;
+import de.kapsel.global.dao.IGenericDAO;
 import de.kapsel.produkt.entities.Werkzeug;
 
 public class WerkzeugService implements IWerkzeugService {
 	
-	@ManagedProperty(value="#{werkzeugDAO}")
-	private IWerkzeugDAO werkzeugDAO;
+	private IGenericDAO<Werkzeug> werkzeugDAO;
 	
-	public IWerkzeugDAO getWerkzeugDAO() {
+	public IGenericDAO<Werkzeug> getWerkzeugDAO() {
 		return werkzeugDAO;
 	}
 
-	public void setWerkzeugDAO(IWerkzeugDAO werkzeugDAO) {
+	public void setWerkzeugDAO(IGenericDAO<Werkzeug> werkzeugDAO) {
 		this.werkzeugDAO = werkzeugDAO;
 	}
 

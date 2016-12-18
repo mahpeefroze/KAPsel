@@ -2,8 +2,6 @@ package de.kapsel.kunde.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import de.kapsel.kunde.dao.IKGruppeDAO;
@@ -13,7 +11,6 @@ public class KGruppeService implements IKGruppeService {
 
 
 	//Injection DAO
-	@ManagedProperty(value="#{kgruppeDAO}")
 	private IKGruppeDAO kgruppeDAO;
 
 	public IKGruppeDAO getKgruppeDAO() {

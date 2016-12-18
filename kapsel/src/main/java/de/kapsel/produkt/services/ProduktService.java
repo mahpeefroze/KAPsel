@@ -2,24 +2,21 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.produkt.dao.IProduktDAO;
+import de.kapsel.global.dao.IGenericDAO;
 import de.kapsel.produkt.entities.Produkt;
 
 public class ProduktService implements IProduktService{
 
 	//Injection ProduktDAO
-	//@ManagedProperty(value="#{produktDAO}")
-	private IProduktDAO produktDAO;
+	private IGenericDAO<Produkt> produktDAO;
 
-	public IProduktDAO getProduktDAO() {
+	public IGenericDAO<Produkt> getProduktDAO() {
 		return produktDAO;
 	}
 
-	public void setProduktDAO(IProduktDAO produktDAO) {
+	public void setProduktDAO(IGenericDAO<Produkt> produktDAO) {
 		this.produktDAO = produktDAO;
 	}
 

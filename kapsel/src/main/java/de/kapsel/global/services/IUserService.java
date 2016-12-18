@@ -1,8 +1,8 @@
-package de.kapsel.um.services;
+package de.kapsel.global.services;
 
 import java.util.List;
 
-import de.kapsel.um.User;
+import de.kapsel.global.entities.User;
 
 public interface IUserService {
 

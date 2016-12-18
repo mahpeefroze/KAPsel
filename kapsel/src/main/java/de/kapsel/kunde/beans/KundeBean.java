@@ -11,10 +11,9 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.global.Adresse;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.entities.Adresse;
 import de.kapsel.global.services.IAdresseService;
-import de.kapsel.kunde.entities.KGruppe;
 import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKGruppeService;
 import de.kapsel.kunde.services.IKundeService;
@@ -39,12 +38,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{adresseService}")
 	private IAdresseService adresseService;
 	
-	public KundeBean(){
-		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
-		//setKunden(kundeService.getKunden()); -> Moved to postconstruct init()
-		//Is being called anyway on init() to clear fields after insert, so no need here as it can be called in first init on pageload
-		//this.newKunde = new Kunde();
-	}
+	public KundeBean(){}
 
 	@PostConstruct
     public void init() {
@@ -52,6 +46,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			setKunden(getKundeService().getKunden());
 			setSelectedKunde(getKunden().get(0));
 			setEmptyList(false);
+			setEditMode(false);
 		}catch (DataAccessException e){
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
@@ -133,6 +128,9 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	
 	//endregion Getter/Setter
 
+
+
+
 	//Load data of specific Item into details-table; not called on page load -> additional load in init()
 	public void loadKunde(SelectEvent event) {
 		setSelectedKunde((Kunde) event.getObject());
@@ -153,40 +151,45 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	public void addKunde(){
 		try {
 			getNewKunde().setKnr(createKnr());
-			KGruppe kGruppe = getkGruppeService().getKGruppeById(getkGruppeId());
-			getNewKunde().setGruppe(kGruppe);
+			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 			//Only for testing purposes, later on every field needs to be filled !!!!!!!!!!!!!!!!!!!!!!!!
 			if(getNewKunde().getAdresse().getId()==0){
-				getNewKunde().setAdresse(getAdresseService().getAdresseById(2));
+				getNewKunde().setAdresse(getAdresseService().getAdresseById(10));
 			}
 			getKundeService().addKunde(getNewKunde());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}
 		
-		cancelEdit();
 		init();
 
 	}
 
 	public void updateKunde(){
 		getKundeService().updateKunde(getSelectedKunde());
-		cancelEdit();
 	}
 	
-	public void setEdit(boolean type){
-		setEditMode(true);
-	}
-	
-	public void cancelEdit(){
-		setEditMode(false);
-	}
 
 	public void deleteKunde(){
 		getKundeService().deleteKunde(getSelectedKunde());
 		init();
 	}
 
+	@Override
+	public void onEditComplete() {
+		//Update kGruppe only if something new was selected, 0 is the index of itemLabel
+		if(getkGruppeId()>0){
+			getSelectedKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
+		}
+		updateKunde();
+		setEditMode(false);
+	}
 
+	@Override
+	public void cancelEditMode() {
+		//setSelectedKunde(getKundeService().getKundeById(getSelectedKunde().getId()));
+		setEditMode(false);
+	}
 
+	
 }

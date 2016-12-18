@@ -1,4 +1,4 @@
-package de.kapsel.produkt.entities;
+package de.kapsel.global.entities;
 
 import java.io.Serializable;
 
@@ -9,15 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="werkzeuge")
-public class Werkzeug implements Serializable{
+@Table(name="utils")
+public class Utils implements Serializable{
+
 
 	private static final long serialVersionUID = 1L;
-	
 	private long id;
 	private String name;
-	private double stundensatz;
-	private String notiz;
+	private String abbr;
+	private double value;
+	private String text;
 	
 	@Id
 	@GeneratedValue
@@ -29,7 +30,6 @@ public class Werkzeug implements Serializable{
 		this.id = id;
 	}
 	
-	
 	@Column(name="name", nullable=false)
 	public String getName() {
 		return name;
@@ -38,21 +38,32 @@ public class Werkzeug implements Serializable{
 		this.name = name;
 	}
 	
-	@Column(name="stundensatz", nullable=true)
-	public double getStundensatz() {
-		return stundensatz;
+	@Column(name="abbr", nullable=true)
+	public String getAbbr() {
+		return abbr;
 	}
-	public void setStundensatz(double stundensatz) {
-		this.stundensatz = stundensatz;
-	}
-	
-	@Column(name="notiz", nullable=true)
-	public String getNotiz() {
-		return notiz;
-	}
-	public void setNotiz(String notiz) {
-		this.notiz = notiz;
+	public void setAbbr(String abbr) {
+		this.abbr = abbr;
 	}
 	
+	@Column(name="value", nullable=false)
+	public double getValue() {
+		return value;
+	}
+	public void setValue(double value) {
+		this.value = value;
+	}
 	
+	@Column(name="text", nullable=true)
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	
+	
+	
+
 }

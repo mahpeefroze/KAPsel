@@ -2,26 +2,23 @@ package de.kapsel.auftrag.services;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.auftrag.dao.IAuftragDAO;
 import de.kapsel.auftrag.entities.Auftrag;
+import de.kapsel.global.dao.IGenericDAO;
 
 public class AuftragService implements IAuftragService {
 
 	//Used to manipulate data before passing it to bean/db
 
 	//Injection AuftragDAO
-	@ManagedProperty(value="#{auftragDAO}")
-	private IAuftragDAO auftragDAO;
+	private IGenericDAO<Auftrag> auftragDAO;
 
-	public IAuftragDAO getAuftragDAO() {
+	public IGenericDAO<Auftrag> getAuftragDAO() {
 		return auftragDAO;
 	}
 
-	public void setAuftragDAO(IAuftragDAO auftragDAO) {
+	public void setAuftragDAO(IGenericDAO<Auftrag> auftragDAO) {
 		this.auftragDAO = auftragDAO;
 	}
 
