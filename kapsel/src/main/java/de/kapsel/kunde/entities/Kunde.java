@@ -1,16 +1,20 @@
 package de.kapsel.kunde.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.global.ETypes;
 import de.kapsel.global.entities.Adresse;
 
@@ -29,9 +33,7 @@ public class Kunde implements Serializable {
 	private Adresse adresse;
 	private double rabatt;
 	private ETypes.KundeStatus status;
-
-	//First Test if One to Many works
-	//private ArrayList<Auftrag> auftraege;
+	private List<Auftrag> auftraege;
 
 
 	@Id
@@ -83,15 +85,6 @@ public class Kunde implements Serializable {
 	public void setGruppe(KGruppe gruppe) {
 		this.gruppe = gruppe;
 	}
-	
-	//Cascade not ALL -> in order not to delete default address, actually breaking the ono-to-one concept
-	@OneToOne(cascade=CascadeType.MERGE)
-	public Adresse getAdresse() {
-		return adresse;
-	}
-	public void setAdresse(Adresse adresse) {
-		this.adresse = adresse;
-	}
 
 	@Column(name="text", nullable=true)
 	public String getText() {
@@ -99,6 +92,14 @@ public class Kunde implements Serializable {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	@OneToOne(cascade=CascadeType.ALL)
+	public Adresse getAdresse() {
+		return adresse;
+	}
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
 	}
 	
 	@Column(name="rabatt", nullable=true)
@@ -116,5 +117,15 @@ public class Kunde implements Serializable {
 	public void setStatus(ETypes.KundeStatus status) {
 		this.status = status;
 	}
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "kunde")
+	public List<Auftrag> getAuftraege() {
+		return auftraege;
+	}
+	public void setAuftraege(List<Auftrag> auftraege) {
+		this.auftraege = auftraege;
+	}
+	
+	
 	
 }

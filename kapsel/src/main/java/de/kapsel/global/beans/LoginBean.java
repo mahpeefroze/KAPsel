@@ -10,7 +10,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 
 import org.springframework.dao.DataAccessException;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,12 +28,15 @@ import de.kapsel.global.services.IUserService;
 public class LoginBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private static final String pwPattern = "^\\w*$";
+	//PrimeFaces seems to misinterpret escape of \w with \, and takes ^\\w*$ as regex -> all words starting with '\' followed by 0 to many occurances of 'w'
+	//Moved regex expression to xhtml View
+	private static final String pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[_])[\\w]{8,25}$";
 	private final String success = "/views/secure/index.xhtml?faces-redirect=true";
 	private final String error= "/views/home.xhtml?faces-redirect=true";
 	
 	private User loginUser;
 	private String passwordNew;
+	private String passwordCtrl;
 	private boolean resPassword;
 	private boolean logged;
 	
@@ -83,6 +88,13 @@ public class LoginBean implements Serializable{
 		this.logged = logged;
 	}
 	
+	public String getPasswordCtrl() {
+		return passwordCtrl;
+	}
+
+	public void setPasswordCtrl(String passwordCtrl) {
+		this.passwordCtrl = passwordCtrl;
+	}
 	
 	//endregion
 
@@ -92,6 +104,7 @@ public class LoginBean implements Serializable{
 	public void init() {
 		try {
 			setLoginUser(new User());
+			setLogged(false);
 			clearUser();
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -99,6 +112,7 @@ public class LoginBean implements Serializable{
 	}
 
 	//ADMIN 0, MOD 1, ADVUSER 2, SYSUSER 3
+	//Returns true if access level is not high enough
 	public boolean validateAccess(ETypes.UserT role){
 		try{
 			return getLoginUser().getRole().ordinal()>role.ordinal();
@@ -108,18 +122,29 @@ public class LoginBean implements Serializable{
 		return true;
 	}
 	
+	public boolean validateHierarchy(ETypes.UserT role){
+		try{
+			return getLoginUser().getRole().ordinal()>=role.ordinal();
+		}catch (NullPointerException e){
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	
+	
 	//LOGIN CONTROL
 	public String loginUser(){
 		
 		try {
 			User dbUser = getUserService().getUserByUsername(getLoginUser().getName());
 			if(dbUser!=null){
-				String dbPassword = dbUser.getPassword();
-				if(dbPassword.equals(dbUser.getName())){
+				if(dbUser.isResPw()){
 					setLoginUser(dbUser);
 					setResPassword(true);
-					return error;
+					return null;
 				}
+				String dbPassword = dbUser.getPassword();
 				String userPassword = hashPassword(getLoginUser().getPassword(), dbUser.getSalt());
 				if(dbPassword.equals(userPassword)){
 					setLoginUser(dbUser);
@@ -151,6 +176,7 @@ public class LoginBean implements Serializable{
 	
 	public String logoutUser(){
 		SessionUtils.getSession().invalidate();
+		setLogged(false);
 		clearUser();
 		return error;
 	}
@@ -191,11 +217,22 @@ public class LoginBean implements Serializable{
 			byte[] salt = generateSalt();
 			getLoginUser().setSalt(salt);
 			getLoginUser().setPassword(hashPassword(getPasswordNew(), salt));
+			getLoginUser().setResPw(false);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		updateUser();
 		clearUser();
+	}
+	
+	//Validate PW before changing it in userSettings
+	public void validateLoggedPW(FacesContext context, UIComponent component, Object newValue){
+		String pw = hashPassword((String) newValue, getLoginUser().getSalt());
+		if(!getLoginUser().getPassword().equals(pw)){
+			FacesMessage msg = new FacesMessage();
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			throw new ValidatorException(msg);
+		}
 	}
 	
 	private void updateUser() {
@@ -204,7 +241,6 @@ public class LoginBean implements Serializable{
 	
 	public void clearUser(){
 		setResPassword(false);
-		setLogged(false);
 		setPasswordNew(null);
 	}
 	

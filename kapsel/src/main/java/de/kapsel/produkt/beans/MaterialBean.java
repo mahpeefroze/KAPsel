@@ -18,32 +18,21 @@ import de.kapsel.produkt.services.IMaterialService;
 public class MaterialBean implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	private Material material;
+	private Material newMaterial;
 	private List<Material> materialien;
 	private Material selectedMaterial;
 	
 	
 	@ManagedProperty(value="#{materialService}")
 	private IMaterialService materialService;
-
-	@PostConstruct
-    public void init() {
-		try{
-			setMaterialien(getMaterialService().getMaterialien());
-			setSelectedMaterial(getMaterialien().get(0));
-		}catch (DataAccessException e) {
-			System.out.println(e.getStackTrace());
-		}catch (IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
-		}
+	
+	//region Getter & Setter
+	public Material getNewMaterial() {
+		return newMaterial;
 	}
 
-	public Material getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(Material material) {
-		this.material = material;
+	public void setNewMaterial(Material newMaterial) {
+		this.newMaterial = newMaterial;
 	}
 
 	public List<Material> getMaterialien() {
@@ -69,8 +58,43 @@ public class MaterialBean implements Serializable{
 	public void setMaterialService(IMaterialService materialService) {
 		this.materialService = materialService;
 	}
+	//endregion
+
+	@PostConstruct
+    public void myInit() {
+		try{
+			setMaterialien(getMaterialService().getMaterialien());
+			setSelectedMaterial(getMaterialien().get(0));
+			resetNewMaterial();
+		}catch (DataAccessException e) {
+			System.out.println(e.getStackTrace());
+		}catch (IndexOutOfBoundsException e){
+			System.out.println(e.getMessage() + ": keine Materialien vorhanden");
+		}
+	}
+
 	
+	public void onMaterialEdit(Material m){
+		setSelectedMaterial(m);
+		updateMaterial();
+	}
 	
+	public void resetNewMaterial(){
+		setNewMaterial(new Material());
+	}
 	
+	public void addMaterial(){
+		getMaterialService().addMaterial(getNewMaterial());
+		myInit();
+	}
+	
+	public void updateMaterial(){
+		getMaterialService().updateMaterial(getSelectedMaterial());
+	}
+	
+	public void deleteMaterial(){
+		getMaterialService().deleteMaterial(getSelectedMaterial());
+		myInit();
+	}
 	
 }

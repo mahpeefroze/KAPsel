@@ -14,12 +14,13 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.auftrag.entities.Auftrag;
+import de.kapsel.auftrag.entities.ProduktWrapper;
 import de.kapsel.auftrag.services.IAuftragService;
+import de.kapsel.auftrag.services.IProduktWrapperService;
 import de.kapsel.global.ETypes;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKundeService;
-import de.kapsel.produkt.entities.Produkt;
 import de.kapsel.produkt.services.IProduktService;
 
 @ManagedBean
@@ -31,12 +32,17 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private List<Auftrag> auftraege;
 	private Auftrag selectedAuftrag;
 	private Auftrag newAuftrag;
+	private ProduktWrapper newProduktWrapper;
+	private ProduktWrapper selectedProduktWrapper;
 
 	@ManagedProperty(value="#{auftragService}")
 	private IAuftragService auftragService;
 	
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
+	
+	@ManagedProperty(value="#{produktWrapperService}")
+	private IProduktWrapperService produktWrapperService;
 	
 	@ManagedProperty(value="#{kundeService}")
 	private IKundeService kundeService;
@@ -68,7 +74,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	//newAuftrag
 	public void resetNewAuftrag(){
 		setNewAuftrag(new Auftrag());
-		getNewAuftrag().setProdukte(new ArrayList<Produkt>());
+		getNewAuftrag().setProdukte(new ArrayList<ProduktWrapper>());
 		getNewAuftrag().setKunde(new Kunde());
 	}
 	
@@ -100,7 +106,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void setSelectedAuftrag(Auftrag selectedAuftrag) {
 		this.selectedAuftrag = selectedAuftrag;
 	}
-
+	
 	//Getter and Setter for the Service
 	public IAuftragService getAuftragService() {
 		return auftragService;
@@ -117,6 +123,14 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void setProduktService(IProduktService produktService) {
 		this.produktService = produktService;
 	}
+	
+	public IProduktWrapperService getProduktWrapperService() {
+		return produktWrapperService;
+	}
+
+	public void setProduktWrapperService(IProduktWrapperService produktWrapperService) {
+		this.produktWrapperService = produktWrapperService;
+	}
 
 	public IKundeService getKundeService() {
 		return kundeService;
@@ -126,16 +140,48 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		this.kundeService = kundeService;
 	}
 	
+	public ProduktWrapper getNewProduktWrapper() {
+		return newProduktWrapper;
+	}
+
+	public void setNewProduktWrapper(ProduktWrapper newProduktWrapper) {
+		this.newProduktWrapper = newProduktWrapper;
+	}
+	
+	public ProduktWrapper getSelectedProduktWrapper() {
+		return selectedProduktWrapper;
+	}
+
+	public void setSelectedProduktWrapper(ProduktWrapper selectedProduktWrapper) {
+		this.selectedProduktWrapper = selectedProduktWrapper;
+	}
+	
+	
 	//endregion Getter/Setter
 
-	//Load data of specific Item into details-table; not called on page load -> additional load in init()
+	
+
+	//Listener for Selection in auftragDT in Nav Panel
 	public void loadAuftrag(SelectEvent event) {
 		setSelectedAuftrag((Auftrag) event.getObject());
-
     }
+	
+	public void loadPassedAuftrag(){
+		for(Auftrag a:getAuftraege()){
+			if(a.getId()==getPassedID()){
+				setSelectedAuftrag(a);
+			}
+		}
+	}
+	
+	public String redirectToKunde(long id){
+		//pK is the name of variable in viewParam [kunde]
+		return "kunde.xhtml?faces-redirect=true&pK="+id;
+	}
 	
 	//Basic strategy for creating new AuftragNr, get highest existing and icrement it by 1
 	public long createAnr(){
+		// TODO proper logic implementation needed
 		long anr=0;
 		if(!isEmptyList()){
 			anr = getAuftraege().get(0).getAnr();
@@ -153,11 +199,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void addAuftrag(){
 		try {
 	
-			//Implement logic for creating new ANR and also put it
 			getNewAuftrag().setAnr(createAnr());
-			//getNewAuftrag().setKunde(getKundeService().getKundeById(1));
 			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
 			getNewAuftrag().setStartdatum(new Date());
+			getNewAuftrag().getKunde().getAuftraege().add(getNewAuftrag());
 			getAuftragService().addAuftrag(getNewAuftrag());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -172,6 +217,20 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void deleteAuftrag(){
 		getAuftragService().deleteAuftrag(this.selectedAuftrag);
 		init();
+	}
+	
+	public void addProdukt(){
+		getSelectedAuftrag().getProdukte().add(getNewProduktWrapper());
+		updateAuftrag();
+	}
+	
+	public void updateProdukt(){
+		
+	}
+	
+	public void deleteProdukt(){
+		getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
+		updateAuftrag();
 	}
 
 	public void clearKundeSelection(){

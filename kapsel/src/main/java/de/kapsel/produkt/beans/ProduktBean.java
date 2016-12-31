@@ -67,10 +67,11 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			setProdukte(produktService.getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
+			setEditMode(false);
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			System.out.println(e.getMessage() + ": keine Produkte vorhanden");
 			setEmptyList(true);
 		}
 		//Clearing newProdukt Dialog fields
@@ -346,6 +347,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
         }
 	}
 	
+	// TODO check if needed, maybe in newProduktDlg
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void deleteBauteilView(){
 		try{
@@ -371,12 +373,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			if(source[source.length-1].equals("btDelView")){
 				updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getSelectedProdukt().getBauteile()));
 				getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
-				//Cascade somehow doesn't remove items from bauteile, need manual remove or else lots of dead records
-				//getBauteilService().deleteBauteil(getSelectedBauteil());
 			}else if(source[source.length-1].equals("asDelView")){
 				updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList(getSelectedProdukt().getAschritte()));
 				getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
-				//getArbeitsschrittService().deleteArbeitsschritt(getSelectedAschritt());
 			}
 			updateProdukt();
 		}catch(java.lang.IllegalArgumentException e){

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+
+<cc:interface>
+</cc:interface>
+
+<cc:implementation>
+	<h:form id="userSettingsForm">
+	<p:menubar>
+        <p:submenu label="Hi, #{loginBean.loginUser.fullname}" icon="fa fa-user" style="float:right;font-size:0.8em;">
+            <p:menuitem value="My settings" icon="fa fa-cogs" oncomplete="PF('mySettings').show();"/>
+            <p:separator />
+            <p:menuitem value="Logout" action="#{loginBean.logoutUser()}" icon="fa fa-power-off"/>
+        </p:submenu>
+     </p:menubar>
+     </h:form>
+     
+     <p:dialog id="mySettingsDlg" header="My Settings" modal="true" widgetVar="mySettings" minHeight="40" resizable="false">
+     	<ui:include src="/views/secure/dialogs/userSettings.xhtml"/>
+     </p:dialog>
+
+</cc:implementation>
+
+</html>

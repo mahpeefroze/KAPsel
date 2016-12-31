@@ -4,22 +4,28 @@
 	height:400px;
 }
 
-div[id^="nav_container"] {
-    max-width: 300px;
-}
-
 div[id^="nav"] {
-    height: 400px;
+	background-color:#eeeeee;
+	line-height:30px;
+    float:left;
 	}
 	
-div[id^="section_container"] {
-	max-width: 600px;
-}
+div[id="nav_1"] {
+	min-height: 400px;
 	
-div[id^="section"] {
-    height: 400px;
 }
 
+div[id="nav_2"] {
+	min-height: 500px;
+}
+
+div[id="nav_3"] {
+	min-height: 600px;
+}
+
+div[id="nav_4"] {
+	min-height: 500px;
+}
 
 .float_frame {
 	background-color:transparent;
@@ -30,3 +36,35 @@ div[id^="section"] {
     margin-top: 1px;
     overflow-y: auto;
 }
+
+.ui-fieldset-legend.ui-state-default{
+	padding: 0px 10px !important;
+}
+
+.ui-selectmanycheckbox.ui-widget td:nth-child(odd) {
+    width: 25px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.ui-selectmanycheckbox.ui-widget td:nth-child(2) {
+	width: 70px;
+}
+
+.ui-selectmanycheckbox.ui-widget td:nth-child(4) {
+	width: 105px;
+}
+
+.ui-selectmanycheckbox.ui-widget td:nth-child(6) {
+	width: 70px;
+}
+	
+.ui-chkbox.ui-widget {
+	
+}
+
+.number_input{
+	width: 50px;
+}
+

@@ -8,6 +8,11 @@
 <h:outputStylesheet name="global.css" library="css" />
 <h:outputStylesheet name="kunde.css" library="css" />
 
+<f:metadata>
+	<f:viewParam name="pK" value="#{kundeBean.passedID}"/>
+	<f:viewAction action="#{kundeBean.loadPassedKunde()}" />
+</f:metadata>
+
 <h:head>
 	<title>#{labels.progName} #{labels.kunde}</title>
 </h:head>
@@ -74,7 +79,7 @@
 					<p:dataTable id="kundeDT" var="item"
 						value="#{kundeBean.kunden}" selectionMode="single"
 						selection="#{kundeBean.selectedKunde}" rowKey="#{item.knr}"
-						emptyMessage="#{labels.norecords}" sortBy="#{item.knr}">
+						emptyMessage="#{errors.norecords}" sortBy="#{item.knr}">
 						<f:facet name="header">#{labels.kundenListe}</f:facet>
 
 
@@ -84,7 +89,7 @@
 					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
 					-->
 
-						<p:column headerText="#{labels.k_nr}">
+						<p:column headerText="#{labels.k_nr}" style="width:50px;">
 							<h:outputText value="#{item.knr}" />
 						</p:column>
 						<p:column headerText="#{labels.nachname}">
@@ -135,9 +140,36 @@
 
 						</p:tab>
 
-						<!-- Abgeschlossene Auftraege -->
-						<p:tab title="#{labels.abgeschlosseneAuftraege}">
-
+						<!-- Liste der Auftraege -->
+						<p:tab title="#{labels.auftragListe}">
+							<p:dataTable id="auftraegeDT" var="item"
+								value="#{kundeBean.selectedKunde.auftraege}" rowKey="#{item.anr}"
+								emptyMessage="#{errors.norecords}" sortBy="#{item.anr}">
+								
+							<p:column headerText="#{labels.a_nr}" style="width:50px;">
+								<h:outputText value="#{item.anr}" />
+							</p:column>
+							<p:column headerText="#{labels.nachname}">
+								<h:outputText value="#{item.name}" />
+							</p:column>
+							<p:column headerText="#{labels.startDatum}" style="width:100px;">
+								<h:outputText value="#{item.startdatum}">
+									<f:convertDateTime pattern="dd.MM.yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="#{labels.terminL}" style="width:100px;">
+								<h:outputText value="#{item.sollenddatum}">
+									<f:convertDateTime pattern="dd.MM.yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="#{labels.typ}" style="width:100px;">
+								<h:outputText value="#{item.status}" />
+							</p:column>
+							<p:column headerText="#{labels.action}" style="width:100px;">
+								<p:commandButton icon="fa fa-list-alt" title="Zusammenfassung zeigen" />
+								<p:commandButton icon="fa fa-arrow-circle-right" title="Zum Auftrag..." action="#{kundeBean.redirectToAuftrag(item.id)}"/>
+							</p:column>
+							</p:dataTable>
 						</p:tab>
 
 

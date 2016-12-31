@@ -6,17 +6,19 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+
+import org.springframework.dao.DataAccessException;
 
 import de.kapsel.kunde.entities.KGruppe;
 import de.kapsel.kunde.services.IKGruppeService;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class KGruppeBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private KGruppe kGruppe;
+	private KGruppe newKGruppe;
 	private List<KGruppe> kGruppen;
 	private KGruppe selectedKGruppe;
 
@@ -24,17 +26,50 @@ public class KGruppeBean implements Serializable{
 	private IKGruppeService kGruppeService;
 
 	@PostConstruct
-    public void init() {
-		setkGruppen(getkGruppeService().getKGruppen());
-		setSelectedKGruppe(getkGruppen().get(0));
+    public void myInit() {
+		try{
+			setkGruppen(getkGruppeService().getKGruppen());
+			setSelectedKGruppe(getkGruppen().get(0));
+			resetNewKGruppe();
+		}catch (DataAccessException e) {
+			System.out.println(e.getStackTrace());
+		}catch (IndexOutOfBoundsException e){
+			System.out.println(e.getMessage() + ": keine KGruppen vorhanden");
+		}
+	}
+	
+	public void onKGruppeEdit(KGruppe kGruppe){
+		setSelectedKGruppe(kGruppe);
+		updateKGruppe();
+	}
+	
+	public void addKGruppe(){
+		getNewKGruppe().setAktiv(true);
+		getkGruppeService().addKGruppe(getNewKGruppe());
+		myInit();
+	}
+	
+	public void resetNewKGruppe(){
+		setNewKGruppe(new KGruppe());
+	}
+	
+	public void updateKGruppe(){
+		getkGruppeService().updateKGruppe(getSelectedKGruppe());
+	}
+	
+	public void deleteKGruppe(){
+		getkGruppeService().deleteKGruppe(getSelectedKGruppe());
+		myInit();
+	}
+	
+
+	//region getter & setter
+	public KGruppe getNewKGruppe() {
+		return newKGruppe;
 	}
 
-	public KGruppe getkGruppe() {
-		return kGruppe;
-	}
-
-	public void setkGruppe(KGruppe kGruppe) {
-		this.kGruppe = kGruppe;
+	public void setNewKGruppe(KGruppe newKGruppe) {
+		this.newKGruppe = newKGruppe;
 	}
 
 	public List<KGruppe> getkGruppen() {
@@ -61,6 +96,6 @@ public class KGruppeBean implements Serializable{
 		this.selectedKGruppe = selectedKGruppe;
 	}
 
-	
+	//endregion
 
 }

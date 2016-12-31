@@ -7,7 +7,7 @@
 	<h:form id="miniKListePanel">
 	<p:dataTable id="miniKListe" var="item" value="#{kundeBean.kunden}"
 		selectionMode="single" selection="#{auftragBean.newAuftrag.kunde}"
-		rowKey="#{item.knr}" emptyMessage="#{labels.norecords}" sortBy="#{item.knr}">
+		rowKey="#{item.knr}" emptyMessage="#{errors_msgs.norecords}" sortBy="#{item.knr}">
 		
 		<p:ajax event="rowSelect" update=":dlgNewAuftragPanel"/>
 							

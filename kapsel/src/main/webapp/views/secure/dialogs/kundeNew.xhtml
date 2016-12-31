@@ -42,7 +42,12 @@
 		</p:row>
 		<p:row>
 			<p:column colspan="2">#{labels.status}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.status}"/></p:column>
+			<p:column colspan="2">
+				<p:selectOneMenu id="newKstatusSelect" value="#{kundeBean.newKunde.status}" style="width:200px">
+					<f:selectItem itemLabel="Status" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.kundeStatus}" var="typ" itemLabel="#{typ}" itemValue="#{kundeStatus}" />
+				</p:selectOneMenu>
+			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>

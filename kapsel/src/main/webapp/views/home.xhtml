@@ -25,7 +25,7 @@
 		<p:message id="logMsg" for="name" styleClass="errorMessage" />
 	
 		#{labels.password}
-		<h:inputSecret value="#{loginBean.loginUser.password}" id="password" required="true" requiredMessage="#{errors.requiredField}"/>
+		<h:inputSecret value="#{loginBean.loginUser.password}" id="password" required="#{loginBean.loginUser.password!=loginBean.loginUser.name}" requiredMessage="#{errors.requiredField}"/>
 		<p:message id="pwMsg" for="password" styleClass="errorMessage" />
 	
 	</h:panelGrid>

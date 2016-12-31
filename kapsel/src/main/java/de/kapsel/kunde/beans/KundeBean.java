@@ -38,6 +38,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{adresseService}")
 	private IAdresseService adresseService;
 	
+		
 	public KundeBean(){}
 
 	@PostConstruct
@@ -128,18 +129,30 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	
 	//endregion Getter/Setter
 
+	//Select Kunde passed as Attribute from another View
+	public void loadPassedKunde(){
+		long id=getPassedID();
+		for(Kunde k:getKunden()){
+			if(k.getId()==id){
+				setSelectedKunde(k);
+			}
+		}
+	}
+	
+	//Method for passing Auftrag id to AuftragView
+	public String redirectToAuftrag(long id){
+		return "auftrag.xhtml?faces-redirect=true&pA="+id;
+	}
 
-
-
-	//Load data of specific Item into details-table; not called on page load -> additional load in init()
+	//Listener for Selection in kundeDT in Nav Panel
 	public void loadKunde(SelectEvent event) {
 		setSelectedKunde((Kunde) event.getObject());
     }
-	
+
 	
 	//Basic strategy for creating new KundenNr, get highest existing and increment it by 1
 	public long createKnr(){
-		long knr = getKunden().get(0).getKnr();
+		long knr = 0;
 		for(Kunde k : getKunden()){
 			if(k.getKnr()>knr){
 				knr=k.getKnr();
@@ -152,10 +165,6 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		try {
 			getNewKunde().setKnr(createKnr());
 			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
-			//Only for testing purposes, later on every field needs to be filled !!!!!!!!!!!!!!!!!!!!!!!!
-			if(getNewKunde().getAdresse().getId()==0){
-				getNewKunde().setAdresse(getAdresseService().getAdresseById(10));
-			}
 			getKundeService().addKunde(getNewKunde());
 		} catch (DataAccessException e) {
 			e.printStackTrace();

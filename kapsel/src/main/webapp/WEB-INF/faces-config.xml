@@ -21,7 +21,7 @@
 			<var>labels</var>
 		</resource-bundle>
 		<resource-bundle>
-			<base-name>properties/errorsDE</base-name>
+			<base-name>properties/errors_msgsDE</base-name>
 			<var>errors</var>
 		</resource-bundle>
 	</application>

@@ -22,6 +22,7 @@ public class User implements Serializable{
 	private String name;
 	private String password;
 	private byte[] salt;
+	private boolean resPw=false;
 
 	@Id
 	@GeneratedValue
@@ -70,13 +71,22 @@ public class User implements Serializable{
 		this.password = password;
 	}
 	
-	@Column(name="salt", nullable=false)
+	@Column(name="salt", nullable=true)
 	public byte[] getSalt() {
 		return salt;
 	}
 
 	public void setSalt(byte[] salt) {
 		this.salt = salt;
+	}
+	
+	@Column(name="resPw", nullable=false)
+	public boolean isResPw() {
+		return resPw;
+	}
+
+	public void setResPw(boolean resPw) {
+		this.resPw = resPw;
 	}
 
 	@Override

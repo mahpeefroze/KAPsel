@@ -76,7 +76,7 @@
 					<p:dataTable id="produktDT" var="item"
 						value="#{produktBean.produkte}" selectionMode="single"
 						selection="#{produktBean.selectedProdukt}" rowKey="#{item.pnr}"
-						emptyMessage="#{labels.norecords}">
+						emptyMessage="#{errors.norecords}">
 						<f:facet name="header">#{labels.prodListe}</f:facet>
 
 
@@ -139,10 +139,10 @@
 							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
 							
 							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="#{produktBean.editMode}" editMode="cell">
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
 									
-								<p:ajax event="cellEdit" listener="#{produktBean.onBauteileEdit}" update="nav_form"/>	
+								<p:ajax event="cellEdit" listener="#{produktBean.onBauteileEdit}"/>	
 
 								<p:column headerText="#{labels.position}" style="width: 40px;">
 									<h:outputText value="#{item.position}" />
@@ -205,10 +205,10 @@
 							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
 							
 							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.aschritte}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="#{produktBean.editMode}" editMode="cell">
+								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
 									
-								<p:ajax event="cellEdit" listener="#{produktBean.onArbeitsschritteEdit}" update="nav_form"/>
+								<p:ajax event="cellEdit" listener="#{produktBean.onArbeitsschritteEdit}"/>
 
 								<p:column headerText="#{labels.position}" style="width: 40px;">
 									<h:outputText value="#{item.position}" />

@@ -31,6 +31,14 @@ public class ETypes {
 		return UserT.values();
 	}
 	
+	public MaterialT[] getMaterialT(){
+		return MaterialT.values();
+	}
+	
+	public UnitT[] getUnitT(){
+		return UnitT.values();
+	}
+	
 	public enum AuftragS{
 		Offen,
 		Bearbeitung,

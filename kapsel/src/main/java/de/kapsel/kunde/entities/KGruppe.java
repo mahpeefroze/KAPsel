@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name="k_gruppen")
 public class KGruppe implements Serializable{
@@ -54,7 +56,8 @@ public class KGruppe implements Serializable{
 	public void setAktiv(boolean aktiv) {
 		this.aktiv = aktiv;
 	}
-
+	
+	@CreationTimestamp
 	@Column(name="datum", nullable=true)
 	public Date getDatum() {
 		return datum;

@@ -19,6 +19,7 @@ public class Utils implements Serializable{
 	private String abbr;
 	private double value;
 	private String text;
+	private char typ;
 	
 	@Id
 	@GeneratedValue
@@ -60,6 +61,14 @@ public class Utils implements Serializable{
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	@Column(name="typ")
+	public char getTyp() {
+		return typ;
+	}
+	public void setTyp(char typ) {
+		this.typ = typ;
 	}
 	
 	

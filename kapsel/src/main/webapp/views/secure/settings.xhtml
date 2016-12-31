@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
 
 <h:outputStylesheet name="global.css" library="css" />
 <h:outputStylesheet name="settings.css" library="css" />
@@ -37,97 +37,388 @@
 
 	</div>
 
-
-	<div id="middle">
+	<h:form id="mid_form">
+		
 		<p:accordionPanel id="settingsPanel" multiple="false">
 
 			<!-- User Settings -->
-			<p:tab id="userTab" title="#{labels.settingsUser}">
+			<p:tab title="#{labels.settingsUser}">
 				
-				<h:form id="nav_form_1">
-					<div id="nav_container_1">
-						<div id="nav_1" class="float_frame">
+				<div id="nav_1" class="float_frame">
+					<br/>
+					<p:panelGrid rendered="#{not loginBean.validateAccess('ADMIN')}">
+						<p:commandButton id="newUser" value="#{labels.add}" oncomplete="PF('newUser').show();"/>
+						<p:commandButton id="delUser" value="#{labels.delete}" oncomplete="PF('delUser').show();"/>
+					</p:panelGrid>
+					<p:dataTable id="userDT" var="item"
+						value="#{settingsBean.users}" selectionMode="single"
+						selection="#{settingsBean.selectedUser}" rowKey="#{item.id}"
+						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('ADMIN')}" editMode="cell">
 
-							<p:dataTable id="userDT" var="item"
-								value="#{userBean.users}" selectionMode="single"
-								selection="#{userBean.selectedUser}" rowKey="#{item.id}"
-								emptyMessage="#{labels.norecords}">
-								<f:facet name="header">#{labels.userListe}</f:facet>
-
-								<p:ajax event="rowSelect" listener="#{userBean.loadUser}" update=":settingsPanel:sect_form_1" />
-
-								<p:column headerText="#{labels.id}" style="width:40px;">
-									<h:outputText value="#{item.id}" />
-								</p:column>
-								<p:column headerText="#{labels.nachname}">
-									<h:outputText value="#{item.name}" />
-								</p:column>
-							</p:dataTable>
-
-							<hr></hr>
-						</div>
-					</div>
-				</h:form>
-
-				<!-- RECHTE SEITE -->
-				<h:form id="sect_form_1">
-					<div id="section_container_1">
-						<div id="section_1" class="float_frame">
-						<p:panelGrid>
-								<p:row>
-									<p:column>#{labels.id}</p:column>
-									<p:column>#{userBean.selectedUser.id}</p:column>
-									<p:column colspan="2"/>
-								</p:row>
-
-								<p:row>
-									<p:column>#{labels.userName}</p:column>
-									<p:column>#{userBean.selectedUser.name}</p:column>
-									<p:column>#{labels.userRole}</p:column>
-									<p:column>
-									
-									<p:selectOneMenu disabled="true" id="userRoleSelect" value="#{userBean.selectedUser.role}" style="width:150px">
+						<f:facet name="header">#{labels.userListe}</f:facet>
+						
+						<p:ajax event="cellEdit" listener="#{settingsBean.onUserEdit(item)}"/>
+						
+						<p:column headerText="#{labels.id}" style="width:50px; text-align: center;" sortBy="#{item.id}">
+							<h:outputText value="#{item.id}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}" sortBy="#{item.fullname}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.fullname}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.fullname}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.userName}" sortBy="#{item.name}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+			               </p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.userRole}" sortBy="#{item.role}" style="width: 200px;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.role}" /></f:facet>
+				               <f:facet name="input">
+									<p:selectOneMenu id="userRoleSelect" value="#{item.role}" style="width:150px">
 										<f:selectItem itemLabel="#{labels.userRole}" itemValue="" noSelectionOption="true" />
-										<f:selectItems value="#{eTypes.userT}" var="typ" itemLabel="#{typ}" itemValue="#{userT}" />
+										<f:selectItems value="#{eTypes.userT}"/>
 									</p:selectOneMenu>
-									
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>#{labels.nachname}</p:column>
-									<p:column>#{userBean.selectedUser.fullname}</p:column>
-									<p:column colspan="2">
-										<p:commandButton value="#{labels.passwordReset}" action="#{userBean.resetPassword()}"/>
-									</p:column>
-								</p:row>
-							</p:panelGrid>
-						
-						
-						</div>
-					</div>
-				</h:form>
+				               </f:facet>
+				            </p:cellEditor>
+						</p:column>
+						<p:column style="text-align: center;" >
+							<p:commandButton disabled="#{(loginBean.validateHierarchy(item.role) and item.name!=loginBean.loginUser.name) or item.resPw}" update="userDT" value="#{labels.passwordReset}" action="#{settingsBean.resetPassword(item)}"/>
+						</p:column>
+					</p:dataTable>
 
+					<p:separator/>
+					
+					<p:dialog header="Benutzer löschen" modal="true" widgetVar="delUser" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich diesen Benutzer löschen?</p>
+					    <p:spacer/>
+					    <p:commandButton value="#{labels.ja}" action="#{settingsBean.deleteUser()}" update="mid_form" oncomplete="PF('delUser').hide();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delUser').hide();"/>
+					</p:dialog>
+					
+				</div>
 
 			</p:tab>
 
 			<!-- Kunden Settings -->
 			<p:tab title="#{labels.settingsKunde}">
+			
+				<div id="nav_2" class="float_frame">
+					<br/>
+					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+						<p:commandButton id="newKGruppe" value="#{labels.add}" oncomplete="PF('newKGruppe').show();"/>
+						<p:commandButton id="delKGruppe" value="#{labels.delete}" oncomplete="PF('delKGruppe').show();"/>
+					</p:panelGrid>
+					<p:dataTable id="kgruppeDT" var="item"
+						value="#{kGruppeBean.kGruppen}" selectionMode="single"
+						selection="#{kGruppeBean.selectedKGruppe}" rowKey="#{item.id}"
+						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('MOD')}" editMode="cell">
+
+						<f:facet name="header">#{labels.kgruppen}</f:facet>
+						
+						<p:ajax event="cellEdit" listener="#{kGruppeBean.onKGruppeEdit(item)}"/>
+
+						<p:column headerText="#{labels.id}" style="width:50px; text-align: center;">
+							<h:outputText value="#{item.id}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.erstDatum}">
+							<h:outputText value="#{item.datum}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{labels.rabatt}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.rabatt}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.rabatt}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.aktiv}" style="text-align: center;">
+							<p:selectBooleanCheckbox value="#{item.aktiv}">
+								<p:ajax listener="#{kGruppeBean.onKGruppeEdit(item)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+					</p:dataTable>
+					
+					<p:dialog header="Kundengruppe löschen" modal="true" widgetVar="delKGruppe" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich diese Kundengruppe löschen?</p>
+					    <p:spacer/>
+					    <p:commandButton value="#{labels.ja}" action="#{kGruppeBean.deleteKGruppe()}" update="mid_form" oncomplete="PF('delKGruppe').hide();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delKGruppe').hide();"/>
+					</p:dialog>
+					
+					<p:separator/>
+					
+										
+					<p:fieldset id="rabatte" toggleable="false" legend="#{labels.settingsRabatte}">
+						<p:selectManyCheckbox id="basic" value="#{settingsBean.rabatteCB}">
+							 <p:ajax update="rabatte"/>
+							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabOeffS') or settingsBean.grabRabStatus('RabFiS') or settingsBean.grabRabStatus('RabPrivS')}" 
+							 	itemLabel="Alle" itemValue="RabAlleS" />
+							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 	itemLabel="#{labels['kunde.typ.OEFFENTLICH']}" itemValue="RabOeffS" />
+							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 	itemLabel="#{labels['kunde.typ.FIRMA']}" itemValue="RabFiS" />
+							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 	itemLabel="#{labels['kunde.typ.PRIVAT']}" itemValue="RabPrivS" />
+						</p:selectManyCheckbox>
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabAlle'].value}" disabled="#{not settingsBean.grabRabStatus('RabAlleS')}" styleClass="number_input"/>
+								</p:column>
+								<p:column/>
+								<p:column style="width: 95px;">
+									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabOeff'].value}" disabled="#{not settingsBean.grabRabStatus('RabOeffS')}" styleClass="number_input"/>
+								</p:column>
+								<p:column/>
+								<p:column>
+									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabFi'].value}" disabled="#{not settingsBean.grabRabStatus('RabFiS')}" styleClass="number_input"/>
+								</p:column>
+								<p:column/>
+								<p:column>
+									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabPriv'].value}" disabled="#{not settingsBean.grabRabStatus('RabPrivS')}" styleClass="number_input"/>
+								</p:column>
+								<p:column/>
+								<p:column>
+									<p:commandButton value="Anwenden" action="#{settingsBean.updateUtilsByType('R')}"/>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					
+					</p:fieldset>
+					
+				</div>
+			
 			</p:tab>
+			
+			<p:tab title="#{labels.settingsProdukt}" rendered="#{not loginBean.validateAccess('MOD')}">
+				
+				<div id="nav_3" class="float_frame fullWidth">
+					<br/>
+						
+					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+						<p:commandButton value="#{labels.add}" oncomplete="PF('newMaterial').show();"/>
+						<p:commandButton value="#{labels.delete}" oncomplete="PF('delMaterial').show();"/>
+					</p:panelGrid>
+					<p:dataTable id="materialienDT" var="item"
+						value="#{materialBean.materialien}" selectionMode="single"
+						selection="#{materialBean.selectedMaterial}" rowKey="#{item.id}"
+						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('MOD')}" editMode="cell">
 
+						<f:facet name="header">#{labels.materialien}</f:facet>
+						
+						<p:ajax event="cellEdit" listener="#{materialBean.onMaterialEdit(item)}"/>
 
+						<p:column headerText="#{labels.id}" style="width:50px; text-align: center;">
+							<h:outputText value="#{item.id}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.preis}" style="width: 100px;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.preis} €" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.preis}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.einheit}" style="width: 80px; text-align: center;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.einheit}"/></f:facet>
+				               <f:facet name="input">
+									<p:selectOneMenu id="materialUnitSelect" value="#{item.einheit}" style="width:150px">
+										<f:selectItem itemLabel="#{labels.einheit}" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{eTypes.unitT}"/>
+									</p:selectOneMenu>
+				               </f:facet>
+				            </p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.typ}" style="width: 200px;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.typ}" /></f:facet>
+				               <f:facet name="input">
+									<p:selectOneMenu id="materialTypSelect" value="#{item.typ}" style="width:150px">
+										<f:selectItem itemLabel="#{labels.typ}" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{eTypes.materialT}"/>
+									</p:selectOneMenu>
+				               </f:facet>
+				            </p:cellEditor>
+						</p:column>
+					</p:dataTable>
+					
+					<p:dialog header="Material löschen" modal="true" widgetVar="delMaterial" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich dieses Material löschen?</p>
+					    <p:spacer/>
+					    <p:commandButton value="#{labels.ja}" action="#{materialBean.deleteMaterial()}" update="mid_form" oncomplete="PF('delMaterial').hide();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delMaterial').hide();"/>
+					</p:dialog>
+					<br/>
+					<p:separator/>
+					
+					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+						<p:commandButton value="#{labels.add}" oncomplete="PF('newWerkzeug').show();"/>
+						<p:commandButton value="#{labels.delete}" oncomplete="PF('delWerkzeug').show();"/>
+					</p:panelGrid>
+					<p:dataTable id="werkzeugeDT" var="item"
+						value="#{werkzeugBean.werkzeuge}" selectionMode="single"
+						selection="#{werkzeugBean.selectedWerkzeug}" rowKey="#{item.id}"
+						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('MOD')}" editMode="cell">
+
+						<f:facet name="header">#{labels.werkzeuge}</f:facet>
+						
+						<p:ajax event="cellEdit" listener="#{werkzeugBean.onWerkzeugEdit(item)}"/>
+
+						<p:column headerText="#{labels.id}" style="width:50px; text-align: center;">
+							<h:outputText value="#{item.id}" />
+						</p:column>
+						<p:column headerText="#{labels.nachname}" style="width: 300px;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.notizen}">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.notiz}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.notiz}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
+						</p:column>
+						<p:column headerText="#{labels.stundensatz}" style="width: 160px;">
+							<p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.stundensatz} €/h"/></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.stundensatz}" style="width:96%"/></f:facet>
+				            </p:cellEditor>
+						</p:column>
+					</p:dataTable>
+					<br/>
+					
+					<p:dialog header="Werkzeug löschen" modal="true" widgetVar="delWerkzeug" minHeight="40" resizable="false">
+						<p>Möchten Sie wirklich dieses Werkzeug löschen?</p>
+					    <p:spacer/>
+					    <p:commandButton value="#{labels.ja}" action="#{werkzeugBean.deleteWerkzeug()}" update="mid_form" oncomplete="PF('delWerkzeug').hide();"/>
+					    <p:commandButton value="#{labels.nein}" onclick="PF('delWerkzeug').hide();"/>
+					</p:dialog>
+				</div>
+				
+			</p:tab>
+			
 			<!-- Produkte Settings -->
-			<p:tab title="#{labels.settingsProdukt}">
+			<p:tab title="#{labels.settingsCalc}" rendered="#{not loginBean.validateAccess('ADMIN')}">
+			
+				<div id="nav_4" class="float_frame fullWidth">
+					<br/>
+					<p:fieldset>
+					<p:panelGrid id="calcSettingsPanel">
+						<p:row>
+							<p:column colspan="7"><b>Herstellekosten</b></p:column>
+						</p:row>
+						<p:row>
+							<p:column>#{settingsBean.utilsMap['MGK'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['MGK'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+							<p:column/>
+							<p:column>#{settingsBean.utilsMap['FGK'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['FGK'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+						</p:row>
+						<p:row>
+							<p:column>#{settingsBean.utilsMap['FAL'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['FAL'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>€/h</p:column>
+							<p:column colspan="4"/>
+						</p:row>
+						<p:row>
+							<p:column colspan="7"><b>Selbstkosten</b></p:column>
+						</p:row>
+						<p:row>
+							<p:column>#{settingsBean.utilsMap['VWGK'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['VWGK'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+							<p:column/>
+							<p:column>#{settingsBean.utilsMap['VTGK'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['VTGK'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="7"><b>Preisuntergrenze</b></p:column>
+						</p:row>
+						<p:row>
+							<p:column>#{settingsBean.utilsMap['WG'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['WG'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+							<p:column/>
+							<p:column>#{settingsBean.utilsMap['USt'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['USt'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+						</p:row>
+						<p:row>
+							<p:column>#{settingsBean.utilsMap['Sk'].name}</p:column>
+							<p:column>
+								<p:inputText value="#{settingsBean.utilsMap['Sk'].value}" styleClass="number_input"/>
+							</p:column>
+							<p:column>%</p:column>
+							<p:column colspan="4"/>
+						</p:row>
+						<p:row>
+							<p:column colspan="4"/>
+							<p:column>
+								<p:commandButton value="Anwenden" action="#{settingsBean.updateUtilsByType('K')}" style="float: right;"/>
+							</p:column>
+							<p:column colspan="2">
+								<p:commandButton value="Zurücksetzen" update="calcSettingsPanel"  process="@this" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					</p:fieldset>
+				</div>
+				
 			</p:tab>
-
-			<!-- Other Settings -->
-			<p:tab title="#{labels.settingsOther}">
-			</p:tab>
-
 
 		</p:accordionPanel>
-
-
-	</div>
-
+	
+	</h:form>	
+	
+	<p:dialog id="userNewDlg" header="Neuer Benutzer" modal="true" widgetVar="newUser" minHeight="40" resizable="false">
+			<ui:include src="/views/secure/dialogs/userNew.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="kGruppeNewDlg" header="Neue Kundengruppe" modal="true" widgetVar="newKGruppe" minHeight="40" resizable="false">
+			<ui:include src="/views/secure/dialogs/kGruppeNew.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="materialNewDlg" header="Neues Material" modal="true" widgetVar="newMaterial" minHeight="40" resizable="false">
+			<ui:include src="/views/secure/dialogs/materialNew.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="werkzeugNewDlg" header="Neues Werkzeug" modal="true" widgetVar="newWerkzeug" minHeight="40" resizable="false">
+			<ui:include src="/views/secure/dialogs/werkzeugNew.xhtml" />
+	</p:dialog>
+	
+	
 </body>
 </html>

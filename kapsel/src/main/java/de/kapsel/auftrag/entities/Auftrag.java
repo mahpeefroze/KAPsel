@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.global.ETypes;
 import de.kapsel.kunde.entities.Kunde;
-import de.kapsel.produkt.entities.Produkt;
 
 
 @Entity
@@ -38,7 +38,7 @@ public class Auftrag implements Serializable{
 	private Date enddatum;
 	private int zeit;
 	private double preis;
-	private List<Produkt> produkte;
+	private List<ProduktWrapper> produkte;
 	
 	private Timestamp erstDatum;
 	private Timestamp modDatum;
@@ -50,7 +50,7 @@ public class Auftrag implements Serializable{
 
 	@Id
 	@GeneratedValue
-	@Column(name="id", nullable=false, unique=true, length=11)
+	@Column(name="id", nullable=false, unique=true)
 	public long getId() {
 		return id;
 	}
@@ -99,12 +99,12 @@ public class Auftrag implements Serializable{
 		this.text = text;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	public List<Produkt> getProdukte() {
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<ProduktWrapper> getProdukte() {
 		return produkte;
 	}
 
-	public void setProdukte(List<Produkt> produkte) {
+	public void setProdukte(List<ProduktWrapper> produkte) {
 		this.produkte = produkte;
 	}
 	

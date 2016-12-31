@@ -51,26 +51,26 @@ body {
 	height:700px;
 }
 
-div[id^="nav_container"] {
+div[id="nav_container"] {
     line-height:30px;
     float:left;
     width:30%;
     height:100%;
 }
 
-div[id^="nav"] {
+div[id="nav"] {
     background-color:#eeeeee;
     height: 678px;
 	}
 	
-div[id^="section_container"] {
+div[id="section_container"] {
 	position:relative;
     float:left;
 	width:70%;
 	height:100%;
 }
 	
-div[id^="section"] {
+div[id="section"] {
     height: 678px;
 }
 
@@ -96,6 +96,9 @@ hr {
     overflow-y: auto;
 }
 
+.ui-fieldset-legend.ui-state-default{
+	padding: 5px 10px !important;
+}
 
 
 
