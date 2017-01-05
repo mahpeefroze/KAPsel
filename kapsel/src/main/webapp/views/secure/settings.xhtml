@@ -38,7 +38,6 @@
 	</div>
 
 	<h:form id="mid_form">
-		
 		<p:accordionPanel id="settingsPanel" multiple="false">
 
 			<!-- User Settings -->
@@ -69,10 +68,7 @@
 			            	</p:cellEditor>
 						</p:column>
 						<p:column headerText="#{labels.userName}" sortBy="#{item.name}">
-							<p:cellEditor>
-				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
-				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
-			               </p:cellEditor>
+				            <h:outputText value="#{item.name}" />
 						</p:column>
 						<p:column headerText="#{labels.userRole}" sortBy="#{item.role}" style="width: 200px;">
 							<p:cellEditor>

@@ -6,15 +6,18 @@ import de.kapsel.produkt.entities.Produkt;
 
 public interface IProduktService {
 
-	public abstract void addProdukt(Produkt produkt);
+	void addProdukt(Produkt produkt);
 
-	public abstract void updateProdukt(Produkt produkt);
+	void updateProdukt(Produkt produkt);
 
-	public abstract void deleteProdukt(Produkt produkt);
+	void deleteProdukt(Produkt produkt);
 
-	public abstract Produkt getProduktByName(String name);
+	Produkt getProduktByName(String name);
 
-	public abstract Produkt getProduktById(long id);
+	Produkt getProduktById(long id);
 
-	public abstract List<Produkt> getProdukte();
+	List<Produkt> getProdukte();
+	
+	List<Produkt> getProdukteWithChildren();
+	
 }

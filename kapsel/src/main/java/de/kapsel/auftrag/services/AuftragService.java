@@ -5,23 +5,23 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.kapsel.auftrag.entities.Auftrag;
-import de.kapsel.global.dao.IGenericDAO;
+import de.kapsel.global.dao.ILazyLoadDAO;
 
 public class AuftragService implements IAuftragService {
 
 	//Used to manipulate data before passing it to bean/db
 
 	//Injection AuftragDAO
-	private IGenericDAO<Auftrag> auftragDAO;
+	private ILazyLoadDAO<Auftrag> auftragDAO;
 
-	public IGenericDAO<Auftrag> getAuftragDAO() {
+	public ILazyLoadDAO<Auftrag> getAuftragDAO() {
 		return auftragDAO;
 	}
 
-	public void setAuftragDAO(IGenericDAO<Auftrag> auftragDAO) {
+	public void setAuftragDAO(ILazyLoadDAO<Auftrag> auftragDAO) {
 		this.auftragDAO = auftragDAO;
 	}
-
+	
 
 	@Override
 	@Transactional(readOnly = false)
@@ -57,6 +57,12 @@ public class AuftragService implements IAuftragService {
 	@Transactional(readOnly = true)
 	public List<Auftrag> getAuftraege() {
 		return auftragDAO.getItems();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Auftrag> getAuftraegeWithChildren() {
+		return auftragDAO.getItemsWithChildren();
 	}
 
 }

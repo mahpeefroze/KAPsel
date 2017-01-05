@@ -4,17 +4,18 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Material;
 import de.kapsel.produkt.services.IMaterialService;
 
 @ManagedBean
-@RequestScoped
+@ApplicationScoped
 public class MaterialBean implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -83,7 +84,17 @@ public class MaterialBean implements Serializable{
 		setNewMaterial(new Material());
 	}
 	
+	public Material findMaterial(long id){
+		for(Material m:getMaterialien()){
+			if(m.getId()==id){
+				return m;
+			}
+		}
+		return null;
+	}
+	
 	public void addMaterial(){
+		getNewMaterial().setbKey(AbstractKapselEntity.generateBKey());
 		getMaterialService().addMaterial(getNewMaterial());
 		myInit();
 	}

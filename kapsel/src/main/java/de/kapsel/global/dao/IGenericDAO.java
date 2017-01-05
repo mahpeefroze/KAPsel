@@ -5,15 +5,15 @@ import java.util.List;
 
 public interface IGenericDAO<T extends Serializable> {
 
-		public abstract void addItem(T item);
+		void addItem(T item);
 
-		public abstract void updateItem(T item);
+		void updateItem(T item);
 
-		public abstract void deleteItem(T item);
+		void deleteItem(T item);
 
-		public abstract T getItemByName(String name);
+		T getItemByName(String name);
 
-		public abstract T getItemById(long id);
+		T getItemById(long id);
 
-		public abstract List<T> getItems();
+		List<T> getItems();
 }

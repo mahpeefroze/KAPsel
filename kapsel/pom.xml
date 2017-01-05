@@ -47,6 +47,7 @@
 		<version.war.plugin>2.6</version.war.plugin>
 		<!-- WildFly Maven Plugin -->
 		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+		
 
 
 
@@ -68,8 +69,9 @@
 		<hibernate.version>5.0.4.Final</hibernate.version>
 		<hibernateValidation.version>5.2.2.Final</hibernateValidation.version>
 		
-		<!-- Apache Common Codec -->
+		<!-- Apache Commons -->
 		<apachecc.version>1.4</apachecc.version>
+		<apachecl.version>3.5</apachecl.version>
 		
 	</properties>
 
@@ -204,12 +206,18 @@
 			<version>${hibernateValidation.version}</version>
 		</dependency>
 	
-		<!-- ___________________________________ Apache Common Codec ___________________________________________ -->
+		<!-- ___________________________________ Apache Commons ___________________________________________ -->
 		
 		<dependency>
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>${apachecc.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${apachecl.version}</version>
 		</dependency>
 		
 		<!-- ___________________________________ javassist Byte Manipulation ___________________________________ -->

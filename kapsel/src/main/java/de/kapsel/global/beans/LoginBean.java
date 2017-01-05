@@ -30,7 +30,7 @@ public class LoginBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//PrimeFaces seems to misinterpret escape of \w with \, and takes ^\\w*$ as regex -> all words starting with '\' followed by 0 to many occurances of 'w'
 	//Moved regex expression to xhtml View
-	private static final String pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[_])[\\w]{8,25}$";
+	private final String pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[_])[\\w]{8,25}$";
 	private final String success = "/views/secure/index.xhtml?faces-redirect=true";
 	private final String error= "/views/home.xhtml?faces-redirect=true";
 	
@@ -149,7 +149,7 @@ public class LoginBean implements Serializable{
 				if(dbPassword.equals(userPassword)){
 					setLoginUser(dbUser);
 					setLogged(true);
-					//SessionUtils.setLoggedUser(getLoginUser());
+					SessionUtils.setLoggedUser(getLoginUser());
 					return success;
 				}else{
 					FacesMessage msg = new FacesMessage("Wrong password.");

@@ -23,7 +23,7 @@
 	</p:dataTable>
 	
 	<p:commandButton value="OK" oncomplete="PF('kundeSelect').hide();" />
-	<p:commandButton value="Abbrechen" action="#{auftragBean.clearKundeSelection()}" update=":dlgNewAuftragPanel" oncomplete="PF('kundeSelect').hide();" />
+	<p:commandButton value="Abbrechen" oncomplete="PF('kundeSelect').hide();" />
 	</h:form>
 
 

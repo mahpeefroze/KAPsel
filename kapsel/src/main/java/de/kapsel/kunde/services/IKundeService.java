@@ -7,16 +7,18 @@ import de.kapsel.kunde.entities.Kunde;
 
 public interface IKundeService {
 
-	public abstract void addKunde(Kunde kunde);
+	void addKunde(Kunde kunde);
 
-	public abstract void updateKunde(Kunde kunde);
+	void updateKunde(Kunde kunde);
 
-	public abstract void deleteKunde(Kunde kunde);
+	void deleteKunde(Kunde kunde);
 
-	public abstract Kunde getKundeByName(String name);
+	Kunde getKundeByName(String name);
 
-	public abstract Kunde getKundeById(long id);
+	Kunde getKundeById(long id);
 
-	public abstract List<Kunde> getKunden();
+	List<Kunde> getKunden();
+	
+	List<Kunde> getKundenWithChildren();
 
 }

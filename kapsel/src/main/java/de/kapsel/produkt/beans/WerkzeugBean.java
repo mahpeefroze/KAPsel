@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 
 import org.springframework.dao.DataAccessException;
 
@@ -14,7 +14,7 @@ import de.kapsel.produkt.entities.Werkzeug;
 import de.kapsel.produkt.services.IWerkzeugService;
 
 @ManagedBean
-@RequestScoped
+@ApplicationScoped
 public class WerkzeugBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -80,6 +80,15 @@ public class WerkzeugBean implements Serializable{
 	
 	public void resetNewWerkzeug(){
 		setNewWerkzeug(new Werkzeug());
+	}
+	
+	public Werkzeug findWerkzeug(long id){
+		for(Werkzeug w:getWerkzeuge()){
+			if(w.getId()==id){
+				return w;
+			}
+		}
+		return null;
 	}
 	
 	public void addWerkzeug(){

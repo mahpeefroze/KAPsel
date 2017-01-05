@@ -9,12 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import de.kapsel.global.DTItem;
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="arbeitsschritte")
-public class Arbeitsschritt implements DTItem, Serializable, Comparable<Arbeitsschritt> {
+public class Arbeitsschritt extends AbstractKapselEntity implements Serializable, Comparable<Arbeitsschritt>,  DTItem {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -86,12 +89,26 @@ public class Arbeitsschritt implements DTItem, Serializable, Comparable<Arbeitss
 	public void setWerkzeug(Werkzeug werkzeug) {
 		this.werkzeug = werkzeug;
 	}
+	
+
 	@Override
 	public int compareTo(Arbeitsschritt aschritt) {
 		if(aschritt==null){
 			return -1;
 		}
-		return Integer.compare(this.position, aschritt.getPosition());
+		return Integer.compare(getPosition(), aschritt.getPosition());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Arbeitsschritt)) return false;
+        if (obj == this) return true;
+        
+        Arbeitsschritt a = (Arbeitsschritt) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), a.getbKey()).
+                isEquals();
 	}
 	
 }

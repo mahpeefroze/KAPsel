@@ -9,11 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Produkt;
 
 @Entity
 @Table(name="produktwrapper")
-public class ProduktWrapper implements Serializable{
+public class ProduktWrapper extends AbstractKapselEntity implements Serializable, Comparable<ProduktWrapper>{
 	
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -63,6 +66,24 @@ public class ProduktWrapper implements Serializable{
 		this.produkt = produkt;
 	} 
 	
+	@Override
+	public int compareTo(ProduktWrapper pw) {
+		if(pw==null){
+			return -1;
+		}
+		return Integer.compare(getPosition(), pw.getPosition());
+	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ProduktWrapper)) return false;
+        if (obj == this) return true;
+        
+        ProduktWrapper pw = (ProduktWrapper) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), pw.getbKey()).
+                isEquals();
+	}
 	
 }

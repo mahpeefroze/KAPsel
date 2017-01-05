@@ -37,7 +37,7 @@ public class KGruppeService implements IKGruppeService {
 	@Override
 	@Transactional(readOnly = false)
 	public void deleteKGruppe(KGruppe kgruppe) {
-		this.kgruppeDAO.deleteItem(kgruppe);
+		this.kgruppeDAO.deleteKGruppe(kgruppe);
 	}
 
 	@Override

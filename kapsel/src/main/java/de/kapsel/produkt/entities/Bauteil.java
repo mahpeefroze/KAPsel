@@ -9,11 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import de.kapsel.global.DTItem;
+import de.kapsel.global.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="bauteile")
-public class Bauteil implements DTItem, Serializable, Comparable<Bauteil>{
+public class Bauteil extends AbstractKapselEntity implements Serializable, Comparable<Bauteil>, DTItem{
 
 	
 	private static final long serialVersionUID = 1L;
@@ -107,9 +110,19 @@ public class Bauteil implements DTItem, Serializable, Comparable<Bauteil>{
 		if(bauteil==null){
 			return -1;
 		}
-		return Integer.compare(this.position, bauteil.getPosition());
+		return Integer.compare(getPosition(), bauteil.getPosition());
 	}
 	
-
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Bauteil)) return false;
+        if (obj == this) return true;
+        
+        Bauteil b = (Bauteil) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), b.getbKey()).
+                isEquals();
+	}
 	
 }

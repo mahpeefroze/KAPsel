@@ -23,6 +23,10 @@ public abstract class AbstractModulBean {
 		setEditMode(true);
 	}
 	
+	public void disableEditMode(){
+		setEditMode(false);
+	}
+	
 	public long getPassedID() {
 		return passedID;
 	}

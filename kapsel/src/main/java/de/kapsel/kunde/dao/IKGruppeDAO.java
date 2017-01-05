@@ -5,6 +5,6 @@ import de.kapsel.kunde.entities.KGruppe;
 
 public interface IKGruppeDAO extends IGenericDAO<KGruppe> {
 
-
+	void deleteKGruppe(KGruppe kgruppe);
 
 }

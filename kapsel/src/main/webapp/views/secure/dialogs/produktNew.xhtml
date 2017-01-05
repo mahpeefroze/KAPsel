@@ -41,86 +41,8 @@
 				<p:inputTextarea styleClass="fullWidth" value="#{produktBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."/>
 			</p:column>
 		</p:row>
-		<p:row>
-			<p:column><p:selectBooleanCheckbox value="#{produktBean.stuecklisteCB}">
-				<p:ajax update="stuecklistePanel" event="change"/>
-			</p:selectBooleanCheckbox></p:column>
-			<p:column>#{labels.c_stueckliste}</p:column>
-		</p:row>
 	</p:panelGrid>
-	<p:panelGrid id="stuecklistePanel">
-		<p:row rendered="#{produktBean.stuecklisteCB}">
-			<p:column colspan="5">
-			
-				<!-- Tabelle mit allen Produkten und Leistungen -->
-				
-				<p:commandButton id="btAddDlg" update="newBauteilDT" title="#{labels.add}" icon="ui-icon-document" actionListener="#{produktBean.addBauteil}" />
-				<p:commandButton update="newBauteilDT" title="#{labels.delete}" icon="ui-icon-cross" action="#{produktBean.deleteBauteilDlg}" />
-				
-				<p:dataTable id="newBauteilDT" var="item" value="#{produktBean.newProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
-					rowKey="#{item.position}" sortBy="#{item.position}" emptyMessage="#{labels.norecords}" editable="true" editMode="cell">
-
-					<!-- p:ajax event="rowSelect" 
-						update=":sect_form" / -->
-						
-					<p:ajax event="cellEdit" listener="#{produktBean.onBauteileNew}"/>	
-
-					<p:column headerText="#{labels.position}" style="width: 30px;">
-						<h:outputText value="#{item.position}" />
-					</p:column>
-					<p:column headerText="#{labels.stueck_zahl}" style="width: 30px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
-			            </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.bezeichnung}" style="width: 80px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
-			           </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.prodL}" style="width: 50px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
-			            </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.prodB}" style="width: 50px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
-			            </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.prodD}" style="width: 50px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.dicke}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.dicke}" style="width:96%"/></f:facet>
-			            </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.bemerkung}" style="width: 80px;">
-						<p:cellEditor>
-			               <f:facet name="output"><h:outputText value="#{item.bemerkung}" /></f:facet>
-			               <f:facet name="input"><p:inputText value="#{item.bemerkung}" style="width:96%"/></f:facet>
-			            </p:cellEditor>
-					</p:column>
-					<p:column headerText="#{labels.werkstoff}" style="width: 70px;">
-						<p:cellEditor>
-							<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
-							<f:facet name="input">
-							<p:selectOneMenu id="materialTypSelectNew" value="#{produktBean.materialId}" style="width:140px" filter="true" filterMatchMode="contains">
-								<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
-								<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
-							</p:selectOneMenu>
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
-
-				</p:dataTable>
-			</p:column>
-		</p:row>
-	</p:panelGrid>
-	
+		
 	
 	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgNewProduktPanel nav_form" oncomplete="PF('newProdukt').hide();" />
 	<p:commandButton value="Abbrechen" action="#{produktBean.resetNewProdukt()}" update="dlgNewProduktPanel" oncomplete="PF('newProdukt').hide();" />

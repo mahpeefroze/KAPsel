@@ -2,25 +2,27 @@ package de.kapsel.produkt.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="produkte")
-public class Produkt implements Serializable {
+public class Produkt extends AbstractKapselEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -32,8 +34,8 @@ public class Produkt implements Serializable {
 	private double preis;
 	private Timestamp erstDatum;
 	private Timestamp modDatum;
-	private List<Bauteil> bauteile;
-	private List<Arbeitsschritt> aschritte;
+	private Set<Bauteil> bauteile;
+	private Set<Arbeitsschritt> aschritte;
 
 
 	@Id
@@ -113,22 +115,36 @@ public class Produkt implements Serializable {
 	}
 	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
 	//..which led to Circular Dependency => removed Produkt from Bauteil, hibernate maps the relation in additional table now
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<Bauteil> getBauteile() {
+	//fetch = FetchType.LAZY enabled by default for @xToMany mappings
+	@OneToMany(orphanRemoval = true)
+	@Cascade(CascadeType.ALL)
+	public Set<Bauteil> getBauteile() {
 		return bauteile;
 	}
-	public void setBauteile(List<Bauteil> bauteile) {
+	public void setBauteile(Set<Bauteil> bauteile) {
 		this.bauteile = bauteile;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<Arbeitsschritt> getAschritte() {
+	@OneToMany(orphanRemoval = true)
+	@Cascade({CascadeType.ALL})
+	public Set<Arbeitsschritt> getAschritte() {
 		return aschritte;
 	}
-	public void setAschritte(List<Arbeitsschritt> aschritte) {
+	public void setAschritte(Set<Arbeitsschritt> aschritte) {
 		this.aschritte = aschritte;
 	}
 	
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Produkt)) return false;
+        if (obj == this) return true;
+        
+        Produkt p = (Produkt) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), p.getbKey()).
+                isEquals();
+	}
 	
 }

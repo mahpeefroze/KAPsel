@@ -1,6 +1,8 @@
 package de.kapsel.kunde.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +13,10 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.global.entities.Adresse;
-import de.kapsel.global.services.IAdresseService;
 import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKGruppeService;
 import de.kapsel.kunde.services.IKundeService;
@@ -35,19 +38,16 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{kgruppeService}")
 	private IKGruppeService kGruppeService;
 	
-	@ManagedProperty(value="#{adresseService}")
-	private IAdresseService adresseService;
-	
 		
 	public KundeBean(){}
 
 	@PostConstruct
     public void init() {
 		try{
-			setKunden(getKundeService().getKunden());
+			setKunden(getKundeService().getKundenWithChildren());
 			setSelectedKunde(getKunden().get(0));
 			setEmptyList(false);
-			setEditMode(false);
+			disableEditMode();
 		}catch (DataAccessException e){
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
@@ -73,6 +73,11 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 
 	public void setKunden(List<Kunde> kunden) {
 		this.kunden = kunden;
+	}
+	
+	//Tried to lazy load Kunden for miniKundenListe -> multiple selects fired -> need to investigate
+	public List<Kunde> getLazyKunden(){
+		return getKundeService().getKunden();
 	}
 	
 	//SingleSelection Item
@@ -119,13 +124,6 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		this.kGruppeService = kGruppeService;
 	}
 	
-	public IAdresseService getAdresseService() {
-		return adresseService;
-	}
-
-	public void setAdresseService(IAdresseService adresseService) {
-		this.adresseService = adresseService;
-	}
 	
 	//endregion Getter/Setter
 
@@ -165,6 +163,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		try {
 			getNewKunde().setKnr(createKnr());
 			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
+			getNewKunde().setbKey(AbstractKapselEntity.generateBKey());
 			getKundeService().addKunde(getNewKunde());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -183,6 +182,12 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		getKundeService().deleteKunde(getSelectedKunde());
 		init();
 	}
+	
+	public ArrayList<Auftrag> atToList(){
+		ArrayList<Auftrag> sortedList= new ArrayList<Auftrag>(getSelectedKunde().getAuftraege());
+		Collections.sort(sortedList);
+		return sortedList; 
+	}
 
 	@Override
 	public void onEditComplete() {
@@ -191,13 +196,12 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			getSelectedKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 		}
 		updateKunde();
-		setEditMode(false);
+		disableEditMode();
 	}
 
 	@Override
 	public void cancelEditMode() {
-		//setSelectedKunde(getKundeService().getKundeById(getSelectedKunde().getId()));
-		setEditMode(false);
+		disableEditMode();
 	}
 
 	

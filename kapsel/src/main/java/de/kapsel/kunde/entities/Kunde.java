@@ -1,7 +1,7 @@
 package de.kapsel.kunde.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,13 +14,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.global.entities.Adresse;
 
 @Entity
 @Table(name = "kunden")
-public class Kunde implements Serializable {
+public class Kunde extends AbstractKapselEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -33,7 +36,7 @@ public class Kunde implements Serializable {
 	private Adresse adresse;
 	private double rabatt;
 	private ETypes.KundeStatus status;
-	private List<Auftrag> auftraege;
+	private Set<Auftrag> auftraege;
 
 
 	@Id
@@ -78,7 +81,7 @@ public class Kunde implements Serializable {
 		this.typ = typ;
 	}
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	public KGruppe getGruppe() {
 		return gruppe;
 	}
@@ -94,7 +97,7 @@ public class Kunde implements Serializable {
 		this.text = text;
 	}
 
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	public Adresse getAdresse() {
 		return adresse;
 	}
@@ -118,14 +121,24 @@ public class Kunde implements Serializable {
 		this.status = status;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "kunde")
-	public List<Auftrag> getAuftraege() {
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kunde")
+	public Set<Auftrag> getAuftraege() {
 		return auftraege;
 	}
-	public void setAuftraege(List<Auftrag> auftraege) {
+	public void setAuftraege(Set<Auftrag> auftraege) {
 		this.auftraege = auftraege;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Kunde)) return false;
+        if (obj == this) return true;
+        
+        Kunde k = (Kunde) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), k.getbKey()).
+                isEquals();
+	}
 	
 }

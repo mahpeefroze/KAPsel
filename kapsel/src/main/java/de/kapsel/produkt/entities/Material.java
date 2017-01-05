@@ -8,11 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="materialien")
-public class Material implements Serializable{
+public class Material extends AbstractKapselEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -62,6 +65,19 @@ public class Material implements Serializable{
 	}
 	public void setTyp(ETypes.MaterialT typ) {
 		this.typ = typ;
+	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Material)) return false;
+        if (obj == this) return true;
+        
+        Material m = (Material) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), m.getbKey()).
+                isEquals();
 	}
 	
 	

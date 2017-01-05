@@ -28,16 +28,16 @@
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-codepen"
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{produktBean.enableEditMode()}" /> 
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()"  /> 
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{produktBean.editMode}">
 						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="processSectForm()"/>
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()"/>
 						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{produktBean.cancelEditMode()}"/>
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -69,14 +69,16 @@
 
 		<!-- LINKE SEITE -->
 		<h:form id="nav_form">
+			<p:remoteCommand name="lockSelection" update="nav_form" action="#{produktBean.enableEditMode()}"/>
+			<p:remoteCommand name="unlockSelection" update="nav_form" />
 			<div id="nav_container">
 				<div id="nav" class="float_frame">
 
 					<!-- Tabelle mit allen Aufträgen -->
 					<p:dataTable id="produktDT" var="item"
 						value="#{produktBean.produkte}" selectionMode="single"
-						selection="#{produktBean.selectedProdukt}" rowKey="#{item.pnr}"
-						emptyMessage="#{errors.norecords}">
+						selection="#{produktBean.selectedProdukt}" disabledSelection="#{produktBean.editMode}"
+						rowKey="#{item.pnr}" emptyMessage="#{errors.norecords}">
 						<f:facet name="header">#{labels.prodListe}</f:facet>
 
 
@@ -108,7 +110,8 @@
 		
 		<!-- RECHTE SEITE -->
 		<h:form id="sect_form">
-			<p:remoteCommand name="processSectForm" process="@form" update="sect_form" action="#{produktBean.onEditComplete()}"/>
+			<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{produktBean.onEditComplete()}"/>
+			<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{produktBean.cancelEditMode()}"/>
 			<div id="section_container">
 				<div id="section" class="float_frame">
 					<p:accordionPanel multiple="true">
@@ -136,13 +139,11 @@
 							<!-- Tabelle mit allen Produkten und Leistungen -->
 							
 							<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addBauteil}" />
-							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
+							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteBauteil}" />
 							
-							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.selectedProdukt.bauteile}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
+							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.btToList()}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
 								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
-									
-								<p:ajax event="cellEdit" listener="#{produktBean.onBauteileEdit}"/>	
 
 								<p:column headerText="#{labels.position}" style="width: 40px;">
 									<h:outputText value="#{item.position}" />
@@ -188,6 +189,7 @@
 										<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
 										<f:facet name="input">
 										<p:selectOneMenu id="materialTypSelect" value="#{produktBean.materialId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
+											<p:ajax listener="#{produktBean.onMaterialChange(item)}"/>
 											<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
 											<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
 										</p:selectOneMenu>
@@ -201,15 +203,13 @@
 						<!-- Arbeitsplan -->
 						<p:tab title="#{labels.arbeitsplan}">
 							
-							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addArbeitsschritt}" />
-							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteItemView}" />
+							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" action="#{produktBean.addArbeitsschritt}" />
+							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteArbeitsschritt}" />
 							
-							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.selectedProdukt.aschritte}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
+							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.asToList()}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
 								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
 
-									
-								<p:ajax event="cellEdit" listener="#{produktBean.onArbeitsschritteEdit}"/>
-
+								
 								<p:column headerText="#{labels.position}" style="width: 40px;">
 									<h:outputText value="#{item.position}" />
 								</p:column>
@@ -241,6 +241,7 @@
 						               <f:facet name="output"><h:outputText value="#{item.werkzeug.name}" /></f:facet>
 										<f:facet name="input">
 										<p:selectOneMenu id="werkzeugSelect" value="#{produktBean.werkzeugId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
+											<p:ajax listener="#{produktBean.onWerkzeugChange(item)}"/>
 											<f:selectItem itemLabel="Werkzeug auswählen" itemValue="" noSelectionOption="true" />
 											<f:selectItems value="#{werkzeugBean.werkzeuge}" var="wz" itemLabel="#{wz.name} | #{wz.stundensatz} #{labels.waehrung}/#{labels.stundeH}" itemValue="#{wz.id}"/>				
 										</p:selectOneMenu>

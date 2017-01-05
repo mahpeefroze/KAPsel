@@ -2,7 +2,9 @@ package de.kapsel.auftrag.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ import de.kapsel.auftrag.services.IAuftragService;
 import de.kapsel.auftrag.services.IProduktWrapperService;
 import de.kapsel.global.ETypes;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKundeService;
 import de.kapsel.produkt.services.IProduktService;
@@ -32,8 +35,9 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private List<Auftrag> auftraege;
 	private Auftrag selectedAuftrag;
 	private Auftrag newAuftrag;
-	private ProduktWrapper newProduktWrapper;
 	private ProduktWrapper selectedProduktWrapper;
+	
+	private HashSet<ProduktWrapper> tempPwList;
 
 	@ManagedProperty(value="#{auftragService}")
 	private IAuftragService auftragService;
@@ -57,11 +61,13 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	@PostConstruct
     public void init() {
 		try{
-			setAuftraege(auftragService.getAuftraege());
+			setAuftraege(auftragService.getAuftraegeWithChildren());
 			setSelectedAuftrag(getAuftraege().get(0));
 			setEmptyList(false);
 			setEditMode(false);
 		}catch(DataAccessException e) {
+			System.out.println(e.getStackTrace());
+		}catch(NullPointerException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
@@ -74,7 +80,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	//newAuftrag
 	public void resetNewAuftrag(){
 		setNewAuftrag(new Auftrag());
-		getNewAuftrag().setProdukte(new ArrayList<ProduktWrapper>());
+		getNewAuftrag().setProdukte(new HashSet<ProduktWrapper>());
 		getNewAuftrag().setKunde(new Kunde());
 	}
 	
@@ -138,14 +144,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	public void setKundeService(IKundeService kundeService) {
 		this.kundeService = kundeService;
-	}
-	
-	public ProduktWrapper getNewProduktWrapper() {
-		return newProduktWrapper;
-	}
-
-	public void setNewProduktWrapper(ProduktWrapper newProduktWrapper) {
-		this.newProduktWrapper = newProduktWrapper;
 	}
 	
 	public ProduktWrapper getSelectedProduktWrapper() {
@@ -219,34 +217,44 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		init();
 	}
 	
-	public void addProdukt(){
-		getSelectedAuftrag().getProdukte().add(getNewProduktWrapper());
-		updateAuftrag();
+	public void addProduktWrapper(){
+		ProduktWrapper pw = new ProduktWrapper();
+		pw.setPosition(getSelectedAuftrag().getProdukte().size()+1);
+		pw.setbKey(AbstractKapselEntity.generateBKey());
+		getSelectedAuftrag().getProdukte().add(pw);
+		tempPwList.add(pw);
 	}
 	
-	public void updateProdukt(){
-		
-	}
-	
-	public void deleteProdukt(){
+	public void deleteProduktWrapper(){
 		getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
 		updateAuftrag();
 	}
 
-	public void clearKundeSelection(){
-		getNewAuftrag().setKunde(new Kunde());
+	
+	public ArrayList<ProduktWrapper> pwToList(){
+		ArrayList<ProduktWrapper> sortedList= new ArrayList<ProduktWrapper>(getSelectedAuftrag().getProdukte());
+		Collections.sort(sortedList);
+		return sortedList; 
 	}
-
+	
+	@Override
+	public void enableEditMode() {
+		super.enableEditMode();
+		tempPwList = new HashSet<ProduktWrapper>();
+	}
+	
 	@Override
 	public void onEditComplete() {
-		setEditMode(false);
-		
+		updateAuftrag();
+		disableEditMode();
 	}
 
 	@Override
 	public void cancelEditMode() {
-		// TODO Auto-generated method stub
-		setEditMode(false);
+		if(tempPwList!=null && !tempPwList.isEmpty()){
+			getSelectedAuftrag().getProdukte().removeAll(tempPwList);
+		}
+		disableEditMode();
 	}
 
 }

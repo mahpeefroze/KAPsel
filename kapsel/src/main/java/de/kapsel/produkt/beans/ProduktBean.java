@@ -2,30 +2,25 @@ package de.kapsel.produkt.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionEvent;
 
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.DTItem;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
-import de.kapsel.produkt.entities.Material;
 import de.kapsel.produkt.entities.Produkt;
-import de.kapsel.produkt.entities.Werkzeug;
-import de.kapsel.produkt.services.IArbeitsschrittService;
-import de.kapsel.produkt.services.IBauteilService;
-import de.kapsel.produkt.services.IMaterialService;
 import de.kapsel.produkt.services.IProduktService;
-import de.kapsel.produkt.services.IWerkzeugService;
 
 @ManagedBean
 @ViewScoped
@@ -37,24 +32,21 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	private Produkt newProdukt;
 	private Bauteil selectedBauteil;
 	private Arbeitsschritt selectedAschritt;
-	private boolean stuecklisteCB;
 	private long materialId;
 	private long werkzeugId;
+	
+	//No getters, for intern use only
+	private HashSet<Bauteil> tempBtSet;
+	private HashSet<Arbeitsschritt> tempAsSet;
 
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
 	
-	@ManagedProperty(value="#{materialService}")
-	private IMaterialService materialService;
+	@ManagedProperty(value="#{werkzeugBean}")
+	private WerkzeugBean werkzeugContainer;
 	
-	@ManagedProperty(value="#{bauteilService}")
-	private IBauteilService bauteilService;
-	
-	@ManagedProperty(value="#{arbeitsschrittService}")
-	private IArbeitsschrittService arbeitsschrittService;
-	
-	@ManagedProperty(value="#{werkzeugService}")
-	private IWerkzeugService werkzeugService;
+	@ManagedProperty(value="#{materialBean}")
+	private MaterialBean materialContainer;
 	
 	public ProduktBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
@@ -64,28 +56,27 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	@PostConstruct
     public void init() {
 		try{
-			setProdukte(produktService.getProdukte());
+			setProdukte(produktService.getProdukteWithChildren());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
-			setEditMode(false);
+			disableEditMode();
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine Produkte vorhanden");
 			setEmptyList(true);
 		}
-		//Clearing newProdukt Dialog fields
+		//Initializing/Clearing newProdukt Dialog fields
 		resetNewProdukt();
 	}
 	
-	//newProdukt
+	//newProdukt initialize/clear
 	public void resetNewProdukt(){
 		setNewProdukt(new Produkt());
-		getNewProdukt().setBauteile(new ArrayList<Bauteil>());
-		getNewProdukt().setAschritte(new ArrayList<Arbeitsschritt>());
+		getNewProdukt().setBauteile(new HashSet<Bauteil>());
+		getNewProdukt().setAschritte(new HashSet<Arbeitsschritt>());
 		setMaterialId(0);
 		setWerkzeugId(0);
-		setStuecklisteCB(false);
 	}
 
 	//region Getters/Setters
@@ -133,13 +124,20 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		this.selectedAschritt = selectedAschritt;
 	}
 	
-	//Show/hide flag for Stueckliste in newProduktDlg
-	public boolean isStuecklisteCB() {
-		return stuecklisteCB;
+	public MaterialBean getMaterialContainer() {
+		return materialContainer;
 	}
 
-	public void setStuecklisteCB(boolean stuecklisteCB) {
-		this.stuecklisteCB = stuecklisteCB;
+	public void setMaterialContainer(MaterialBean materialContainer) {
+		this.materialContainer = materialContainer;
+	}
+
+	public WerkzeugBean getWerkzeugContainer() {
+		return werkzeugContainer;
+	}
+
+	public void setWerkzeugContainer(WerkzeugBean werkzeugContainer) {
+		this.werkzeugContainer = werkzeugContainer;
 	}
 
 	//Getter and Setter Service
@@ -151,38 +149,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		this.produktService = produktService;
 	}
 	
-	public IMaterialService getMaterialService() {
-		return materialService;
-	}
-
-	public void setMaterialService(IMaterialService materialService) {
-		this.materialService = materialService;
-	}
-	
-	public IBauteilService getBauteilService() {
-		return bauteilService;
-	}
-
-	public void setBauteilService(IBauteilService bauteilService) {
-		this.bauteilService = bauteilService;
-	}
-	
-	public IArbeitsschrittService getArbeitsschrittService() {
-		return arbeitsschrittService;
-	}
-
-	public void setArbeitsschrittService(IArbeitsschrittService arbeitsschrittService) {
-		this.arbeitsschrittService = arbeitsschrittService;
-	}
-
-	public IWerkzeugService getWerkzeugService() {
-		return werkzeugService;
-	}
-
-	public void setWerkzeugService(IWerkzeugService werkzeugService) {
-		this.werkzeugService = werkzeugService;
-	}
-
 	public long getMaterialId() {
 		return materialId;
 	}
@@ -206,20 +172,31 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	public void loadProdukt(SelectEvent event) {
 		setSelectedProdukt((Produkt) event.getObject());
     }
+	
+	//Find Produkt in the list, alternative to query by id since all produkts are here anyway
+	public Produkt findProdukt(long id){
+		for(Produkt p:getProdukte()){
+			if(p.getId()==id){
+				return p;
+			}
+		}
+		return null;
+	}
 		
-		//Basic strategy for creating new ProduktNr, get highest existing and icrement it by 1
+	//Basic strategy for creating new ProduktNr, get highest existing and icrement it by 1
 	public long createPnr(){
 		long pnr=0;
+		long tempPnr;
 		try{
 			pnr = getProdukte().get(0).getPnr();
 			for(Produkt p : getProdukte()){
-				long tempPnr = p.getPnr();
+				tempPnr = p.getPnr();
 				if(tempPnr>pnr){
 					pnr=tempPnr;
 				}
 			}
 		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			System.out.println(e.getMessage() + ": keine Produkte vorhanden");
 		}
 		return pnr + 1;
 	}
@@ -228,6 +205,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		double price=0;
 		try{
 			if(!getSelectedProdukt().getAschritte().isEmpty()){
+				//Work time[min] *( (tool [cost/h] + worker [cost/h])/ 60[h->min])
 				for(Arbeitsschritt a:getSelectedProdukt().getAschritte()){
 					price+=(a.getZeit()*a.getWerkzeug().getStundensatz()/60);
 				}
@@ -275,10 +253,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		try {
 			//Implement logic for creating new PNR and also put it
 			getNewProdukt().setPnr(createPnr());
-			//If stueckliste checkbox unchecked
-			if(!stuecklisteCB){
-				getNewProdukt().setBauteile(null);
-			}
+			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
 			getProduktService().addProdukt(getNewProdukt());
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -298,175 +273,101 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	//region BAUTEIL SECTION-----------------------------------------------------//
 	
+	//Set to List converter -> for displaying in PF DataTable
+	public ArrayList<Bauteil> btToList(){
+		ArrayList<Bauteil> sortedList= new ArrayList<Bauteil>(getSelectedProdukt().getBauteile());
+		Collections.sort(sortedList);
+		return sortedList;
+	}
 	
 	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
-	public void addBauteil(ActionEvent actionEvent){
+	public void addBauteil(){
 		Bauteil b = new Bauteil();
-		//Splitting full clientID name
-		String[] source = actionEvent.getComponent().getClientId().split(":");
-		//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
-		if(source[source.length-1].equals("btAddView")){
-			b.setPosition(getSelectedProdukt().getBauteile().size()+1); 
-			getSelectedProdukt().getBauteile().add(b);
-		}else{
-			b.setPosition(getNewProdukt().getBauteile().size()+1); 
-			getNewProdukt().getBauteile().add(b);
-		}
-		//Reset SelectOneMenu's starting value
+		b.setPosition(getSelectedProdukt().getBauteile().size()+1);
+		b.setbKey(AbstractKapselEntity.generateBKey());
+		getSelectedProdukt().getBauteile().add(b);
+		tempBtSet.add(b);
 		setMaterialId(0); 
 	}
 	
-	
-	
-	//Update Bauteil Values in produktNew Dialog
-	public void onBauteileNew(CellEditEvent event){
-        updateBauteile(getNewProdukt(), event);
+	//Material change listener
+	public void onMaterialChange(Bauteil b){
+		b.setMaterial(getMaterialContainer().findMaterial(getMaterialId()));
 	}
 	
-	//Update Bauteil Values in Details View + DB
-	public void onBauteileEdit(CellEditEvent event){
-        updateBauteile(getSelectedProdukt(), event);
-        //Can only updated existing DB entries
-        updateProdukt();
-	}
-	
-	//Update Bauteil Values in Model
-	private void updateBauteile(Produkt p, CellEditEvent event){
-        String colName = event.getColumn().getHeaderText();
-        if(colName.equals("Werkstoff")){
-        	int itemPosition = event.getRowIndex();
-            List<Bauteil> s = p.getBauteile();
-			Material material = getMaterialService().getMaterialById(getMaterialId());
-	        //Iterate through all Bauteile of 1 Produkt to find the one changed
-	        for(Bauteil b : s){
-	        	//On mismatch go next
-	        	if(b.getPosition()!=(itemPosition+1)) continue;
-	        	//Pass found Bauteil b
-	        	b.setMaterial(material);
-	        }
-        }
-	}
-	
-	// TODO check if needed, maybe in newProduktDlg
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void deleteBauteilView(){
-		try{
-			//updateBauteilPosition(getSelectedBauteil().getPosition(), getSelectedProdukt());
-			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getSelectedProdukt().getBauteile()));
-			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
-			updateProdukt();
-			//Cascade somehow doesn't remove items from bauteile, need manual remove or else lots of dead records
-			getBauteilService().deleteBauteil(getSelectedBauteil());
-		}catch(java.lang.IllegalArgumentException e){
-			System.out.println("selectedBauteil is empty");
-		}catch(java.lang.NullPointerException e){
-			System.out.println("selectedBauteil is empty Nullpointer");
-		}
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void deleteItemView(ActionEvent actionEvent){
-		try{
-			//Splitting full clientID name
-			String[] source = actionEvent.getComponent().getClientId().split(":");
-			//Differentiating between Bauteil Add in View (selectedProdukt) and in Dialog (newProdukt)
-			if(source[source.length-1].equals("btDelView")){
-				updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getSelectedProdukt().getBauteile()));
-				getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
-			}else if(source[source.length-1].equals("asDelView")){
-				updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList(getSelectedProdukt().getAschritte()));
-				getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
-			}
-			updateProdukt();
-		}catch(java.lang.IllegalArgumentException e){
-			System.out.println("selectedBauteil is empty");
-		}catch(java.lang.NullPointerException e){
-			System.out.println("selectedBauteil is empty Nullpointer");
-		}
-	}
-	
-	@SuppressWarnings({ "unchecked" , "rawtypes"})
-	public void deleteBauteilDlg(){
-		try{
-			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList(getNewProdukt().getBauteile()));
-			getNewProdukt().getBauteile().remove(getSelectedBauteil());
-		}catch(java.lang.IllegalArgumentException e){
-			System.out.println("selectedBauteil is empty");
-		}catch(java.lang.NullPointerException e){
-			System.out.println("selectedBauteil is empty Nullpointer");
-		}
+	public void deleteBauteil(){
+		updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getBauteile()));
+		getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
 	}
 	
 	//endregion
 
 	//region ARBEITSSCHRITT SECTION-----------------------------------------------------//
 	
-	public void addArbeitsschritt(ActionEvent actionEvent){
+	//Set to List converter -> for displaying in PF DataTable
+	public ArrayList<Arbeitsschritt> asToList(){
+		ArrayList<Arbeitsschritt> sortedList= new ArrayList<Arbeitsschritt>(getSelectedProdukt().getAschritte());
+		Collections.sort(sortedList);
+		return sortedList;
+	}
+	
+	public void addArbeitsschritt(){
 		Arbeitsschritt a = new Arbeitsschritt();
-		//Splitting full clientID name
-		String[] source = actionEvent.getComponent().getClientId().split(":");
-		//Differentiating between adding Arbeitsschritt in View (selectedProdukt) and in Dialog (newProdukt)
-		if(source[source.length-1].equals("asAddView")){
-			a.setPosition(getSelectedProdukt().getAschritte().size()+1); 
-			getSelectedProdukt().getAschritte().add(a);
-		}else{
-			a.setPosition(getNewProdukt().getAschritte().size()+1); 
-			getNewProdukt().getAschritte().add(a);
-		}
-		//Reset SelectOneMenu's starting value
-		setWerkzeugId(0); 
-		
+		a.setPosition(getSelectedProdukt().getAschritte().size()+1);
+		a.setbKey(AbstractKapselEntity.generateBKey());
+		getSelectedProdukt().getAschritte().add(a);
+		tempAsSet.add(a);
+		setWerkzeugId(0);
 	}
 	
-	//Update Bauteil Values in Details View + DB
-	public void onArbeitsschritteEdit(CellEditEvent event){
-        updateArbeitsschritte(getSelectedProdukt(), event);
-        //Can only updated existing DB entries
-        updateProdukt();
+	//Werkzeug change listener
+	public void onWerkzeugChange(Arbeitsschritt as){
+		as.setWerkzeug(getWerkzeugContainer().findWerkzeug(getWerkzeugId()));
 	}
 	
-	//Update Bauteil Values in Model
-	private void updateArbeitsschritte(Produkt p, CellEditEvent event){
-        String colName = event.getColumn().getHeaderText();
-        if(colName.equals("Werkzeug")){
-        	int itemPosition = event.getRowIndex();
-            List<Arbeitsschritt> s = p.getAschritte();
-			Werkzeug werkzeug = getWerkzeugService().getWerkzeugById(getWerkzeugId());
-	        //Iterate through all Arbeitsschritte of 1 Produkt to find the one changed
-	        for(Arbeitsschritt a : s){
-	        	//On mismatch go next
-	        	if(a.getPosition()!=(itemPosition+1)) continue;
-	        	//Pass found Bauteil b
-	        	a.setWerkzeug(werkzeug);
-	        }
-        }
+	public void deleteArbeitsschritt(){
+		updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getAschritte()));
+		getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
 	}
 	
 	//endregion
 	
+	//Only 1 Position can be deleted at the same time, so just -1 everything that was higher than deleted item
 	private void updateItemPosition(int delPos, ArrayList<DTItem> items){
-		//if(o.getClass().equals(Bauteil.class)){}
 		for(DTItem t:items){
 			if(t.getPosition()>delPos){
 				t.setPosition(t.getPosition()-1);
 			}
 		}
 	}
+	
+	
+	//region editMode
+	public void enableEditMode(){
+		super.enableEditMode();
+		tempBtSet = new HashSet<Bauteil>();
+		tempAsSet = new HashSet<Arbeitsschritt>();
+	}
 
 	@Override
 	public void onEditComplete() {
-		
 		updateProdukt();
-		setEditMode(false);
-		
+		disableEditMode();
 	}
 
 	@Override
 	public void cancelEditMode() {
-		// TODO Auto-generated method stub
-		setEditMode(false);
+		//Remove Arbeitsschritte if any were added
+		if(tempAsSet!=null && !tempAsSet.isEmpty()){
+			getSelectedProdukt().getAschritte().removeAll(tempAsSet);
+		}
+		//Remove Bauteil if any were added
+		if(tempBtSet!=null && !tempBtSet.isEmpty()){
+			getSelectedProdukt().getBauteile().removeAll(tempBtSet);
+		}
+		disableEditMode();
 	}
 	
-	
+	//endregion
 	
 }

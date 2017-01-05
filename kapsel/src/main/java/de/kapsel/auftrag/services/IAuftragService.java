@@ -6,16 +6,18 @@ import de.kapsel.auftrag.entities.Auftrag;
 
 public interface IAuftragService {
 
-	public abstract void addAuftrag(Auftrag auftrag);
+	void addAuftrag(Auftrag auftrag);
 
-	public abstract void updateAuftrag(Auftrag auftrag);
+	void updateAuftrag(Auftrag auftrag);
 
-	public abstract void deleteAuftrag(Auftrag auftrag);
+	void deleteAuftrag(Auftrag auftrag);
 
-	public abstract Auftrag getAuftragByName(String name);
+	Auftrag getAuftragByName(String name);
 
-	public abstract Auftrag getAuftragById(long id);
+	Auftrag getAuftragById(long id);
 
-	public abstract List<Auftrag> getAuftraege();
+	List<Auftrag> getAuftraege();
+	
+	List<Auftrag> getAuftraegeWithChildren();
 
 }

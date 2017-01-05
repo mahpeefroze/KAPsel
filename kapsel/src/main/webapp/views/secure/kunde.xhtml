@@ -31,16 +31,16 @@
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-user-plus"
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{kundeBean.enableEditMode()}" /> 
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="lockSelection()" /> 
 						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{kundeBean.editMode}">
 						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="processSectForm()" />
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" />
 						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" action="#{kundeBean.cancelEditMode()}" process="@this"/>
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
@@ -72,23 +72,22 @@
 
 		<!-- LINKE SEITE -->
 		<h:form id="nav_form">
+			<p:remoteCommand name="lockSelection" update="nav_form" action="#{kundeBean.enableEditMode()}"/>
+			<p:remoteCommand name="unlockSelection" update="nav_form" />
 			<div id="nav_container">
 				<div id="nav" class="float_frame">
 
 					<!-- Tabelle mit allen Kunden -->
 					<p:dataTable id="kundeDT" var="item"
 						value="#{kundeBean.kunden}" selectionMode="single"
-						selection="#{kundeBean.selectedKunde}" rowKey="#{item.knr}"
+						selection="#{kundeBean.selectedKunde}" disabledSelection="#{kundeBean.editMode}" rowKey="#{item.knr}"
 						emptyMessage="#{errors.norecords}" sortBy="#{item.knr}">
 						<f:facet name="header">#{labels.kundenListe}</f:facet>
 
 
 						<p:ajax event="rowSelect" listener="#{kundeBean.loadKunde}"
 							update=":sect_form"/>		
-						<!-- 
-					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
-					-->
-
+						
 						<p:column headerText="#{labels.k_nr}" style="width:50px;">
 							<h:outputText value="#{item.knr}" />
 						</p:column>
@@ -111,7 +110,8 @@
 
 		<!-- RECHTE SEITE -->
 		<h:form id="sect_form">
-			<p:remoteCommand name="processSectForm" process="@form" update="sect_form" action="#{kundeBean.onEditComplete()}"/>
+			<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{kundeBean.onEditComplete()}"/>
+			<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{kundeBean.cancelEditMode()}"/>
 			<div id="section_container">
 				<div id="section" class="float_frame">
 					<p:accordionPanel multiple="true">
@@ -143,7 +143,7 @@
 						<!-- Liste der Auftraege -->
 						<p:tab title="#{labels.auftragListe}">
 							<p:dataTable id="auftraegeDT" var="item"
-								value="#{kundeBean.selectedKunde.auftraege}" rowKey="#{item.anr}"
+								value="#{kundeBean.atToList()}" rowKey="#{item.anr}"
 								emptyMessage="#{errors.norecords}" sortBy="#{item.anr}">
 								
 							<p:column headerText="#{labels.a_nr}" style="width:50px;">

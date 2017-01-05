@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import de.kapsel.global.ETypes;
 
 @Entity
@@ -96,5 +98,27 @@ public class User implements Serializable{
 
 		return user;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 17;
+		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof User)) return false;
+		if (obj == this) return true;
+
+		User u = (User) obj;
+		
+		return new EqualsBuilder().
+                append(u.getName(), getName()).
+                isEquals();
+	}
+	
+	
 
 }

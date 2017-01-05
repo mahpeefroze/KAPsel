@@ -3,7 +3,7 @@ package de.kapsel.auftrag.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +24,7 @@ import de.kapsel.kunde.entities.Kunde;
 
 @Entity
 @Table(name = "auftraege")
-public class Auftrag implements Serializable{
+public class Auftrag implements Serializable, Comparable<Auftrag>{
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -33,15 +33,16 @@ public class Auftrag implements Serializable{
 	private String text;
 	private Kunde kunde;
 	private ETypes.AuftragS status;
+	private int zeit;
+	private double preis;
 	private Date sollenddatum;
 	private Date startdatum;
 	private Date enddatum;
-	private int zeit;
-	private double preis;
-	private List<ProduktWrapper> produkte;
-	
 	private Timestamp erstDatum;
 	private Timestamp modDatum;
+	private Set<ProduktWrapper> produkte;
+	
+
 	
 
 	//Annotations at accessor-methods tell hibernate to use them to change variables, so get/set logic is aplied
@@ -77,6 +78,15 @@ public class Auftrag implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Column(name="text", nullable=true)
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
 
 	//ManyToOne -> MANY objects of this class relate to ONE object of the other class (MANY auftraege -> ONE kunde)
 	//Cascade.Type.ALL connects internally (hibernate) and adds/deletes combined stuff e.g. removes all auftraege when kunde is removed
@@ -90,22 +100,31 @@ public class Auftrag implements Serializable{
 		this.kunde = kunde;
 	}
 
-	@Column(name="text", nullable=true)
-	public String getText() {
-		return text;
+	@Column(name="status", nullable=false)
+	public ETypes.AuftragS getStatus() {
+		return status;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setStatus(ETypes.AuftragS status) {
+		this.status = status;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<ProduktWrapper> getProdukte() {
-		return produkte;
+	@Column(name="zeit", nullable=false)
+	public int getZeit() {
+		return zeit;
 	}
 
-	public void setProdukte(List<ProduktWrapper> produkte) {
-		this.produkte = produkte;
+	public void setZeit(int zeit) {
+		this.zeit = zeit;
+	}
+	
+	@Column(name="preis", nullable=false)
+	public double getPreis() {
+		return preis;
+	}
+
+	public void setPreis(double preis) {
+		this.preis = preis;
 	}
 	
 	@Column(name="soll_enddatum")
@@ -134,35 +153,6 @@ public class Auftrag implements Serializable{
 	public void setEnddatum(Date enddatum) {
 		this.enddatum = enddatum;
 	}
-	
-	@Column(name="status", nullable=false)
-	public ETypes.AuftragS getStatus() {
-		return status;
-	}
-
-	public void setStatus(ETypes.AuftragS status) {
-		this.status = status;
-	}
-
-	@Column(name="zeit", nullable=false)
-	public int getZeit() {
-		return zeit;
-	}
-
-	public void setZeit(int zeit) {
-		this.zeit = zeit;
-	}
-	
-	@Column(name="preis", nullable=false)
-	public double getPreis() {
-		return preis;
-	}
-
-	public void setPreis(double preis) {
-		this.preis = preis;
-	}
-	
-	
 
 	@CreationTimestamp
 	@Column(name="erst_datum", nullable=false)
@@ -183,13 +173,23 @@ public class Auftrag implements Serializable{
 	public void setModDatum(Timestamp modDatum) {
 		this.modDatum = modDatum;
 	}
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<ProduktWrapper> getProdukte() {
+		return produkte;
+	}
+
+	public void setProdukte(Set<ProduktWrapper> produkte) {
+		this.produkte = produkte;
+	}
+
 
 	@Override
-	public String toString(){
-
-		String user = "Anr: " + getAnr() + ", Name: " + getName() + ", Kunde: " + getKunde().toString();
-
-		return user;
+	public int compareTo(Auftrag a) {
+		if(a==null){
+			return -1;
+		}
+		return Long.compare(getAnr(), a.getAnr());
 	}
 
 }

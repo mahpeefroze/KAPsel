@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.kunde.dao.IKundeDAO;
+import de.kapsel.global.dao.ILazyLoadDAO;
 import de.kapsel.kunde.entities.Kunde;
 
 public class KundeService implements IKundeService{
 
 	//Injection KundeDAO
-	private IKundeDAO kundeDAO;
+	private ILazyLoadDAO<Kunde> kundeDAO;
 
-	public IKundeDAO getKundeDAO() {
+	public ILazyLoadDAO<Kunde> getKundeDAO() {
 		return kundeDAO;
 	}
 
-	public void setKundeDAO(IKundeDAO kundeDAO) {
+	public void setKundeDAO(ILazyLoadDAO<Kunde> kundeDAO) {
 		this.kundeDAO = kundeDAO;
 	}
 
@@ -48,6 +48,11 @@ public class KundeService implements IKundeService{
 	@Transactional(readOnly = true)
 	public List<Kunde> getKunden() {
 		return kundeDAO.getItems();
+	}
+
+	@Transactional(readOnly = true)
+	public List<Kunde> getKundenWithChildren() {
+		return kundeDAO.getItemsWithChildren();
 	}
 
 }

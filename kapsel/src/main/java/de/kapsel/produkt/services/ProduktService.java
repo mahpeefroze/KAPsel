@@ -2,21 +2,22 @@ package de.kapsel.produkt.services;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.global.dao.IGenericDAO;
+import de.kapsel.global.dao.ILazyLoadDAO;
 import de.kapsel.produkt.entities.Produkt;
 
 public class ProduktService implements IProduktService{
 
 	//Injection ProduktDAO
-	private IGenericDAO<Produkt> produktDAO;
+	private ILazyLoadDAO<Produkt> produktDAO;
 
-	public IGenericDAO<Produkt> getProduktDAO() {
+	public ILazyLoadDAO<Produkt> getProduktDAO() {
 		return produktDAO;
 	}
 
-	public void setProduktDAO(IGenericDAO<Produkt> produktDAO) {
+	public void setProduktDAO(ILazyLoadDAO<Produkt> produktDAO) {
 		this.produktDAO = produktDAO;
 	}
 
@@ -54,6 +55,17 @@ public class ProduktService implements IProduktService{
 	@Transactional(readOnly = true)
 	public List<Produkt> getProdukte() {
 		return produktDAO.getItems();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Produkt> getProdukteWithChildren() {
+		List<Produkt> result = produktDAO.getItems();
+		for(Produkt p:result){
+			Hibernate.initialize(p.getBauteile());
+			Hibernate.initialize(p.getAschritte());
+		}
+		return result;
 	}
 
 }
