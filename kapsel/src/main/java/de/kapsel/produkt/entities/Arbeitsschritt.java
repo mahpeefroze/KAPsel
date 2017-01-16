@@ -90,6 +90,18 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		this.werkzeug = werkzeug;
 	}
 	
+	public Arbeitsschritt createCopy(){
+		Arbeitsschritt a = new Arbeitsschritt();
+		a.setbKey(AbstractKapselEntity.generateBKey());
+		a.setPosition(getPosition());
+		a.setName(getName());
+		a.setZeit(getZeit());
+		a.setNotiz(getNotiz());
+		a.setTyp(getTyp());
+		a.setWerkzeug(getWerkzeug());
+		return a;
+	}
+	
 
 	@Override
 	public int compareTo(Arbeitsschritt aschritt) {

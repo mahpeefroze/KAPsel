@@ -1,6 +1,7 @@
 package de.kapsel.kunde.beans;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +14,10 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
+
 import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.global.entities.Adresse;
 import de.kapsel.kunde.entities.Kunde;
@@ -38,6 +41,8 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{kgruppeService}")
 	private IKGruppeService kGruppeService;
 	
+	@ManagedProperty(value="#{utilsBean}")
+	private UtilsBean utilsContainer;
 		
 	public KundeBean(){}
 
@@ -124,8 +129,17 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		this.kGruppeService = kGruppeService;
 	}
 	
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
+	}
 	
 	//endregion Getter/Setter
+
+
 
 	//Select Kunde passed as Attribute from another View
 	public void loadPassedKunde(){
@@ -164,13 +178,44 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			getNewKunde().setKnr(createKnr());
 			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 			getNewKunde().setbKey(AbstractKapselEntity.generateBKey());
+			getNewKunde().setKnr(getUtilsContainer().getNextMax("KNR"));
+			if(isAdresseEmpty()){
+				getNewKunde().setAdresse(null);
+			}
 			getKundeService().addKunde(getNewKunde());
-		} catch (DataAccessException e) {
-			e.printStackTrace();
+			getUtilsContainer().updateNrStorage();
+		} catch (Exception e) {
+			getUtilsContainer().rollbackLast("KNR");
+			System.out.println(e.getMessage());
 		}
 		
 		init();
 
+	}
+	
+	//Check if Adresse is empty with Reflection
+	private boolean isAdresseEmpty(){
+		Field[] fields = Adresse.class.getFields();
+		Object v;
+		@SuppressWarnings("rawtypes")
+		Class t;
+		for(Field f:fields){
+			t = f.getType();
+			try {
+				v = f.get(getNewKunde().getAdresse());
+				if(t.isPrimitive() && ((Number) v).longValue() != 0){
+					   return false;
+				}else if(!t.isPrimitive() && v != null){
+					   return false;
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			   
+		}
+		return true;
 	}
 
 	public void updateKunde(){
@@ -187,6 +232,14 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		ArrayList<Auftrag> sortedList= new ArrayList<Auftrag>(getSelectedKunde().getAuftraege());
 		Collections.sort(sortedList);
 		return sortedList; 
+	}
+	
+	@Override
+	public void enableEditMode() {
+		super.enableEditMode();
+		if(getSelectedKunde().getAdresse()==null){
+			getSelectedKunde().setAdresse(new Adresse());
+		}
 	}
 
 	@Override

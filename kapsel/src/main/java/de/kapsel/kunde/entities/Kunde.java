@@ -57,7 +57,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable {
 		this.knr = knr;
 	}
 
-	@Column(name="name", unique=false, length=40, nullable=false)
+	@Column(name="name", unique=false, nullable=false)
 	public String getName() {
 		return name;
 	}
@@ -65,7 +65,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable {
 		this.name = name;
 	}
 
-	@Column(name="apartner", unique=false, length=20, nullable=false)
+	@Column(name="apartner", unique=false, nullable=false)
 	public String getAPartner() {
 		return aPartner;
 	}

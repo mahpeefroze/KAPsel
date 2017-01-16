@@ -1,5 +1,6 @@
 package de.kapsel.produkt.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -48,13 +49,27 @@ public class ProduktService implements IProduktService{
 	@Override
 	@Transactional(readOnly = true)
 	public Produkt getProduktById(long id) {
-		return produktDAO.getItemById(id);
+		Produkt p = produktDAO.getItemById(id);
+		Hibernate.initialize(p.getAschritte());
+		Hibernate.initialize(p.getBauteile());
+		return p;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<Produkt> getProdukte() {
-		return produktDAO.getItems();
+		ArrayList<Produkt> nontemps = new ArrayList<Produkt>();
+		List<Produkt> produkte = produktDAO.getItems();
+		for(Produkt p:produkte){
+			if(!p.isTempFlag()){
+				nontemps.add(p);
+			}
+			
+		}
+		if(!nontemps.isEmpty()){
+			return nontemps;
+		}
+		return null;
 	}
 
 	@Override
@@ -67,5 +82,23 @@ public class ProduktService implements IProduktService{
 		}
 		return result;
 	}
+	
+	@Override
+	@Transactional
+	public List<Produkt> getTemplates() {
+		ArrayList<Produkt> temps = new ArrayList<Produkt>();
+		List<Produkt> produkte = produktDAO.getItems();
+		for(Produkt p:produkte){
+			if(p.isTempFlag()){
+				temps.add(p);
+			}
+		}
+		if(!temps.isEmpty()){
+			return temps;
+		}
+		return null;
+	}
+	
+	
 
 }

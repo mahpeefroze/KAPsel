@@ -28,35 +28,35 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-user-plus"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.editMode}" value="#{labels.add}" icon="fa fa-user-plus"
 							styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="lockSelection()" /> 
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()" /> 
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.emptyList or kundeBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delKunde').show();"/>
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{kundeBean.editMode}">
 						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" />
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" oncomplete="unlockSelection()"/>
 						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton value="To PDF" icon="fa fa-file-pdf-o"
+						<p:commandButton disabled="#{kundeBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
 							styleClass="ui-ribbon-bigbutton" />
-						<p:commandButton value="To Word" icon="fa fa-file-word-o"
+						<p:commandButton disabled="#{kundeBean.editMode}" value="To Word" icon="fa fa-file-word-o"
 							styleClass="ui-ribbon-bigbutton" />
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton value="Print" icon="fa fa-print"
+						<p:commandButton disabled="#{kundeBean.editMode}" value="Print" icon="fa fa-print"
 							styleClass="ui-ribbon-bigbutton" />
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
+						<p:commandButton disabled="#{kundeBean.editMode}" value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
 					</p:ribbonGroup>
 
 				</p:tab>
@@ -80,7 +80,7 @@
 					<!-- Tabelle mit allen Kunden -->
 					<p:dataTable id="kundeDT" var="item"
 						value="#{kundeBean.kunden}" selectionMode="single"
-						selection="#{kundeBean.selectedKunde}" disabledSelection="#{kundeBean.editMode}" rowKey="#{item.knr}"
+						selection="#{kundeBean.selectedKunde}" disabledSelection="#{kundeBean.editMode}" rowKey="#{item.id}"
 						emptyMessage="#{errors.norecords}" sortBy="#{item.knr}">
 						<f:facet name="header">#{labels.kundenListe}</f:facet>
 
@@ -88,7 +88,7 @@
 						<p:ajax event="rowSelect" listener="#{kundeBean.loadKunde}"
 							update=":sect_form"/>		
 						
-						<p:column headerText="#{labels.k_nr}" style="width:50px;">
+						<p:column headerText="#{labels.k_nr}" style="width:90px;">
 							<h:outputText value="#{item.knr}" />
 						</p:column>
 						<p:column headerText="#{labels.nachname}">
@@ -162,7 +162,7 @@
 									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputText>
 							</p:column>
-							<p:column headerText="#{labels.typ}" style="width:100px;">
+							<p:column headerText="#{labels.status}" style="width:100px;">
 								<h:outputText value="#{item.status}" />
 							</p:column>
 							<p:column headerText="#{labels.action}" style="width:100px;">

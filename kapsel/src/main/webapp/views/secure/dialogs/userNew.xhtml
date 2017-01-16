@@ -8,16 +8,16 @@
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
-			<p:column><p:inputText value="#{settingsBean.newUser.fullname}" style="width:200px;"/></p:column>
+			<p:column><p:inputText value="#{userBean.newUser.fullname}" style="width:200px;"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.userName}:</p:column>
-			<p:column><p:inputText value="#{settingsBean.newUser.name}" style="width:200px;"/></p:column>
+			<p:column><p:inputText value="#{userBean.newUser.name}" style="width:200px;"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.userRole}:</p:column>
 			<p:column>
-				<p:selectOneMenu id="userRoleSelect" value="#{settingsBean.newUser.role}" required="true" requiredMessage="Field Rolle is mandatory!">
+				<p:selectOneMenu id="userRoleSelect" value="#{userBean.newUser.role}" required="true" requiredMessage="Field Rolle is mandatory!">
 					<f:selectItem itemLabel="Bitte auswählen" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.userT}" var="typ" itemLabel="#{typ}" itemValue="#{userT}" />
 				</p:selectOneMenu>
@@ -25,8 +25,8 @@
 		</p:row>
 	</p:panelGrid>
 	<p:message for="userRoleSelect" />
-	<p:commandButton value="OK" action="#{settingsBean.addUser()}" update="dlgNewUserPanel mid_form" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newUser').hide();" />
-	<p:commandButton value="Abbrechen" action="#{settingsBean.resetNewUser()}" update="dlgNewUserPanel" oncomplete="PF('newUser').hide();" />	
+	<p:commandButton value="OK" action="#{userBean.addUser()}" update="dlgNewUserPanel mid_form" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newUser').hide();" />
+	<p:commandButton value="Abbrechen" action="#{userBean.resetNewUser()}" update="dlgNewUserPanel" oncomplete="PF('newUser').hide();" />	
 	</h:form>
 	
 

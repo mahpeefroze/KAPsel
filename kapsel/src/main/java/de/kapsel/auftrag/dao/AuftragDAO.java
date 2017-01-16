@@ -17,7 +17,7 @@ public class AuftragDAO extends AbstractDAO<Auftrag> implements ILazyLoadDAO<Auf
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Auftrag> getItemsWithChildren() {
-		String query="select a"+
+		String query="select distinct a"+
 					" from Auftrag a"+
 					" left join fetch a.produkte p"+
 					" left join fetch p.produkt";

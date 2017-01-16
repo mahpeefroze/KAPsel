@@ -25,35 +25,35 @@
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.add}" icon="fa fa-codepen"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.add}" icon="fa fa-codepen"
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')}" value="#{labels.edit}" icon="fa fa-edit"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()"  /> 
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList}" value="#{labels.delete}" icon="fa fa-trash"
+						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList or produktBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{produktBean.editMode}">
 						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()"/>
+							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" oncomplete="unlockSelection()"/>
 						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton value="To PDF" icon="fa fa-file-pdf-o"
+						<p:commandButton disabled="#{produktBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
-						<p:commandButton value="To Word" icon="fa fa-file-word-o"
+						<p:commandButton disabled="#{produktBean.editMode}" value="To Word" icon="fa fa-file-word-o"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 
 					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton value="Print" icon="fa fa-print"
+						<p:commandButton disabled="#{produktBean.editMode}" value="Print" icon="fa fa-print"
 							styleClass="ui-ribbon-bigbutton" type="button" />
 					</p:ribbonGroup>
 					
 					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
+						<p:commandButton disabled="#{produktBean.editMode}" value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
 					</p:ribbonGroup>
 
 				</p:tab>
@@ -78,25 +78,25 @@
 					<p:dataTable id="produktDT" var="item"
 						value="#{produktBean.produkte}" selectionMode="single"
 						selection="#{produktBean.selectedProdukt}" disabledSelection="#{produktBean.editMode}"
-						rowKey="#{item.pnr}" emptyMessage="#{errors.norecords}">
+						rowKey="#{item.id}" sortBy="#{item.pnr}" emptyMessage="#{errors.norecords}">
 						<f:facet name="header">#{labels.prodListe}</f:facet>
 
 
 						<p:ajax event="rowSelect" listener="#{produktBean.loadProdukt}"
 							update=":sect_form" />
 
-						<p:column headerText="#{labels.p_nr}">
+						<p:column headerText="#{labels.p_nr}" style="width: 90px;">
 							<h:outputText value="#{item.pnr}" />
 						</p:column>
 						<p:column headerText="#{labels.nachname}">
 							<h:outputText value="#{item.name}" />
 						</p:column>
-						<p:column headerText="#{labels.erstDatum}">
+						<p:column headerText="#{labels.erstDatum}" style="width: 85px;">
 							<h:outputText value="#{item.erstDatum}" >
 								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="#{labels.modDatum}">
+						<p:column headerText="#{labels.modDatum}" style="width: 85px;">
 							<h:outputText value="#{item.modDatum}">
 								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputText>

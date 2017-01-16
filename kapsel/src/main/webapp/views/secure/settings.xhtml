@@ -50,13 +50,13 @@
 						<p:commandButton id="delUser" value="#{labels.delete}" oncomplete="PF('delUser').show();"/>
 					</p:panelGrid>
 					<p:dataTable id="userDT" var="item"
-						value="#{settingsBean.users}" selectionMode="single"
-						selection="#{settingsBean.selectedUser}" rowKey="#{item.id}"
+						value="#{userBean.users}" selectionMode="single"
+						selection="#{userBean.selectedUser}" rowKey="#{item.id}"
 						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('ADMIN')}" editMode="cell">
 
 						<f:facet name="header">#{labels.userListe}</f:facet>
 						
-						<p:ajax event="cellEdit" listener="#{settingsBean.onUserEdit(item)}"/>
+						<p:ajax event="cellEdit" listener="#{userBean.onUserEdit(item)}"/>
 						
 						<p:column headerText="#{labels.id}" style="width:50px; text-align: center;" sortBy="#{item.id}">
 							<h:outputText value="#{item.id}" />
@@ -82,7 +82,7 @@
 				            </p:cellEditor>
 						</p:column>
 						<p:column style="text-align: center;" >
-							<p:commandButton disabled="#{(loginBean.validateHierarchy(item.role) and item.name!=loginBean.loginUser.name) or item.resPw}" update="userDT" value="#{labels.passwordReset}" action="#{settingsBean.resetPassword(item)}"/>
+							<p:commandButton disabled="#{(loginBean.validateHierarchy(item.role) and item.name!=loginBean.loginUser.name) or item.resPw}" update="userDT" value="#{labels.passwordReset}" action="#{userBean.resetPassword(item)}"/>
 						</p:column>
 					</p:dataTable>
 
@@ -91,7 +91,7 @@
 					<p:dialog header="Benutzer löschen" modal="true" widgetVar="delUser" minHeight="40" resizable="false">
 						<p>Möchten Sie wirklich diesen Benutzer löschen?</p>
 					    <p:spacer/>
-					    <p:commandButton value="#{labels.ja}" action="#{settingsBean.deleteUser()}" update="mid_form" oncomplete="PF('delUser').hide();"/>
+					    <p:commandButton value="#{labels.ja}" action="#{userBean.deleteUser()}" update="mid_form" oncomplete="PF('delUser').hide();"/>
 					    <p:commandButton value="#{labels.nein}" onclick="PF('delUser').hide();"/>
 					</p:dialog>
 					
@@ -155,37 +155,37 @@
 					
 										
 					<p:fieldset id="rabatte" toggleable="false" legend="#{labels.settingsRabatte}">
-						<p:selectManyCheckbox id="basic" value="#{settingsBean.rabatteCB}">
+						<p:selectManyCheckbox id="basic" value="#{utilsBean.rabatteCB}">
 							 <p:ajax update="rabatte"/>
-							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabOeffS') or settingsBean.grabRabStatus('RabFiS') or settingsBean.grabRabStatus('RabPrivS')}" 
+							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabOeffS') or utils.grabRabStatus('RabFiS') or utilsBean.grabRabStatus('RabPrivS')}" 
 							 	itemLabel="Alle" itemValue="RabAlleS" />
-							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabAlleS')}" 
 							 	itemLabel="#{labels['kunde.typ.OEFFENTLICH']}" itemValue="RabOeffS" />
-							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabAlleS')}" 
 							 	itemLabel="#{labels['kunde.typ.FIRMA']}" itemValue="RabFiS" />
-							 <f:selectItem itemDisabled="#{settingsBean.grabRabStatus('RabAlleS')}" 
+							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabAlleS')}" 
 							 	itemLabel="#{labels['kunde.typ.PRIVAT']}" itemValue="RabPrivS" />
 						</p:selectManyCheckbox>
 						<p:panelGrid>
 							<p:row>
 								<p:column>
-									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabAlle'].value}" disabled="#{not settingsBean.grabRabStatus('RabAlleS')}" styleClass="number_input"/>
+									<p:inputText placeholder="0%" value="#{utilsBean.utilsMap['RabAlle'].value}" disabled="#{not utilsBean.grabRabStatus('RabAlleS')}" styleClass="number_input"/>
 								</p:column>
 								<p:column/>
 								<p:column style="width: 95px;">
-									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabOeff'].value}" disabled="#{not settingsBean.grabRabStatus('RabOeffS')}" styleClass="number_input"/>
+									<p:inputText placeholder="0%" value="#{utilsBean.utilsMap['RabOeff'].value}" disabled="#{not utilsBean.grabRabStatus('RabOeffS')}" styleClass="number_input"/>
 								</p:column>
 								<p:column/>
 								<p:column>
-									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabFi'].value}" disabled="#{not settingsBean.grabRabStatus('RabFiS')}" styleClass="number_input"/>
+									<p:inputText placeholder="0%" value=" #{utilsBean.utilsMap['RabFi'].value}" disabled="#{not utilsBean.grabRabStatus('RabFiS')}" styleClass="number_input"/>
 								</p:column>
 								<p:column/>
 								<p:column>
-									<p:inputText placeholder="0%" value="#{settingsBean.utilsMap['RabPriv'].value}" disabled="#{not settingsBean.grabRabStatus('RabPrivS')}" styleClass="number_input"/>
+									<p:inputText placeholder="0%" value="#{utilsBean.utilsMap['RabPriv'].value}" disabled="#{not utilsBean.grabRabStatus('RabPrivS')}" styleClass="number_input"/>
 								</p:column>
 								<p:column/>
 								<p:column>
-									<p:commandButton value="Anwenden" action="#{settingsBean.updateUtilsByType('R')}"/>
+									<p:commandButton value="Anwenden" action="#{utilsBean.updateUtilsByType('R')}"/>
 								</p:column>
 							</p:row>
 						</p:panelGrid>
@@ -320,22 +320,22 @@
 							<p:column colspan="7"><b>Herstellekosten</b></p:column>
 						</p:row>
 						<p:row>
-							<p:column>#{settingsBean.utilsMap['MGK'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['MGK'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['MGK'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['MGK'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 							<p:column/>
-							<p:column>#{settingsBean.utilsMap['FGK'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['FGK'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['FGK'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['FGK'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 						</p:row>
 						<p:row>
-							<p:column>#{settingsBean.utilsMap['FAL'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['FAL'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['FAL'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['FAL'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>€/h</p:column>
 							<p:column colspan="4"/>
@@ -344,15 +344,15 @@
 							<p:column colspan="7"><b>Selbstkosten</b></p:column>
 						</p:row>
 						<p:row>
-							<p:column>#{settingsBean.utilsMap['VWGK'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['VWGK'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['VWGK'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['VWGK'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 							<p:column/>
-							<p:column>#{settingsBean.utilsMap['VTGK'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['VTGK'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['VTGK'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['VTGK'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 						</p:row>
@@ -360,22 +360,22 @@
 							<p:column colspan="7"><b>Preisuntergrenze</b></p:column>
 						</p:row>
 						<p:row>
-							<p:column>#{settingsBean.utilsMap['WG'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['WG'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['WG'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['WG'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 							<p:column/>
-							<p:column>#{settingsBean.utilsMap['USt'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['USt'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['USt'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['USt'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 						</p:row>
 						<p:row>
-							<p:column>#{settingsBean.utilsMap['Sk'].name}</p:column>
+							<p:column>#{utilsBean.utilsMap['Sk'].name}</p:column>
 							<p:column>
-								<p:inputText value="#{settingsBean.utilsMap['Sk'].value}" styleClass="number_input"/>
+								<p:inputText value="#{utilsBean.utilsMap['Sk'].value}" styleClass="number_input"/>
 							</p:column>
 							<p:column>%</p:column>
 							<p:column colspan="4"/>
@@ -383,7 +383,7 @@
 						<p:row>
 							<p:column colspan="4"/>
 							<p:column>
-								<p:commandButton value="Anwenden" action="#{settingsBean.updateUtilsByType('K')}" style="float: right;"/>
+								<p:commandButton value="Anwenden" action="#{utilsBean.updateUtilsByType('K')}" style="float: right;"/>
 							</p:column>
 							<p:column colspan="2">
 								<p:commandButton value="Zurücksetzen" update="calcSettingsPanel"  process="@this" />

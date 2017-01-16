@@ -14,8 +14,10 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
+
 import de.kapsel.global.DTItem;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Arbeitsschritt;
 import de.kapsel.produkt.entities.Bauteil;
@@ -47,6 +49,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	@ManagedProperty(value="#{materialBean}")
 	private MaterialBean materialContainer;
+	
+	@ManagedProperty(value="#{utilsBean}")
+	private UtilsBean utilsContainer;
 	
 	public ProduktBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
@@ -138,6 +143,14 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 
 	public void setWerkzeugContainer(WerkzeugBean werkzeugContainer) {
 		this.werkzeugContainer = werkzeugContainer;
+	}
+
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
 	}
 
 	//Getter and Setter Service
@@ -252,10 +265,11 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	public void addProdukt(){
 		try {
 			//Implement logic for creating new PNR and also put it
-			getNewProdukt().setPnr(createPnr());
+			getNewProdukt().setPnr(getUtilsContainer().getNextMax("PNR"));
 			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
 			getProduktService().addProdukt(getNewProdukt());
-		} catch (DataAccessException e) {
+		} catch (Exception e) {
+			getUtilsContainer().rollbackLast("PNR");
 			e.printStackTrace();
 		}
 		init();
@@ -296,8 +310,10 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public void deleteBauteil(){
-		updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getBauteile()));
-		getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
+		if(getSelectedBauteil()!=null){
+			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getBauteile()));
+			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
+		}
 	}
 	
 	//endregion
@@ -326,8 +342,10 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public void deleteArbeitsschritt(){
-		updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getAschritte()));
-		getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
+		if(getSelectedAschritt()!=null){
+			updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getAschritte()));
+			getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
+		}
 	}
 	
 	//endregion

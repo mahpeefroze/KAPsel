@@ -33,3 +33,8 @@
 #miniKListeDlg{
 	width: 500px !important;
 }
+
+.ui-selectonelistbox{
+	min-height: 200px;
+	min-width: 450px;
+}

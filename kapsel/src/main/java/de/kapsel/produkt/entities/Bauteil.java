@@ -105,6 +105,20 @@ public class Bauteil extends AbstractKapselEntity implements Serializable, Compa
 		this.material = material;
 	}
 	
+	public Bauteil createCopy(){
+		Bauteil b = new Bauteil();
+		b.setPosition(getPosition());
+		b.setbKey(AbstractKapselEntity.generateBKey());
+		b.setName(getName());
+		b.setMenge(getMenge());
+		b.setLaenge(getLaenge());
+		b.setBreite(getBreite());
+		b.setDicke(getDicke());
+		b.setBemerkung(getBemerkung());
+		b.setMaterial(getMaterial());
+		return b;
+	}
+	
 	@Override
 	public int compareTo(Bauteil bauteil) {
 		if(bauteil==null){

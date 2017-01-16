@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DualListModel;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.auftrag.entities.Auftrag;
@@ -21,9 +23,11 @@ import de.kapsel.auftrag.services.IAuftragService;
 import de.kapsel.auftrag.services.IProduktWrapperService;
 import de.kapsel.global.ETypes;
 import de.kapsel.global.beans.AbstractModulBean;
+import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.kunde.entities.Kunde;
 import de.kapsel.kunde.services.IKundeService;
+import de.kapsel.produkt.entities.Produkt;
 import de.kapsel.produkt.services.IProduktService;
 
 @ManagedBean
@@ -36,8 +40,20 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private Auftrag selectedAuftrag;
 	private Auftrag newAuftrag;
 	private ProduktWrapper selectedProduktWrapper;
+	private Produkt newProdukt;
+	private Produkt selectedTemplate;
+	private long selectedTemplateId;
+	private List<Produkt> templates;
+	private DualListModel<String> stdProdukte;
+	
+	private boolean newProdBool;
+	private boolean templProdBool;
+	private boolean selProdBool;
 	
 	private HashSet<ProduktWrapper> tempPwList;
+	private HashSet<ProduktWrapper>	tempDelPwList;
+	private HashMap<String, Produkt> produktMap;
+	
 
 	@ManagedProperty(value="#{auftragService}")
 	private IAuftragService auftragService;
@@ -50,7 +66,11 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	
 	@ManagedProperty(value="#{kundeService}")
 	private IKundeService kundeService;
-
+	
+	@ManagedProperty(value="#{utilsBean}")
+	private UtilsBean utilsContainer;
+	
+	
 	//Gather Items to fill the table
 	public AuftragBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
@@ -146,6 +166,14 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		this.kundeService = kundeService;
 	}
 	
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
+	}
+
 	public ProduktWrapper getSelectedProduktWrapper() {
 		return selectedProduktWrapper;
 	}
@@ -154,11 +182,73 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		this.selectedProduktWrapper = selectedProduktWrapper;
 	}
 	
+	public Produkt getNewProdukt() {
+		return newProdukt;
+	}
+
+	public void setNewProdukt(Produkt newProdukt) {
+		this.newProdukt = newProdukt;
+	}
+	
+	public Produkt getSelectedTemplate() {
+		return selectedTemplate;
+	}
+
+	public void setSelectedTemplate(Produkt selectedTemplate) {
+		this.selectedTemplate = selectedTemplate;
+	}
+	
+	public long getSelectedTemplateId() {
+		return selectedTemplateId;
+	}
+
+	public void setSelectedTemplateId(long selectedTemplateId) {
+		this.selectedTemplateId = selectedTemplateId;
+	}
+
+	public List<Produkt> getTemplates() {
+		return templates;
+	}
+
+	public void setTemplates(List<Produkt> templates) {
+		this.templates = templates;
+	}
+	
+	public DualListModel<String> getStdProdukte() {
+		return stdProdukte;
+	}
+
+	public void setStdProdukte(DualListModel<String> stdProdukte) {
+		this.stdProdukte = stdProdukte;
+	}
+	
+	public boolean isNewProdBool() {
+		return newProdBool;
+	}
+
+	public void setNewProdBool(boolean newProdBool) {
+		this.newProdBool = newProdBool;
+	}
+
+	public boolean isTempProdBool() {
+		return templProdBool;
+	}
+
+	public void setTempProdBool(boolean tempProdBool) {
+		this.templProdBool = tempProdBool;
+	}
+
+	public boolean isSelProdBool() {
+		return selProdBool;
+	}
+
+	public void setSelProdBool(boolean selProdBool) {
+		this.selProdBool = selProdBool;
+	}
 	
 	//endregion Getter/Setter
 
 	
-
 	//Listener for Selection in auftragDT in Nav Panel
 	public void loadAuftrag(SelectEvent event) {
 		setSelectedAuftrag((Auftrag) event.getObject());
@@ -177,32 +267,16 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		return "kunde.xhtml?faces-redirect=true&pK="+id;
 	}
 	
-	//Basic strategy for creating new AuftragNr, get highest existing and icrement it by 1
-	public long createAnr(){
-		// TODO proper logic implementation needed
-		long anr=0;
-		if(!isEmptyList()){
-			anr = getAuftraege().get(0).getAnr();
-			for(Auftrag a : getAuftraege()){
-				long tempAnr = a.getAnr();
-				if(tempAnr>anr){
-					anr=tempAnr;
-				}
-			}
-		}
-		return anr + 1;
-	}
-
-
 	public void addAuftrag(){
 		try {
 	
-			getNewAuftrag().setAnr(createAnr());
+			getNewAuftrag().setAnr(getUtilsContainer().getNextMax("ANR"));
 			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
 			getNewAuftrag().setStartdatum(new Date());
 			getNewAuftrag().getKunde().getAuftraege().add(getNewAuftrag());
 			getAuftragService().addAuftrag(getNewAuftrag());
-		} catch (DataAccessException e) {
+		} catch (Exception e) {
+			getUtilsContainer().rollbackLast("ANR");
 			e.printStackTrace();
 		}
 		init();
@@ -217,17 +291,122 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		init();
 	}
 	
-	public void addProduktWrapper(){
+	//region PRODUKT ADD/DELETE + DISPLAY
+	
+	public void addProduktNew(){
+		ProduktWrapper pw = createProduktWrapper();
+		pw.setProdukt(getNewProdukt());
+		
+	}
+	
+	public void addProduktFromTemplate(){
+		if(getSelectedTemplateId()!=0){
+			ProduktWrapper pw = createProduktWrapper();
+			pw.setProdukt(new Produkt().createFromTemplate(getProduktService().getProduktById((getSelectedTemplateId()))));
+			pw.setName(pw.getProdukt().getName()+"Wrapper");
+		}
+	}
+	
+	public void addProduktFromSelection(){
+		boolean contained=false;
+		boolean firstRun=false;
+		ProduktWrapper pw;
+		Produkt p;
+		if(tempPwList.isEmpty() && getSelectedAuftrag().getProdukte().isEmpty()){
+			firstRun=true;
+		}
+		for(String prodName:getStdProdukte().getTarget()){
+			p=produktMap.get(prodName);
+			if(!firstRun){
+				contained=false;
+				if(!getSelectedAuftrag().getProdukte().isEmpty()){
+					for(ProduktWrapper wrapper: getSelectedAuftrag().getProdukte()){
+						if(wrapper.getProdukt().equals(p)){
+							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
+							contained=true;
+							break;
+						}
+					}
+				}
+				if(!tempPwList.isEmpty() && !contained && !getSelectedAuftrag().getProdukte().containsAll(tempPwList)){
+					for(ProduktWrapper wrapper:tempPwList){
+						if(wrapper.getProdukt().equals(p)){
+							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
+							contained=true;
+							break;
+						}
+					}
+				}
+			}
+			
+			if(!contained){
+				pw = createProduktWrapper();
+				pw.setProdukt(p);
+				pw.setName(pw.getProdukt().getName()+"Wrapper");
+			}
+		}
+	}
+	
+	public void addProduktDisplayChange(int source){
+		newProdBool=false;
+		templProdBool=false;
+		selProdBool=false;
+		switch(source){
+		case 0: newProdBool=true;
+				break;
+		case 1: templProdBool=true;
+				prepareProduktTemplates();
+				break;
+		case 2: selProdBool=true;
+				prepareProduktSelection();
+				break;
+		}
+	}
+	
+	private void prepareProduktTemplates(){
+		if(getTemplates()==null){
+			setTemplates(getProduktService().getTemplates());
+		}
+	}
+	
+	private void prepareProduktSelection(){
+		if(getStdProdukte()==null){
+			ArrayList<String> prodNames = new ArrayList<>();
+			produktMap = new HashMap<>();
+			for(Produkt p:getProduktService().getProdukte()){
+				produktMap.put(p.getName(), p);
+				prodNames.add(p.getName());
+			}
+			setStdProdukte(new DualListModel<>(prodNames, new ArrayList<String>()));
+		}
+	}
+	
+	private ProduktWrapper createProduktWrapper(){
 		ProduktWrapper pw = new ProduktWrapper();
 		pw.setPosition(getSelectedAuftrag().getProdukte().size()+1);
 		pw.setbKey(AbstractKapselEntity.generateBKey());
+		pw.setStueckzahl(1);
 		getSelectedAuftrag().getProdukte().add(pw);
 		tempPwList.add(pw);
+		//TODO Remove testing output
+		System.out.println(pw.getbKey() + " Auftrage_Produkte: " + getSelectedAuftrag().getProdukte().size() + " TempPWList: " + tempPwList.size());
+		return pw;
 	}
 	
 	public void deleteProduktWrapper(){
-		getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
-		updateAuftrag();
+		if(getSelectedProduktWrapper()!=null){
+			tempDelPwList.add(getSelectedProduktWrapper());
+			updatePWPosition(getSelectedProduktWrapper().getPosition());
+			getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
+		}
+	}
+	
+	private void updatePWPosition(int delPos){
+		for(ProduktWrapper pw:getSelectedAuftrag().getProdukte()){
+			if(pw.getPosition()>delPos){
+				pw.setPosition(pw.getPosition()-1);
+			}
+		}
 	}
 
 	
@@ -237,22 +416,42 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		return sortedList; 
 	}
 	
+	//endregion
+	
 	@Override
 	public void enableEditMode() {
 		super.enableEditMode();
 		tempPwList = new HashSet<ProduktWrapper>();
+		tempDelPwList = new HashSet<ProduktWrapper>();
+		setSelectedTemplateId(0);
 	}
 	
 	@Override
 	public void onEditComplete() {
+		if(tempPwList!=null && !tempPwList.isEmpty()){
+			Produkt p;
+			for(ProduktWrapper pw:tempPwList){
+				p=pw.getProdukt();
+				//Nur für die neuerstellte Produkte (new oder fromTemplate)
+				if(p.getPnr()==0){
+					p.setPnr(getUtilsContainer().getNextMax("PNR"));
+					p.setName("Produkt_" + p.getPnr());
+				}
+			}
+		}
 		updateAuftrag();
+		getUtilsContainer().updateNrStorage();
 		disableEditMode();
 	}
 
 	@Override
 	public void cancelEditMode() {
+		
 		if(tempPwList!=null && !tempPwList.isEmpty()){
 			getSelectedAuftrag().getProdukte().removeAll(tempPwList);
+		}
+		if(tempDelPwList!=null && !tempDelPwList.isEmpty()){
+			getSelectedAuftrag().getProdukte().addAll(tempDelPwList);
 		}
 		disableEditMode();
 	}

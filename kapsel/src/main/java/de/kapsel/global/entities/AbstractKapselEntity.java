@@ -26,7 +26,9 @@ public abstract class AbstractKapselEntity {
 	public static long generateBKey(){
 		long stamp = new Date().getTime();
 		int hash = SessionUtils.getLoggedUser().hashCode();
-		return stamp+(51*hash);
+		double rand = Math.random();
+		int factor = (int) (rand*3719);
+		return stamp+(factor*hash);
 	}
 	
 	public int hashCode() {

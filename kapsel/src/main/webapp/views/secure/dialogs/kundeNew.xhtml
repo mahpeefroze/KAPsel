@@ -9,12 +9,12 @@
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.knr}:</p:column>
-			<p:column>#{kundeBean.createKnr()}</p:column>
+			<p:column></p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
 				<p:selectOneMenu id="newKtypSelect" value="#{kundeBean.newKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
+					<f:selectItems value="#{eTypes.kundeT}"/>
 				</p:selectOneMenu>
 			</p:column>
 			<p:column rowspan="3">#Bild</p:column>

@@ -33,5 +33,5 @@ public class ProduktDAO extends AbstractDAO<Produkt> implements ILazyLoadDAO<Pro
 	
 	return resultP;
 	}
-
+	
 }

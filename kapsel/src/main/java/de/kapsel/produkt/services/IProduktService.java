@@ -20,4 +20,5 @@ public interface IProduktService {
 	
 	List<Produkt> getProdukteWithChildren();
 	
+	List<Produkt> getTemplates();
 }

@@ -18,7 +18,7 @@
 			<p:column style="width:150px;">
 				<p:selectOneMenu id="edit_kundeStatusSelect" value="#{eKunde.status}" style="width:100px" styleClass="alignRight">
 					<f:selectItem itemLabel="#{labels.status}" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeStatus}" var="typ" itemLabel="#{typ}" itemValue="#{kundeStatus}" />
+					<f:selectItems value="#{eTypes.kundeStatus}"/>
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>
@@ -33,7 +33,7 @@
 			<p:column>
 				<p:selectOneMenu id="edit_newKtypSelect" value="#{eKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeT}" var="typ" itemLabel="#{typ}" itemValue="#{kundeT}" />
+					<f:selectItems value="#{eTypes.kundeT}" />
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>

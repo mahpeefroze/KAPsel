@@ -2,6 +2,7 @@ package de.kapsel.produkt.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -36,6 +37,8 @@ public class Produkt extends AbstractKapselEntity implements Serializable {
 	private Timestamp modDatum;
 	private Set<Bauteil> bauteile;
 	private Set<Arbeitsschritt> aschritte;
+	private boolean tempFlag=false;
+	private boolean stdFlag=false;
 
 
 	@Id
@@ -132,6 +135,42 @@ public class Produkt extends AbstractKapselEntity implements Serializable {
 	}
 	public void setAschritte(Set<Arbeitsschritt> aschritte) {
 		this.aschritte = aschritte;
+	}
+	
+	@Column(name="tempFlag")
+	public boolean isTempFlag() {
+		return tempFlag;
+	}
+	public void setTempFlag(boolean tempFlag) {
+		this.tempFlag = tempFlag;
+	}
+	
+	@Column(name="stdFlag")
+	public boolean isStdFlag() {
+		return stdFlag;
+	}
+	public void setStdFlag(boolean stdFlag) {
+		this.stdFlag = stdFlag;
+	}
+	
+	//Creates deep copy
+	public Produkt createFromTemplate(Produkt template){
+		Produkt p = new Produkt();
+		p.setbKey(AbstractKapselEntity.generateBKey());
+		p.setName(template.getName());
+		p.setText(template.getText());
+		p.setTyp(template.getTyp());
+		p.setZeit(template.getZeit());
+		p.setPreis(template.getPreis());
+		p.setBauteile(new HashSet<Bauteil>());
+		for(Bauteil b:template.getBauteile()){
+			p.getBauteile().add(b.createCopy());
+		}
+		p.setAschritte(new HashSet<Arbeitsschritt>());
+		for(Arbeitsschritt a:template.getAschritte()){
+			p.getAschritte().add(a.createCopy());
+		}
+		return p;
 	}
 	
 	
