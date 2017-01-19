@@ -30,12 +30,12 @@ public class KGruppeBean implements Serializable{
 		try{
 			setkGruppen(getkGruppeService().getKGruppen());
 			setSelectedKGruppe(getkGruppen().get(0));
-			resetNewKGruppe();
 		}catch (DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch (IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine KGruppen vorhanden");
 		}
+		resetNewKGruppe();
 	}
 	
 	public void onKGruppeEdit(KGruppe kGruppe){

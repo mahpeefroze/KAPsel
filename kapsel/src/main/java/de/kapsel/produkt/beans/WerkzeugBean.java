@@ -64,12 +64,12 @@ public class WerkzeugBean implements Serializable{
 		try{
 			setWerkzeuge(getWerkzeugService().getWerkzeuge());
 			setSelectedWerkzeug(getWerkzeuge().get(0));
-			resetNewWerkzeug();
 		}catch (DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch (IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			System.out.println(e.getMessage() + ": keine Werkzeuge vorhanden");
 		}
+		resetNewWerkzeug();
 	}
 	
 

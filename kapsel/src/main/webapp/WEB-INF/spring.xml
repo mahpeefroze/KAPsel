@@ -16,12 +16,12 @@
     <tx:annotation-driven transaction-manager="txManager"/>
  
     <!-- Transaction Manager is defined -->
-    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 	
 	<!-- Session Factory Declaration -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
             <list>
@@ -44,14 +44,14 @@
         
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.import_files">import.sql</prop>
+                <prop key="hibernate.hbm2ddl.import_files_sql_extractor">org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor</prop>
             </props>
         </property>
     </bean>
-    
-    <bean id="testBean" class="de.kapsel.global.beans.TestBean"/>
     
 	
 	<!-- KUNDE DECLARATION -->

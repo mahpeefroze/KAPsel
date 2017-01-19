@@ -289,6 +289,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	//Set to List converter -> for displaying in PF DataTable
 	public ArrayList<Bauteil> btToList(){
+		if(getSelectedProdukt()==null || getSelectedProdukt().getBauteile()==null){
+			return null;
+		}
 		ArrayList<Bauteil> sortedList= new ArrayList<Bauteil>(getSelectedProdukt().getBauteile());
 		Collections.sort(sortedList);
 		return sortedList;
@@ -322,6 +325,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	//Set to List converter -> for displaying in PF DataTable
 	public ArrayList<Arbeitsschritt> asToList(){
+		if(getSelectedProdukt()==null || getSelectedProdukt().getAschritte()==null){
+			return null;
+		}
 		ArrayList<Arbeitsschritt> sortedList= new ArrayList<Arbeitsschritt>(getSelectedProdukt().getAschritte());
 		Collections.sort(sortedList);
 		return sortedList;

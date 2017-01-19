@@ -80,12 +80,13 @@ public class UserBean implements Serializable{
 		try {
 			setUsers(getUserService().getUsers());
 			setSelectedUser(getUsers().get(0));
-			resetNewUser();
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
-		}	
+			System.out.println(e.getMessage() + ": keine User vorhanden");
+		}
+		resetNewUser();
 	}
 
 	public void addUser(){

@@ -66,12 +66,12 @@ public class MaterialBean implements Serializable{
 		try{
 			setMaterialien(getMaterialService().getMaterialien());
 			setSelectedMaterial(getMaterialien().get(0));
-			resetNewMaterial();
 		}catch (DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch (IndexOutOfBoundsException e){
 			System.out.println(e.getMessage() + ": keine Materialien vorhanden");
 		}
+		resetNewMaterial();
 	}
 
 	

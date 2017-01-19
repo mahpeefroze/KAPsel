@@ -56,7 +56,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		}catch (DataAccessException e){
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			System.out.println(e.getMessage() + ": keine Kunden vorhanden");
 			setEmptyList(true);
 		}
 		resetNewKunde();
@@ -186,7 +186,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			getUtilsContainer().updateNrStorage();
 		} catch (Exception e) {
 			getUtilsContainer().rollbackLast("KNR");
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		init();
@@ -229,6 +229,9 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public ArrayList<Auftrag> atToList(){
+		if(getSelectedKunde()==null || getSelectedKunde().getAuftraege()==null){
+			return null;
+		}
 		ArrayList<Auftrag> sortedList= new ArrayList<Auftrag>(getSelectedKunde().getAuftraege());
 		Collections.sort(sortedList);
 		return sortedList; 

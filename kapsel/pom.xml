@@ -46,7 +46,7 @@
 		<!-- WAR Packaging Framework -->
 		<version.war.plugin>2.6</version.war.plugin>
 		<!-- WildFly Maven Plugin -->
-		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+		<version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
 		
 
 
@@ -66,8 +66,8 @@
 		<j_connector.version>5.1.38</j_connector.version>
 
 		<!-- Hibernate -->
-		<hibernate.version>5.0.4.Final</hibernate.version>
-		<hibernateValidation.version>5.2.2.Final</hibernateValidation.version>
+		<hibernate.version>5.1.0.Final</hibernate.version>
+		<hibernateValidation.version>5.2.4.Final</hibernateValidation.version>
 		
 		<!-- Apache Commons -->
 		<apachecc.version>1.4</apachecc.version>
@@ -99,6 +99,12 @@
 	        <artifactId>jstl</artifactId>
 	        <version>1.2</version>
    		</dependency>
+   		
+   		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
    		
    		<dependency>
 		    <groupId>javax.servlet</groupId>
@@ -169,19 +175,22 @@
 		</dependency>
 
 
-		<!-- ___________________________________ Hibernate 4.3.8.Final ___________________________________ -->
+		<!-- ___________________________________ Hibernate  ___________________________________ -->
 		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>dom4j</artifactId>
+					<groupId>dom4j</groupId>
+				</exclusion>
+			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
+		
 
 		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
 			typesafe criteria queries -->
@@ -189,6 +198,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
 			<version>${hibernate.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Annotation processor that raising compilation errors whenever constraint 
@@ -197,6 +207,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
 			<version>${hibernateValidation.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- JSR-303 (Bean Validation) Implementation -->
@@ -204,7 +215,9 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernateValidation.version}</version>
+			<scope>provided</scope>
 		</dependency>
+		
 	
 		<!-- ___________________________________ Apache Commons ___________________________________________ -->
 		

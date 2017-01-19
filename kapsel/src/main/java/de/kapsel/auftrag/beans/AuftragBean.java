@@ -90,7 +90,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		}catch(NullPointerException e) {
 			System.out.println(e.getStackTrace());
 		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Einträge vorhanden");
+			System.out.println(e.getMessage() + ": keine Aufträge vorhanden");
 			setEmptyList(true);
 		}
 		//Clearing newAuftrag Dialog fields after insert
@@ -411,6 +411,9 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	
 	public ArrayList<ProduktWrapper> pwToList(){
+		if(getSelectedAuftrag()==null || getSelectedAuftrag().getProdukte()==null){
+			return null;
+		}
 		ArrayList<ProduktWrapper> sortedList= new ArrayList<ProduktWrapper>(getSelectedAuftrag().getProdukte());
 		Collections.sort(sortedList);
 		return sortedList; 
