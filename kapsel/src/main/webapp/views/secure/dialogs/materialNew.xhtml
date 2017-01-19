@@ -24,6 +24,10 @@
 			</p:column>
 		</p:row>
 		<p:row>
+			<p:column>#{labels.verschnitt} [%]:</p:column>
+			<p:column><p:inputText value="#{materialBean.newMaterial.verschnitt}" style="width:96%"/></p:column>
+		</p:row>
+		<p:row>
 			<p:column>#{labels.typ}:</p:column>
 			<p:column>
 				<p:selectOneMenu id="materialTypSelect" value="#{materialBean.newMaterial.typ}" style="width:150px">

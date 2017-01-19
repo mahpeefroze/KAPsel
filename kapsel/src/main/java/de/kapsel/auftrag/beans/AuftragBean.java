@@ -23,6 +23,7 @@ import de.kapsel.auftrag.services.IAuftragService;
 import de.kapsel.auftrag.services.IProduktWrapperService;
 import de.kapsel.global.DTItem;
 import de.kapsel.global.ETypes;
+import de.kapsel.global.IKapselCalculator;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
@@ -66,6 +67,8 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
 	
+	@ManagedProperty(value="#{basicAuftragCalculator}")
+	private IKapselCalculator<Auftrag> auftragCalc;
 	
 	//Gather Items to fill the table
 	public AuftragBean(){
@@ -160,6 +163,14 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	public void setUtilsContainer(UtilsBean utilsContainer) {
 		this.utilsContainer = utilsContainer;
+	}
+	
+	public IKapselCalculator<Auftrag> getAuftragCalc() {
+		return auftragCalc;
+	}
+
+	public void setAuftragCalc(IKapselCalculator<Auftrag> auftragCalc) {
+		this.auftragCalc = auftragCalc;
 	}
 
 	public ProduktWrapper getSelectedProduktWrapper() {
@@ -259,6 +270,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			getNewAuftrag().setStartdatum(new Date());
 			getNewAuftrag().getKunde().getAuftraege().add(getNewAuftrag());
 			getAuftragService().addAuftrag(getNewAuftrag());
+			getUtilsContainer().updateNrStorage();
 		} catch (Exception e) {
 			getUtilsContainer().rollbackLast("ANR");
 			e.printStackTrace();
@@ -273,6 +285,18 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void deleteAuftrag(){
 		getAuftragService().deleteAuftrag(this.selectedAuftrag);
 		myInit();
+	}
+	
+	public void calculateNetto(){
+		getSelectedAuftrag().setPreis(getAuftragCalc().calculateNettoPrice(getSelectedAuftrag()));
+	}
+	
+	public void calculateBrutto(){
+		getSelectedAuftrag().setPreis(getAuftragCalc().calculateBruttoPrice(getSelectedAuftrag()));
+	}
+	
+	public void calculateTime(){
+		getSelectedAuftrag().setZeit(getAuftragCalc().calculateTime(getSelectedAuftrag()));
 	}
 	
 	//region PRODUKT ADD/DELETE + DISPLAY

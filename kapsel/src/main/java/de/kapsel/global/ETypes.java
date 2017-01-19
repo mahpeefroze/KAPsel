@@ -84,15 +84,18 @@ public class ETypes {
 		Öl,
 		Beschlag,
 		Verbindungsmittel,
+		Kunststoffkante,
+		Holzanleimer,
 		Sonstiges;
 	}
 	
 	public enum UnitT{
 		kg,
 		l,
+		lfm,
 		m2,
 		m3,
-		pcs;
+		stck;
 	}
 	
 	public enum ProduktT{

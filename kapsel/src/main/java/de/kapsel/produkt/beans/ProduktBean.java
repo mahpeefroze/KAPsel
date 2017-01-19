@@ -15,6 +15,7 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.global.DTItem;
+import de.kapsel.global.IKapselCalculator;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
@@ -51,6 +52,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
+	
+	@ManagedProperty(value="#{basicProduktCalculator}")
+	private IKapselCalculator<Produkt> produktCalc;
 	
 	public ProduktBean(){
 		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
@@ -152,6 +156,15 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		this.utilsContainer = utilsContainer;
 	}
 
+	public IKapselCalculator<Produkt> getProduktCalc() {
+		return produktCalc;
+	}
+
+	
+	public void setProduktCalc(IKapselCalculator<Produkt> produktCalc) {
+		this.produktCalc = produktCalc;
+	}
+
 	//Getter and Setter Service
 	public IProduktService getProduktService() {
 		return produktService;
@@ -222,50 +235,11 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public void calculatePrice(){
-		double price=0;
-		try{
-			if(!getSelectedProdukt().getAschritte().isEmpty()){
-				//Work time[min] *( (tool [cost/h] + worker [cost/h])/ 60[h->min])
-				for(Arbeitsschritt a:getSelectedProdukt().getAschritte()){
-					price+=(a.getZeit()*a.getWerkzeug().getStundensatz()/60);
-				}
-			}
-			//Get Unit of Accounting for each Bauteil-Material and multiply it by the amount and price 
-			if(!getSelectedProdukt().getBauteile().isEmpty()){
-				for(Bauteil b:getSelectedProdukt().getBauteile()){
-					price+=b.getMenge()*getUoA(b)*b.getMaterial().getPreis();
-				}
-			}
-		}catch (DataAccessException e) {
-			e.printStackTrace();
-		}
-		getSelectedProdukt().setPreis(price);
-	}
-	
-	//Get Unit of Accounting for every Material
-	private double getUoA(Bauteil b){
-		switch(b.getMaterial().getEinheit()){
-			case kg: return 1;
-			case l: return 1;
-			case m2: return b.getLaenge()*b.getBreite()/(10E6);
-			case m3: return b.getLaenge()*b.getBreite()*b.getDicke()/(10E9);
-			case pcs: return 1;
-			default: return 0;
-		}
+		getSelectedProdukt().setPreis(getProduktCalc().calculateNettoPrice(getSelectedProdukt()));
 	}
 	
 	public void calculateTime(){
-		int time=0;
-		try{
-			if(!getSelectedProdukt().getAschritte().isEmpty()){
-				for(Arbeitsschritt a:getSelectedProdukt().getAschritte()){
-					time+=a.getZeit();
-				}
-			}
-		}catch (DataAccessException e) {
-			e.printStackTrace();
-		}
-		getSelectedProdukt().setZeit(time);
+		getSelectedProdukt().setZeit(getProduktCalc().calculateTime(getSelectedProdukt()));
 	}
 
 
@@ -275,6 +249,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			getNewProdukt().setPnr(getUtilsContainer().getNextMax("PNR"));
 			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
 			getProduktService().addProdukt(getNewProdukt());
+			getUtilsContainer().updateNrStorage();
 		} catch (Exception e) {
 			getUtilsContainer().rollbackLast("PNR");
 			e.printStackTrace();
