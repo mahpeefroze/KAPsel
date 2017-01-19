@@ -22,6 +22,7 @@ public class Material extends AbstractKapselEntity implements Serializable{
 	private String name;
 	private double preis;
 	private ETypes.UnitT einheit;
+	private double verschnitt=1.0;
 	private ETypes.MaterialT typ;
 	
 	
@@ -59,7 +60,15 @@ public class Material extends AbstractKapselEntity implements Serializable{
 		this.einheit = einheit;
 	}
 	
-	@Column(name="typ", nullable=true)
+	@Column(name="verschnitt", nullable=false)
+	public double getVerschnitt() {
+		return verschnitt;
+	}
+	public void setVerschnitt(double verschnitt) {
+		this.verschnitt = verschnitt;
+	}
+	
+	@Column(name="typ", nullable=false)
 	public ETypes.MaterialT getTyp() {
 		return typ;
 	}

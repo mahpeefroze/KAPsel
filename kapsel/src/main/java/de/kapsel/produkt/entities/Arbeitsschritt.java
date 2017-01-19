@@ -56,7 +56,7 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		this.name = name;
 	}
 	
-	@Column(name="zeit")
+	@Column(name="zeit", nullable=false)
 	public int getZeit() {
 		return zeit;
 	}
@@ -64,7 +64,7 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		this.zeit = zeit;
 	}
 	
-	@Column(name="notiz")
+	@Column(name="notiz", nullable=true)
 	public String getNotiz() {
 		return notiz;
 	}
@@ -73,7 +73,7 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		this.notiz = notiz;
 	}
 	
-	@Column(name="typ")
+	@Column(name="typ", nullable=false)
 	public ETypes.AschrittT getTyp() {
 		return typ;
 	}

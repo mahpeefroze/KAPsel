@@ -31,7 +31,7 @@
 									styleClass="ui-ribbon-bigbutton" update="kundeNewDlg" oncomplete="PF('newKunde').show();"/>
 						</p:column>
 						<p:column>
-							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or kundeBean.emptyList or kundeBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 									styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()" /> 
 						</p:column>
 						<p:column style="border-right-width: 1px !important;">
@@ -196,7 +196,7 @@
 				<p:dialog id="deleteKunde" header="Kunden löschen" modal="true" widgetVar="delKunde" minHeight="40" resizable="false">
 					<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
 				    <hr></hr>
-				    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" update="nav_form sect_form" oncomplete="PF('delKunde').hide();"/>
+				    <p:commandButton value="#{labels.ja}" action="#{kundeBean.deleteKunde()}" update="ribbon_form nav_form sect_form" oncomplete="PF('delKunde').hide();"/>
 				    <p:commandButton value="#{labels.nein}" onclick="PF('delKunde').hide();"/>
 				</p:dialog>
 				

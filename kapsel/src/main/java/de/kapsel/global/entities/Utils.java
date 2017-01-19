@@ -39,7 +39,7 @@ public class Utils implements Serializable{
 		this.name = name;
 	}
 	
-	@Column(name="abbr", nullable=true)
+	@Column(name="abbr", nullable=false)
 	public String getAbbr() {
 		return abbr;
 	}
@@ -63,7 +63,7 @@ public class Utils implements Serializable{
 		this.text = text;
 	}
 	
-	@Column(name="typ")
+	@Column(name="typ", nullable=false)
 	public char getTyp() {
 		return typ;
 	}

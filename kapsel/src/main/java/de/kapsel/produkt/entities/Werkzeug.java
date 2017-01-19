@@ -38,7 +38,7 @@ public class Werkzeug implements Serializable{
 		this.name = name;
 	}
 	
-	@Column(name="stundensatz", nullable=true)
+	@Column(name="stundensatz", nullable=false)
 	public double getStundensatz() {
 		return stundensatz;
 	}

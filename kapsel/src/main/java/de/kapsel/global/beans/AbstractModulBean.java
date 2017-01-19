@@ -1,15 +1,26 @@
 package de.kapsel.global.beans;
 
+import java.util.ArrayList;
+
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 
+import de.kapsel.global.DTItem;
+
 public abstract class AbstractModulBean {
 	
+	protected long passedID;
 	protected boolean emptyList;
 	protected boolean editMode;
-	protected long passedID;
 	protected String activeTabs;
+	
+	public long getPassedID() {
+		return passedID;
+	}
+	public void setPassedID(long passedID) {
+		this.passedID = passedID;
+	}
 	
 	public boolean isEmptyList() {
 		return emptyList;
@@ -32,12 +43,9 @@ public abstract class AbstractModulBean {
 		setEditMode(false);
 	}
 	
-	public long getPassedID() {
-		return passedID;
-	}
-	public void setPassedID(long passedID) {
-		this.passedID = passedID;
-	}
+	public abstract void cancelEditMode();
+	
+	public abstract void onEditComplete();
 
 	public String getActiveTabs() {
 		return activeTabs;
@@ -57,8 +65,14 @@ public abstract class AbstractModulBean {
 		setActiveTabs(ap.getActiveIndex());
 	}
 	
-	public abstract void cancelEditMode();
+	//Only 1 Position can be deleted at the same time, so just -1 everything that was higher than deleted item
+	public void updateItemPosition(int delPos, ArrayList<DTItem> items){
+		for(DTItem t:items){
+			if(t.getPosition()>delPos){
+				t.setPosition(t.getPosition()-1);
+			}
+		}
+	}
 	
-	public abstract void onEditComplete();
 
 }

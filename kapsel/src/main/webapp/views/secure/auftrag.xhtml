@@ -35,7 +35,7 @@
 									styleClass="ui-ribbon-bigbutton" oncomplete="PF('newAuftrag').show();"/>
 						</p:column>
 						<p:column>
-							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER')or auftragBean.emptyList or auftragBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()" /> 
 						</p:column>
 						<p:column style="border-right-width: 1px !important;">
@@ -297,7 +297,7 @@
 				<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
 					<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
 				    <hr></hr>
-				    <p:commandButton value="#{labels.ja}" action="#{auftragBean.deleteAuftrag()}" update="nav_form sect_form" oncomplete="PF('delAuftrag').hide();"/>
+				    <p:commandButton value="#{labels.ja}" action="#{auftragBean.deleteAuftrag()}" update="ribbon_form nav_form sect_form" oncomplete="PF('delAuftrag').hide();"/>
 				    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
 				</p:dialog>
 					

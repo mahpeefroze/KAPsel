@@ -34,7 +34,7 @@
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
 						</p:column>
 						<p:column>
-							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList or produktBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()"  /> 
 						</p:column>
 						<p:column style="border-right-width: 1px !important;">
@@ -289,7 +289,7 @@
 				<p:dialog header="Produkt löschen" modal="true" widgetVar="delProdukt" minHeight="40" resizable="false">
 					<p>Möchten Sie wirklich dieses Produkt löschen?</p>
 				    <hr></hr>
-				    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" update="nav_form sect_form" oncomplete="PF('delProdukt').hide();"/>
+				    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" update="ribbon_form nav_form sect_form" oncomplete="PF('delProdukt').hide();"/>
 				    <p:commandButton value="#{labels.nein}" onclick="PF('delProdukt').hide();"/>
 				</p:dialog>	
 				

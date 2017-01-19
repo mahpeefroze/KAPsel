@@ -7,12 +7,18 @@
 	<h:form id="dlgNewUserPanel">
 	<p:panelGrid>
 		<p:row>
-			<p:column>#{labels.nachname}:</p:column>
-			<p:column><p:inputText value="#{userBean.newUser.fullname}" style="width:200px;"/></p:column>
+			<p:column>#{labels.userName}:</p:column>
+			<p:column>
+				<p:inputText id="userNameInput" value="#{userBean.newUser.name}" style="width:200px;"/>
+				<p:tooltip for="userNameInput" value="Anmeldename/Login" />
+			</p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.userName}:</p:column>
-			<p:column><p:inputText value="#{userBean.newUser.name}" style="width:200px;"/></p:column>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column>
+				<p:inputText id="userFullnameInput" value="#{userBean.newUser.fullname}" style="width:200px;"/>
+				<p:tooltip for="userFullnameInput" value="Angezeigter Name" />
+			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.userRole}:</p:column>

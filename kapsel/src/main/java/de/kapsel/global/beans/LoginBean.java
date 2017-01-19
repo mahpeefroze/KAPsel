@@ -101,7 +101,7 @@ public class LoginBean implements Serializable{
 
 
 	@PostConstruct
-	public void init() {
+	public void myInit() {
 		try {
 			setLoginUser(new User());
 			setLogged(false);

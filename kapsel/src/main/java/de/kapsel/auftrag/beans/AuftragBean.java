@@ -21,6 +21,7 @@ import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.auftrag.entities.ProduktWrapper;
 import de.kapsel.auftrag.services.IAuftragService;
 import de.kapsel.auftrag.services.IProduktWrapperService;
+import de.kapsel.global.DTItem;
 import de.kapsel.global.ETypes;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.beans.UtilsBean;
@@ -74,7 +75,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	}
 
 	@PostConstruct
-    public void init() {
+    public void myInit() {
 		try{
 			setAuftraege(auftragService.getAuftraegeWithChildren());
 			setSelectedAuftrag(getAuftraege().get(0));
@@ -262,7 +263,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			getUtilsContainer().rollbackLast("ANR");
 			e.printStackTrace();
 		}
-		init();
+		myInit();
 	}
 
 	public void updateAuftrag(){
@@ -271,7 +272,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	public void deleteAuftrag(){
 		getAuftragService().deleteAuftrag(this.selectedAuftrag);
-		init();
+		myInit();
 	}
 	
 	//region PRODUKT ADD/DELETE + DISPLAY
@@ -380,19 +381,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void deleteProduktWrapper(){
 		if(getSelectedProduktWrapper()!=null){
 			tempDelPwList.add(getSelectedProduktWrapper());
-			updatePWPosition(getSelectedProduktWrapper().getPosition());
+			updateItemPosition(getSelectedProduktWrapper().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getProdukte()));
 			getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
 		}
 	}
-	
-	private void updatePWPosition(int delPos){
-		for(ProduktWrapper pw:getSelectedAuftrag().getProdukte()){
-			if(pw.getPosition()>delPos){
-				pw.setPosition(pw.getPosition()-1);
-			}
-		}
-	}
-
 	
 	public ArrayList<ProduktWrapper> pwToList(){
 		if(getSelectedAuftrag()==null || getSelectedAuftrag().getProdukte()==null){
@@ -433,16 +425,8 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	@Override
 	public void cancelEditMode() {
-		
-//		if(tempPwList!=null && !tempPwList.isEmpty()){
-//			getSelectedAuftrag().getProdukte().removeAll(tempPwList);
-//		}
-//		if(tempDelPwList!=null && !tempDelPwList.isEmpty()){
-//			getSelectedAuftrag().getProdukte().addAll(tempDelPwList);
-//		}
 		Auftrag orig = getAuftragService().getAuftragById(getSelectedAuftrag().getId());
-		int i=getAuftraege().indexOf(getSelectedAuftrag());
-		getAuftraege().set(i, orig);
+		getAuftraege().set(getAuftraege().indexOf(getSelectedAuftrag()), orig);
 		setSelectedAuftrag(orig);
 		disableEditMode();
 	}

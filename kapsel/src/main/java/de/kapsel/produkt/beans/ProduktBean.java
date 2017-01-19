@@ -58,7 +58,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	//Prepare data for first display or update after insert/delete
 	@PostConstruct
-    public void init() {
+    public void myInit() {
 		try{
 			setProdukte(getProduktService().getProdukteWithChildren());
 			setSelectedProdukt(getProdukte().get(0));
@@ -279,7 +279,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 			getUtilsContainer().rollbackLast("PNR");
 			e.printStackTrace();
 		}
-		init();
+		myInit();
 	}
 	
 	public void updateProdukt(){
@@ -288,7 +288,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 
 	public void deleteProdukt(){
 		getProduktService().deleteProdukt(getSelectedProdukt());
-		init();
+		myInit();
 	}
 	
 	
@@ -363,15 +363,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	
 	//endregion
 	
-	//Only 1 Position can be deleted at the same time, so just -1 everything that was higher than deleted item
-	private void updateItemPosition(int delPos, ArrayList<DTItem> items){
-		for(DTItem t:items){
-			if(t.getPosition()>delPos){
-				t.setPosition(t.getPosition()-1);
-			}
-		}
-	}
-	
 	
 	//region editMode
 	public void enableEditMode(){
@@ -388,14 +379,9 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 
 	@Override
 	public void cancelEditMode() {
-		//Remove Arbeitsschritte if any were added
-		if(tempAsSet!=null && !tempAsSet.isEmpty()){
-			getSelectedProdukt().getAschritte().removeAll(tempAsSet);
-		}
-		//Remove Bauteil if any were added
-		if(tempBtSet!=null && !tempBtSet.isEmpty()){
-			getSelectedProdukt().getBauteile().removeAll(tempBtSet);
-		}
+		Produkt orig = getProduktService().getProduktById(getSelectedProdukt().getId());
+		getProdukte().set(getProdukte().indexOf(getSelectedProdukt()), orig);
+		setSelectedProdukt(orig);
 		disableEditMode();
 	}
 	

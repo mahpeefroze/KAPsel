@@ -50,7 +50,7 @@
 			<p:column colspan="2"><p:inputText value="#{auftragBean.newAuftrag.preis}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-	<p:commandButton value="OK" action="#{auftragBean.addAuftrag()}" update="dlgNewAuftragPanel nav_form" oncomplete="PF('newAuftrag').hide();" />
+	<p:commandButton value="OK" action="#{auftragBean.addAuftrag()}" update="dlgNewAuftragPanel nav_form ribbon_form" oncomplete="PF('newAuftrag').hide();" />
 	<p:commandButton value="Abbrechen" action="#{auftragBean.resetNewAuftrag()}" update="dlgNewAuftragPanel" oncomplete="PF('newAuftrag').hide();" />	
 	</h:form>
 	

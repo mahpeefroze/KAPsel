@@ -47,7 +47,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	public KundeBean(){}
 
 	@PostConstruct
-    public void init() {
+    public void myInit() {
 		try{
 			setKunden(getKundeService().getKundenWithChildren());
 			setSelectedKunde(getKunden().get(0));
@@ -176,7 +176,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			e.printStackTrace();
 		}
 		
-		init();
+		myInit();
 
 	}
 	
@@ -212,7 +212,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 
 	public void deleteKunde(){
 		getKundeService().deleteKunde(getSelectedKunde());
-		init();
+		myInit();
 	}
 	
 	public ArrayList<Auftrag> atToList(){
@@ -244,6 +244,9 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 
 	@Override
 	public void cancelEditMode() {
+		Kunde orig = getKundeService().getKundeById(getSelectedKunde().getId());
+		getKunden().set(getKunden().indexOf(getSelectedKunde()), orig);
+		setSelectedKunde(orig);
 		disableEditMode();
 	}
 

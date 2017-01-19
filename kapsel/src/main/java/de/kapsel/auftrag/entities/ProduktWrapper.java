@@ -13,12 +13,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import de.kapsel.global.DTItem;
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Produkt;
 
 @Entity
 @Table(name="produktwrapper")
-public class ProduktWrapper extends AbstractKapselEntity implements Serializable, Comparable<ProduktWrapper>{
+public class ProduktWrapper extends AbstractKapselEntity implements Serializable, Comparable<ProduktWrapper>, DTItem{
 	
 	private static final long serialVersionUID = 1L;
 	private long id;
