@@ -5,22 +5,21 @@
     xmlns:p="http://primefaces.org/ui">
 
 	<h:form>
-	<p:dataTable var="item" value="#{kundeBean.kunden}"
-		selectionMode="single" selection="#{targetKunde}"
-		rowKey="#{item.knr}" emptyMessage="#{errors_msgs.norecords}" sortBy="#{item.knr}">
+	<p:dataTable var="item" value="#{userBean.users}"
+		selectionMode="single" selection="#{targetBearbeiter}"
+		rowKey="#{item.id}" emptyMessage="#{errors_msgs.norecords}" sortBy="#{item.id}">
 		
 		<p:ajax event="rowSelect" update="#{targetUpdate}"/>
-		
-		<p:column headerText="#{labels.k_nr}" style="width:90px;" >
-			<h:outputText value="#{item.knr}" />
+							
+		<p:column headerText="#{labels.id}" style="width:50px;">
+			<h:outputText value="#{item.id}" />
 		</p:column>
 		<p:column headerText="#{labels.nachname}">
 			<h:outputText value="#{item.name}" />
 		</p:column>
-		<p:column headerText="#{labels.typ}" style="width:80px;">
-			<h:outputText value="#{item.typ}" />
+		<p:column headerText="#{labels.userRole}" style="width:80px;" >
+			<h:outputText value="#{item.role}" />
 		</p:column>
-		
 	</p:dataTable>
 	<p:spacer/>
 	</h:form>

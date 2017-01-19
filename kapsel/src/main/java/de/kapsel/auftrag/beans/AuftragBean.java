@@ -26,7 +26,6 @@ import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.beans.UtilsBean;
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.kunde.entities.Kunde;
-import de.kapsel.kunde.services.IKundeService;
 import de.kapsel.produkt.entities.Produkt;
 import de.kapsel.produkt.services.IProduktService;
 
@@ -41,7 +40,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private Auftrag newAuftrag;
 	private ProduktWrapper selectedProduktWrapper;
 	private Produkt newProdukt;
-	private Produkt selectedTemplate;
 	private long selectedTemplateId;
 	private List<Produkt> templates;
 	private DualListModel<String> stdProdukte;
@@ -63,9 +61,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	
 	@ManagedProperty(value="#{produktWrapperService}")
 	private IProduktWrapperService produktWrapperService;
-	
-	@ManagedProperty(value="#{kundeService}")
-	private IKundeService kundeService;
 	
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
@@ -157,14 +152,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void setProduktWrapperService(IProduktWrapperService produktWrapperService) {
 		this.produktWrapperService = produktWrapperService;
 	}
-
-	public IKundeService getKundeService() {
-		return kundeService;
-	}
-
-	public void setKundeService(IKundeService kundeService) {
-		this.kundeService = kundeService;
-	}
 	
 	public UtilsBean getUtilsContainer() {
 		return utilsContainer;
@@ -188,14 +175,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 
 	public void setNewProdukt(Produkt newProdukt) {
 		this.newProdukt = newProdukt;
-	}
-	
-	public Produkt getSelectedTemplate() {
-		return selectedTemplate;
-	}
-
-	public void setSelectedTemplate(Produkt selectedTemplate) {
-		this.selectedTemplate = selectedTemplate;
 	}
 	
 	public long getSelectedTemplateId() {
@@ -267,6 +246,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		return "kunde.xhtml?faces-redirect=true&pK="+id;
 	}
 	
+	public String redirectToProdukt(long id){
+		return "produkt.xhtml?faces-redirect=true&pP="+id;
+	}
+	
 	public void addAuftrag(){
 		try {
 	
@@ -294,9 +277,11 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	//region PRODUKT ADD/DELETE + DISPLAY
 	
 	public void addProduktNew(){
-		ProduktWrapper pw = createProduktWrapper();
-		pw.setProdukt(getNewProdukt());
-		
+		if(getNewProdukt()!=null){
+			ProduktWrapper pw = createProduktWrapper();
+			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
+			pw.setProdukt(getNewProdukt());
+		}
 	}
 	
 	public void addProduktFromTemplate(){
@@ -353,6 +338,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		selProdBool=false;
 		switch(source){
 		case 0: newProdBool=true;
+				newProdukt = new Produkt();
 				break;
 		case 1: templProdBool=true;
 				prepareProduktTemplates();
@@ -388,8 +374,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		pw.setStueckzahl(1);
 		getSelectedAuftrag().getProdukte().add(pw);
 		tempPwList.add(pw);
-		//TODO Remove testing output
-		System.out.println(pw.getbKey() + " Auftrage_Produkte: " + getSelectedAuftrag().getProdukte().size() + " TempPWList: " + tempPwList.size());
 		return pw;
 	}
 	
@@ -447,12 +431,16 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	@Override
 	public void cancelEditMode() {
 		
-		if(tempPwList!=null && !tempPwList.isEmpty()){
-			getSelectedAuftrag().getProdukte().removeAll(tempPwList);
-		}
-		if(tempDelPwList!=null && !tempDelPwList.isEmpty()){
-			getSelectedAuftrag().getProdukte().addAll(tempDelPwList);
-		}
+//		if(tempPwList!=null && !tempPwList.isEmpty()){
+//			getSelectedAuftrag().getProdukte().removeAll(tempPwList);
+//		}
+//		if(tempDelPwList!=null && !tempDelPwList.isEmpty()){
+//			getSelectedAuftrag().getProdukte().addAll(tempDelPwList);
+//		}
+		Auftrag orig = getAuftragService().getAuftragById(getSelectedAuftrag().getId());
+		int i=getAuftraege().indexOf(getSelectedAuftrag());
+		getAuftraege().set(i, orig);
+		setSelectedAuftrag(orig);
 		disableEditMode();
 	}
 

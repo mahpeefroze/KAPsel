@@ -15,26 +15,56 @@
 	<p:separator/>
 	
 	<p:panelGrid id="newProduktPanel" rendered="#{auftragBean.newProdBool}">
-		New Produkt Panel
+		<p:row>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column>
+				<p:inputText value="#{auftragBean.newProdukt.name}" />
+			</p:column>
+			<p:column>#typ:</p:column>
+			<p:column>
+				<p:selectOneMenu id="newPtypSelect" value="#{auftragBean.newProdukt.typ}" style="width:200px">
+					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.produktT}" var="typ" itemLabel="#{typ}" itemValue="#{produktT}"/>
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.pZeit}:</p:column>
+			<p:column>
+				<p:inputText value="#{auftragBean.newProdukt.zeit}" />#{labels.zeitEinheit}
+			</p:column>
+			<p:column>#{labels.preis}:</p:column>
+			<p:column>
+				<p:inputText value="#{auftragBean.newProdukt.preis}" />#{labels.waehrung}
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="4">#{labels.beschreibung}:</p:column>
+		</p:row>
+		<p:row>
+			<!-- Bezeichnungsfeld -->
+			<p:column colspan="4">
+				<p:inputTextarea styleClass="fullWidth" value="#{auftragBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."/>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:commandButton value="Add" action="#{auftragBean.addProduktNew()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
+			</p:column>
+		</p:row>
 	</p:panelGrid>
 	
-	<p:panelGrid id="templateProduktPanel" rendered="#{auftragBean.tempProdBool}" var="t">
+	<p:panelGrid id="templateProduktPanel" rendered="#{auftragBean.tempProdBool}">
 		<p:row>
-			<p:column rowspan="2">
+			<p:column>
 				<p:selectOneListbox value="#{auftragBean.selectedTemplateId}">
 					<f:selectItems var="item" value="#{auftragBean.templates}" itemLabel="#{item.pnr} #{item.name}" itemValue="#{item.id}"/>
 				</p:selectOneListbox>
 			</p:column>
 			<p:column>
-				<p:commandButton value="Add empty" action="#{auftragBean.addProduktFromTemplate()}" update=":sect_form"/>
+				<p:commandButton value="Add empty" action="#{auftragBean.addProduktFromTemplate()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
 			</p:column>
 		</p:row>
-		<p:row>
-			<p:column>
-				<p:commandButton value="Add and Edit"/>
-			</p:column>
-		</p:row>
-		
 	</p:panelGrid>
 	
 	<p:panelGrid id="selectProduktPanel" rendered="#{auftragBean.selProdBool}">
@@ -46,7 +76,7 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:commandButton value="Add selected" action="#{auftragBean.addProduktFromSelection()}" update=":sect_form"/>
+				<p:commandButton value="Add selected" action="#{auftragBean.addProduktFromSelection()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
 			</p:column>
 		</p:row>
 	</p:panelGrid>

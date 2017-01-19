@@ -94,8 +94,6 @@ public class UtilsBean implements Serializable{
 	
 	//endregion
 
-
-
 	@PostConstruct
 	public void myInit(){
 		try {
@@ -126,10 +124,6 @@ public class UtilsBean implements Serializable{
 	
 	public void rollbackLast(String name){
 		System.out.println(this.nrStorage.rollbackLast(name) + "is free again.");
-	}
-	
-	public long offerNr(){
-		return 2107010000;
 	}
 
 	//region UTILS Settings

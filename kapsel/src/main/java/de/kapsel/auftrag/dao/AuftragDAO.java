@@ -19,6 +19,8 @@ public class AuftragDAO extends AbstractDAO<Auftrag> implements ILazyLoadDAO<Auf
 	public List<Auftrag> getItemsWithChildren() {
 		String query="select distinct a"+
 					" from Auftrag a"+
+					" left join fetch a.kunde k" +
+					" left join fetch a.bearbeiter" +
 					" left join fetch a.produkte p"+
 					" left join fetch p.produkt";
 		

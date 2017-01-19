@@ -1,9 +1,55 @@
 @CHARSET "UTF-8";
 
+body{
+	background-color:#e5f2e5;
+}
+
+#header {
+    border-color:#004c00;
+    color: #578BC9;
+}
+
+#nav {
+	border-color:#004c00;
+    background-color:#cce5cc;
+}
+
+#section{
+	border-color:#004c00;
+    background-color:#cce5cc;
+}
+
+.ui-accordion-content{
+	background-color:#cce5cc;
+}
+
+.ui-accordion .ui-accordion-header{
+	
+}
+
+.ui-accordion-header.ui-state-active{
+	background: linear-gradient(rgba(59, 173, 53, 0.2), rgba(59, 173, 53, 0.8));
+}
+
+.ui-accordion-header.ui-state-hover{
+	background: linear-gradient(rgba(59, 173, 53, 0.8), rgba(59, 173, 53, 0.2));
+}
+
+.ui-dialog-titlebar{
+	background: linear-gradient(rgba(59, 173, 53, 0.8), rgba(59, 173, 53, 0.2));
+}
+
+.ui-datatable-header {
+	background: linear-gradient(rgba(25,140,25, 0.2), rgba(25,140,25, 0.8));
+}
+
+.bgRibbon{
+	background: linear-gradient(rgba(25,140,25, 0.2), rgba(25,140,25, 0.65));
+}
+
 .ui-button-icon-left.ui-icon.ui-c.fa.fa-calculator{
 	width: 30px;
 	height: 30px;
 	margin-left: -14px;
 	margin-top: -8px;
 }
-

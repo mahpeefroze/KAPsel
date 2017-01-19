@@ -11,21 +11,49 @@
 	float:right;
 }
 
+body{
+	background-color: #f0f0fc;
+}
+
 #header {
-    border-color: #578BC9;
+    border-color:#9898eb;
     color: #578BC9;
 }
 
 #nav {
-	border-color:#578BC9;
-    color:#578BC9;
+	border-color:#9898eb;
+    background-color:#eaeafb;
 }
 
 #section{
-	border-color:#578BC9;
-    color:#578BC9;
+	border-color:#9898eb;
+    background-color:#eeeeee;
 }
 
 .ui-accordion-content{
-	background-color: rgba(174, 204, 240, 0.2);
+	background-color:#eaeafb;
+}
+
+.ui-accordion .ui-accordion-header{
+	
+}
+
+.ui-accordion-header.ui-state-active{
+	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
+}
+
+.ui-accordion-header.ui-state-hover{
+	background: linear-gradient(rgba(170,170,238, 0.6), rgba(170,170,238, 0.2));
+}
+
+.ui-dialog-titlebar{
+	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
+}
+
+.ui-datatable-header {
+	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
+}
+
+.bgRibbon{
+	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
 }

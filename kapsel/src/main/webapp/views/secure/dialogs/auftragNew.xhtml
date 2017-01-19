@@ -7,32 +7,36 @@
 	<h:form id="dlgNewAuftragPanel">
 	<p:panelGrid>
 		<p:row>
-			<p:column>#{labels.anr}:</p:column>
-			<p:column>#{auftragBean.selectedAuftrag.anr + 1}</p:column>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column colspan="2"><p:inputText value="#{auftragBean.newAuftrag.name}" style="width:200px;"/></p:column>
 			<p:column>#{labels.erstDatum}:</p:column>
-			<p:column colspan="2">
+			<p:column>
 				<h:outputText value="#{currentDate}">
 					<f:convertDateTime pattern="dd.MM.yyyy" type="date"/>
 				</h:outputText>
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.nachname}:</p:column>
-			<p:column><p:inputText value="#{auftragBean.newAuftrag.name}" style="width:200px;"/></p:column>
 			<p:column>#{labels.kunde}:</p:column>
 			<p:column>
 				<h:outputText value="#{auftragBean.newAuftrag.kunde.name}"/>
 			</p:column>
 			<p:column  style="width:40px;">
-				<p:commandButton icon="fa fa-user-plus" oncomplete="PF('kundeSelect').show();"/>
+				<p:commandButton icon="fa fa-user-plus" oncomplete="PF('newKundeSelect').show();"/>
 			</p:column>
-		</p:row>
-		<p:row>
 			<p:column>#{labels.terminL}:</p:column>
 			<p:column ><p:calendar showOn="button" pattern="dd.MM.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}" /></p:column>
+			
+		</p:row>
+		<p:row>
 			<p:column>#{labels.verantwortlichMA}:</p:column>
-			<p:column></p:column>
-			<p:column></p:column>
+			<p:column>
+				<h:outputText value="#{auftragBean.newAuftrag.bearbeiter.name}"/>
+			</p:column>
+			<p:column style="width:40px;">
+				<p:commandButton icon="fa fa-user-plus" oncomplete="PF('newBearbeiterSelect').show();"/>
+			</p:column>
+			<p:column colspan="2"></p:column>
 		</p:row>
 		<p:row>
 			<p:column colspan="5">
@@ -50,10 +54,23 @@
 	<p:commandButton value="Abbrechen" action="#{auftragBean.resetNewAuftrag()}" update="dlgNewAuftragPanel" oncomplete="PF('newAuftrag').hide();" />	
 	</h:form>
 	
-	<p:dialog id="miniKListeDlg" header="Kunden auswählen"  widgetVar="kundeSelect" minHeight="40" resizable="false" modal="true" appendTo="@(body)">
-		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml"/>
+	<p:dialog id="miniKListeDlgNew" header="Kunden auswählen"  widgetVar="newKundeSelect" minHeight="40" width="450" resizable="false" modal="true" appendTo="@(body)">
+		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml">
+			<ui:param name="targetKunde" value="#{auftragBean.newAuftrag.kunde}" />
+			<ui:param name="targetUpdate" value=":dlgNewAuftragPanel" />
+		</ui:include>
+		<p:commandButton value="OK" oncomplete="PF('newKundeSelect').hide();" />
+		<p:commandButton value="Abbrechen" oncomplete="PF('newKundeSelect').hide();" />
 	</p:dialog>
 	
+	<p:dialog id="miniBListeDlgNew" header="Bearbeiter auswählen"  widgetVar="newBearbeiterSelect" minHeight="40" width="400" resizable="false" modal="true" appendTo="@(body)">
+		<ui:include src="/views/secure/dialogs/miniBearbeiterList.xhtml">
+			<ui:param name="targetBearbeiter" value="#{auftragBean.newAuftrag.bearbeiter}" />
+			<ui:param name="targetUpdate" value=":dlgNewAuftragPanel" />
+		</ui:include>
+		<p:commandButton value="OK" oncomplete="PF('newBearbeiterSelect').hide();" />
+		<p:commandButton value="Abbrechen" oncomplete="PF('newBearbeiterSelect').hide();" />
+	</p:dialog>
 	
 
 </ui:composition>

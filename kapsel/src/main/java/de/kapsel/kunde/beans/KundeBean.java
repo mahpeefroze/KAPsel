@@ -161,21 +161,8 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		setSelectedKunde((Kunde) event.getObject());
     }
 
-	
-	//Basic strategy for creating new KundenNr, get highest existing and increment it by 1
-	public long createKnr(){
-		long knr = 0;
-		for(Kunde k : getKunden()){
-			if(k.getKnr()>knr){
-				knr=k.getKnr();
-			}
-		}
-		return knr + 1;
-	}
-	
 	public void addKunde(){
 		try {
-			getNewKunde().setKnr(createKnr());
 			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 			getNewKunde().setbKey(AbstractKapselEntity.generateBKey());
 			getNewKunde().setKnr(getUtilsContainer().getNextMax("KNR"));

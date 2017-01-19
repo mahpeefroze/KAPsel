@@ -3,9 +3,11 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     xmlns:p="http://primefaces.org/ui">
 
 <h:outputStylesheet name="global.css" library="css" />
+<h:outputStylesheet name="ribbon.css" library="css" />
 <h:outputStylesheet name="auftrag.css" library="css" />
 
 <f:metadata>
@@ -22,50 +24,69 @@
 <body>
 
 	<!-- OBEN, HIER KOMMT DER RIBBON REIN -->
-	<div id="header" class="float_frame">
+	<div id="header" class="bordered-frame">
 		<h:form id="ribbon_form">
-			<p:ribbon>
-				<p:tab title="#{labels.auftrag}">
-					<p:ribbonGroup>
-						<h1>#{labels.auftraege}</h1>
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.editMode}" value="#{labels.add}" icon="fa fa-file-text-o"
-							styleClass="ui-ribbon-bigbutton" update="auftragNewDlg" oncomplete="PF('newAuftrag').show();"/>
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+		
+			<p:panel styleClass="bgRibbon">
+			<p:panelGrid styleClass="fullWidth">
+						<p:row>
+						<p:column>
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.editMode}" value="#{labels.add}" icon="fa fa-file-text-o"
+									styleClass="ui-ribbon-bigbutton" oncomplete="PF('newAuftrag').show();"/>
+						</p:column>
+						<p:column>
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()" /> 
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.emptyList or auftragBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
+						</p:column>
+						<p:column style="border-right-width: 1px !important;">
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or auftragBean.emptyList or auftragBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delAuftrag').show();"/>
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{auftragBean.editMode}">
-						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" oncomplete="unlockSelection()"/>
-						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
-							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton disabled="#{auftragBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-						<p:commandButton disabled="#{auftragBean.editMode}" value="To Word" icon="fa fa-file-word-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton disabled="#{auftragBean.editMode}" value="Print" icon="fa fa-print"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton disabled="#{auftragBean.editMode}" value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
-					</p:ribbonGroup>
-					
-				</p:tab>
-
-			</p:ribbon>
-			
+						</p:column>
+						
+						
+						<p:column rendered="#{auftragBean.editMode}">
+							<p:commandButton value="#{labels.ok}" icon="fa fa-check"
+									styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" oncomplete="unlockSelection()"/>
+						</p:column>
+						<p:column rendered="#{auftragBean.editMode}" style="border-right-width: 1px !important;">
+							<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
+									styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
+						</p:column>
+						
+						
+						<p:column>
+							<p:commandButton disabled="#{auftragBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						<p:column style="border-right-width: 1px !important;">
+							<p:commandButton disabled="#{auftragBean.editMode}" value="To Word" icon="fa fa-file-word-o"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						<p:column>
+							<p:commandButton disabled="#{auftragBean.editMode}" value="Print" icon="fa fa-print"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						
+						<p:column styleClass="pageTitleCell">
+						<p>#{labels.auftrag}</p>
+						</p:column>
+						
+						<p:column style="float: right;">
+							<p:commandButton disabled="#{auftragBean.editMode}" value="#{labels.menu}" icon="fa fa-home" 
+								styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
+						</p:column>
+						</p:row>
+						<p:row>
+						<p:column colspan="3" style="border-right-width: 1px !important;">#{labels.action}</p:column>
+						<p:column colspan="2" rendered="#{auftragBean.editMode}" style="border-right-width: 1px !important;">#{labels.edit}</p:column>
+						<p:column colspan="2" style="border-right-width: 1px !important;">#{labels.export}</p:column>
+						<p:column>#{labels.print}</p:column>
+						<p:column colspan="2"/>
+						
+						</p:row>
+					</p:panelGrid>
+			</p:panel>
+								
 		</h:form>
 		
 		
@@ -74,219 +95,236 @@
 
 	<div id="middle">
 
-
 		<!-- LINKE SEITE -->
-		<h:form id="nav_form">
-			<p:remoteCommand name="lockSelection" update="nav_form" action="#{auftragBean.enableEditMode()}"/>
-			<p:remoteCommand name="unlockSelection" update="nav_form" />
-			<div id="nav_container">
-				<div id="nav" class="float_frame">
+		<div id="nav" class="bordered-frame">
+			<h:form id="nav_form">
+			
+				<p:remoteCommand name="lockSelection" update="nav_form" action="#{auftragBean.enableEditMode()}"/>
+				<p:remoteCommand name="unlockSelection" update="nav_form" />
+				
+				<!-- Tabelle mit allen Aufträgen -->
+				<p:dataTable id="auftragDT" var="item"
+					value="#{auftragBean.auftraege}" selectionMode="single"
+					selection="#{auftragBean.selectedAuftrag}" disabledSelection="#{auftragBean.editMode}"
+					rowKey="#{item.id}" sortBy="#{item.anr}" emptyMessage="#{errors.norecords}">
+					<f:facet name="header">#{labels.auftragListe}</f:facet>
 
-					<!-- Tabelle mit allen Aufträgen -->
-					<p:dataTable id="auftragDT" var="item"
-						value="#{auftragBean.auftraege}" selectionMode="single"
-						selection="#{auftragBean.selectedAuftrag}" disabledSelection="#{auftragBean.editMode}"
-						rowKey="#{item.id}" sortBy="#{item.anr}" emptyMessage="#{errors.norecords}">
-						<f:facet name="header">#{labels.auftragListe}</f:facet>
+					<p:ajax event="rowSelect" listener="#{auftragBean.loadAuftrag}"
+						update=":sect_form" />
 
+					<p:column headerText="#{labels.a_nr}" style="width: 90px;">
+						<h:outputText value="#{item.anr}" />
+					</p:column>
+					<p:column headerText="#{labels.nachname}">
+						<h:outputText value="#{item.name}" />
+					</p:column>
+					<p:column headerText="#{labels.terminL}">
+						<h:outputText value="#{item.sollenddatum}">
+							<f:convertDateTime pattern="dd.MM.yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{labels.kunde}">
+						<h:outputText value="#{item.kunde.name}" />
+					</p:column>
+				</p:dataTable>
+				
+			</h:form>
+		</div>
 
-						<p:ajax event="rowSelect" listener="#{auftragBean.loadAuftrag}"
-							update=":sect_form" />
-						<!-- 
-					<p:ajax event="rowUnselect" listener="#{AuftragBean.clearAuftrag}" update="auftrag.xhtml:section_container" />
-					-->
-
-						<p:column headerText="#{labels.a_nr}">
-							<h:outputText value="#{item.anr}" />
-						</p:column>
-						<p:column headerText="#{labels.nachname}">
-							<h:outputText value="#{item.name}" />
-						</p:column>
-						<p:column headerText="#{labels.terminL}">
-							<h:outputText value="#{item.sollenddatum}">
-								<f:convertDateTime pattern="dd.MM.yyyy" />
-							</h:outputText>
-						</p:column>
-						<p:column headerText="#{labels.kunde}">
-							<h:outputText value="#{item.kunde.name}" />
-						</p:column>
-					</p:dataTable>
-
-					<hr></hr>
-				</div>
-			</div>
-		</h:form>
 
 		<!-- RECHTE SEITE -->
-		<h:form id="sect_form">
-			<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{auftragBean.onEditComplete()}"/>
-			<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{auftragBean.cancelEditMode()}"/>
-			<div id="section_container">
-				<div id="section" class="float_frame">
-					<p:accordionPanel multiple="true">
-						<!-- Auftragsdetails -->
-						<p:tab title="#{labels.auftragDetail}">
+		
+		<div id="section" class="bordered-frame">
+			<h:form id="sect_form">
+				<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{auftragBean.onEditComplete()}"/>
+				<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{auftragBean.cancelEditMode()}"/>
+				
+				<!-- 
+				c:set helps evaluate list of active tabs, 0 is a valid index for a tab but can't be set to the activeTabs property, resulting in
+				exception about wrong syntax. c:set wraps around and lets primefaces insert the valid 0 into property 
+				 -->
+				 
+				<c:set var="activeTabs" value="#{empty auftragBean.activeTabs ? 0 : auftragBean.activeTabs}" scope="request" />
+				<p:accordionPanel multiple="true" activeIndex="#{activeTabs}" >
+					<p:ajax event="tabChange" listener="#{auftragBean.onTabChange}" />
+					<p:ajax event="tabClose" listener="#{auftragBean.onTabClose}" />
+					<!-- Auftragsdetails -->
+					<p:tab title="#{labels.auftragDetail}">
+						
+						<p:spacer/>
+						
+						<!-- Edit Mode -->
+						<ui:fragment rendered="#{auftragBean.editMode}">
+							<ui:include src="/views/secure/includes/auftragEdit.xhtml"/>
+						</ui:fragment>
+						
+						<!-- Display Mode -->
+						<ui:fragment rendered="#{not auftragBean.editMode}">
+							<ui:include src="/views/secure/includes/auftragDisplay.xhtml"/>
+						</ui:fragment>
 							
-							<p:spacer/>
-							
-							<!-- Edit Mode -->
-							<ui:fragment rendered="#{auftragBean.editMode}">
-								<ui:include src="/views/secure/includes/auftragEdit.xhtml"/>
-							</ui:fragment>
-							
-							<!-- Display Mode -->
-							<ui:fragment rendered="#{not auftragBean.editMode}">
-								<ui:include src="/views/secure/includes/auftragDisplay.xhtml"/>
-							</ui:fragment>
+					</p:tab>
+
+					<!-- Produkte und Leistungen -->
+					<p:tab title="#{labels.prodLeist}">
+					
+						<p:commandButton update="produktDT" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('addProdukt').show();" />
+						<p:commandButton update="produktDT" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteProduktWrapper()}" />
+
+						<!-- Tabelle mit allen Produkten und Leistungen -->
+						<p:dataTable id="produktDT" var="item"
+							value="#{auftragBean.pwToList()}" rowKey="#{item.id}" editable="#{auftragBean.editMode}" editMode="cell" 
+							selectionMode="single" selection="#{auftragBean.selectedProduktWrapper}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
+
+							<p:column headerText="#{labels.position}" style="width:50px;">
+								<h:outputText value="#{item.position}" />
+							</p:column>
+							<p:column headerText="#{labels.p_nr}" style="width:100px;">
+								<p:commandLink id="toProduktView" value="#{item.produkt.pnr}" action="#{auftragBean.redirectToProdukt(item.produkt.id)}" disabled="#{auftragBean.editMode}"/>
+								<p:tooltip for="toProduktView" value="In Produktansicht anzeigen" position="top" />
+							</p:column>
+							<p:column headerText="#{labels.stueckzahl}" style="width:80px;">
+								<p:cellEditor>
+									<f:facet name="input"><p:spinner value="#{item.stueckzahl}"/></f:facet>
+									<f:facet name="output"><h:outputText value="#{item.stueckzahl}" /></f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.nachname}">
+								<p:cellEditor>
+									<f:facet name="input"><p:inputText value="#{item.produkt.name}" disabled="#{item.produkt.stdFlag}"/></f:facet>
+									<f:facet name="output"><h:outputText value="#{item.produkt.name}" /></f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.bezeichnung}">
+								<p:cellEditor>
+									<f:facet name="input"><p:inputText value="#{item.produkt.text}" disabled="#{item.produkt.stdFlag}"/></f:facet>
+									<f:facet name="output"><h:outputText value="#{item.produkt.text}" /></f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.typ}" style="width:100px;">
+								<h:outputText value="#{item.produkt.typ}" />
+							</p:column>
+							<p:column headerText="Kosten" style="width:80px;">
+								<p:cellEditor>
+									<f:facet name="input"><p:inputText value="#{item.produkt.preis}" disabled="#{item.produkt.stdFlag}"/></f:facet>
+									<f:facet name="output"><h:outputText value="#{item.produkt.preis}" /></f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="Zeit" style="width:60px;">
+								<p:cellEditor >
+									<f:facet name="input" ><p:inputText value="#{item.produkt.zeit}" disabled="#{item.produkt.stdFlag}"/></f:facet>
+									<f:facet name="output"><h:outputText value="#{item.produkt.zeit}" /></f:facet>
+								</p:cellEditor>
+							</p:column>
+						</p:dataTable>
+						
+					</p:tab>
+
+
+					<!-- Dokumente -->
+					<p:tab title="#{labels.doc}">
+
+						<p:tabView>
+							<p:tab title="Übersicht">
+								<h:outputText value="Aktuelle Versionen von Dateien" />
+								<p:panelGrid>
+									<p:row>
+										<p:column>Angebot</p:column>
+										<p:column></p:column>
+									</p:row>
+									<p:row>
+										<p:column>Auftragsbestätigung</p:column>
+										<p:column></p:column>
+									</p:row>
+									<p:row>
+										<p:column>Abschlagsrechnung</p:column>
+										<p:column></p:column>
+									</p:row>
+									<p:row>
+										<p:column>Rechnung</p:column>
+										<p:column></p:column>
+									</p:row>
+									<p:row>
+										<p:column>Lieferschein</p:column>
+										<p:column></p:column>
+									</p:row>
 								
-						</p:tab>
-
-						<!-- Produkte und Leistungen -->
-						<p:tab title="#{labels.prodLeist}">
+								</p:panelGrid>
+							</p:tab>
+							<p:tab title="Angebote">
+								<h:outputText value="Angebote für den Kunden" />
+							</p:tab>
+							<p:tab title="Auftragsbestätigung">
+								<h:outputText
+									value="Bestätigung durch Kunden - Eingescannte datei/email" />
+							</p:tab>
+							<p:tab title="Abschlagsrechnung">
+								<h:outputText
+									value="Teilrechnung wenn ein Teil der Leistungen erledigt wurden" />
+							</p:tab>
+							<p:tab title="Rechnung">
+								<h:outputText value="End/gesamtrechnung für die Bestellung" />
+							</p:tab>
+							<p:tab title="Briefe und Gesprächsprotokolle">
+								<h:outputText value="Briefe an und von Kunden" />
+							</p:tab>
+							<p:tab title="Lieferschein">
+								<h:outputText value="Lieferschein für Kunden" />
+							</p:tab>
+						</p:tabView>
 						
-							<p:commandButton update="produktDT" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('addProdukt').show();" />
-							<p:commandButton update="produktDT" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteProduktWrapper()}" />
+					</p:tab>
 
-							<!-- Tabelle mit allen Produkten und Leistungen -->
-							<p:dataTable id="produktDT" var="item"
-								value="#{auftragBean.pwToList()}" rowKey="#{item.id}" editable="#{auftragBean.editMode}" editMode="cell" 
-								selectionMode="single" selection="#{auftragBean.selectedProduktWrapper}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
-
-								<p:column headerText="#{labels.position}" style="width:50px;">
-									<h:outputText value="#{item.position}" />
-								</p:column>
-								<p:column headerText="#{labels.p_nr}" style="width:100px;">
-									<h:outputText value="#{item.produkt.pnr}" />
-								</p:column>
-								<p:column headerText="#{labels.stueckzahl}" style="width:80px;">
-									<p:cellEditor>
-										<f:facet name="input"><p:spinner value="#{item.stueckzahl}"/></f:facet>
-										<f:facet name="output"><h:outputText value="#{item.stueckzahl}" /></f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.nachname}">
-									<p:cellEditor>
-										<f:facet name="input"><p:inputText value="#{item.produkt.name}" disabled="#{item.produkt.stdFlag}"/></f:facet>
-										<f:facet name="output"><h:outputText value="#{item.produkt.name}" /></f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.bezeichnung}">
-									<p:cellEditor>
-										<f:facet name="input"><p:inputText value="#{item.produkt.text}" disabled="#{item.produkt.stdFlag}"/></f:facet>
-										<f:facet name="output"><h:outputText value="#{item.produkt.text}" /></f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.typ}" style="width:100px;">
-									<h:outputText value="#{item.produkt.typ}" />
-								</p:column>
-								<p:column headerText="Kosten" style="width:80px;">
-									<p:cellEditor>
-										<f:facet name="input"><p:inputText value="#{item.produkt.preis}" disabled="#{item.produkt.stdFlag}"/></f:facet>
-										<f:facet name="output"><h:outputText value="#{item.produkt.preis}" /></f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column headerText="Zeit" style="width:60px;">
-									<p:cellEditor >
-										<f:facet name="input" ><p:inputText value="#{item.produkt.zeit}" disabled="#{item.produkt.stdFlag}"/></f:facet>
-										<f:facet name="output"><h:outputText value="#{item.produkt.zeit}" /></f:facet>
-									</p:cellEditor>
-								</p:column>
-
-							</p:dataTable>
-						</p:tab>
+					<p:tab title="#{labels.dateien}">
 
 
-						<!-- Dokumente -->
-						<p:tab title="#{labels.doc}">
+						<p:fileUpload value="#{fileUploadView.file}" multiple="true" mode="simple"
+							skinSimple="true" />
 
-							<p:tabView>
-								<p:tab title="Übersicht">
-									<h:outputText value="Aktuelle Versionen von Dateien" />
-									<p:panelGrid>
-										<p:row>
-											<p:column>Angebot</p:column>
-											<p:column></p:column>
-										</p:row>
-										<p:row>
-											<p:column>Auftragsbestätigung</p:column>
-											<p:column></p:column>
-										</p:row>
-										<p:row>
-											<p:column>Abschlagsrechnung</p:column>
-											<p:column></p:column>
-										</p:row>
-										<p:row>
-											<p:column>Rechnung</p:column>
-											<p:column></p:column>
-										</p:row>
-										<p:row>
-											<p:column>Lieferschein</p:column>
-											<p:column></p:column>
-										</p:row>
-									
-									</p:panelGrid>
-								</p:tab>
-								<p:tab title="Angebote">
-									<h:outputText value="Angebote für den Kunden" />
-								</p:tab>
-								<p:tab title="Auftragsbestätigung">
-									<h:outputText
-										value="Bestätigung durch Kunden - Eingescannte datei/email" />
-								</p:tab>
-								<p:tab title="Abschlagsrechnung">
-									<h:outputText
-										value="Teilrechnung wenn ein Teil der Leistungen erledigt wurden" />
-								</p:tab>
-								<p:tab title="Rechnung">
-									<h:outputText value="End/gesamtrechnung für die Bestellung" />
-								</p:tab>
-								<p:tab title="Briefe und Gesprächsprotokolle">
-									<h:outputText value="Briefe an und von Kunden" />
-								</p:tab>
-								<p:tab title="Lieferschein">
-									<h:outputText value="Lieferschein für Kunden" />
-								</p:tab>
-							</p:tabView>
-						</p:tab>
-
-						<p:tab title="#{labels.dateien}">
-
-							<h:form>
-
-								<p:fileUpload value="#{fileUploadView.file}" multiple="true" mode="simple"
-									skinSimple="true" />
-
-								<p:commandButton value="Submit" ajax="false" disabled="true" />
-							</h:form>
-							
-							<p:fieldset style="margin-bottom:10px;">
-							
-							
-							</p:fieldset>
-							
-						</p:tab>
+						<p:commandButton value="Submit" ajax="false" disabled="true" />
 						
-						<p:tab title="#{labels.stats}" disabled="true"></p:tab>
+						<p:fieldset style="margin-bottom:10px;">
+						
+						
+						</p:fieldset>
+						
+					</p:tab>
+					
+					<p:tab title="#{labels.stats}" disabled="true"/>
 
-					</p:accordionPanel>
+				</p:accordionPanel>
 
-					<hr></hr>
-					<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
-						<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
-					    <hr></hr>
-					    <p:commandButton value="#{labels.ja}" action="#{auftragBean.deleteAuftrag()}" update="nav_form sect_form" oncomplete="PF('delAuftrag').hide();"/>
-					    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
-					</p:dialog>
-
-				</div>
-			</div>
-		</h:form>
+				<p:dialog header="Auftrag löschen" modal="true" widgetVar="delAuftrag" minHeight="40" resizable="false">
+					<p>Möchten Sie wirklich diesen Auftrag löschen?</p>
+				    <hr></hr>
+				    <p:commandButton value="#{labels.ja}" action="#{auftragBean.deleteAuftrag()}" update="nav_form sect_form" oncomplete="PF('delAuftrag').hide();"/>
+				    <p:commandButton value="#{labels.nein}" onclick="PF('delAuftrag').hide();"/>
+				</p:dialog>
+					
+			</h:form>
+		</div>
 	</div>
-
-	<div id="footer"></div>
 
 	<p:dialog id="auftragNewDlg" header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
 		<ui:include src="/views/secure/dialogs/auftragNew.xhtml"/>
+	</p:dialog>
+	
+	<p:dialog id="miniKListeDlgEdit" header="Kunden auswählen" modal="true" widgetVar="editKundeSelect" minHeight="40" width="450" resizable="false">
+		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml">
+			<ui:param name="targetKunde" value="#{auftragBean.selectedAuftrag.kunde}" />
+			<ui:param name="targetUpdate" value="sect_form" />
+		</ui:include>
+		<p:commandButton value="OK" oncomplete="PF('editKundeSelect').hide();" />
+		<p:commandButton value="Abbrechen" oncomplete="PF('editKundeSelect').hide();" />
+	</p:dialog>
+	
+	<p:dialog id="miniBListeDlgEdit" header="Bearbeiter auswählen" modal="true" widgetVar="editBearbeiterSelect" minHeight="40" width="400" resizable="false">
+		<ui:include src="/views/secure/dialogs/miniBearbeiterList.xhtml">
+			<ui:param name="targetBearbeiter" value="#{auftragBean.selectedAuftrag.bearbeiter}" />
+			<ui:param name="targetUpdate" value="sect_form" />
+		</ui:include>
+		<p:commandButton value="OK" oncomplete="PF('editBearbeiterSelect').hide();" />
+		<p:commandButton value="Abbrechen" oncomplete="PF('editBearbeiterSelect').hide();" />
 	</p:dialog>
 	
 	<p:dialog id="produktAddDlg" header="Neuer Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">

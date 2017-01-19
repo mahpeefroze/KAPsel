@@ -75,12 +75,7 @@ public class ProduktService implements IProduktService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Produkt> getProdukteWithChildren() {
-		List<Produkt> result = produktDAO.getItems();
-		for(Produkt p:result){
-			Hibernate.initialize(p.getBauteile());
-			Hibernate.initialize(p.getAschritte());
-		}
-		return result;
+		return produktDAO.getItemsWithChildren();
 	}
 	
 	@Override

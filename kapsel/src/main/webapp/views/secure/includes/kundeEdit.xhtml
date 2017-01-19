@@ -10,13 +10,13 @@
 	<p:panelGrid styleClass="fullWidth">
 		<p:row>
 			<p:column>
-				<h:outputText value="#{kundeBean.selectedKunde.name}" />
+				<h:outputText value="#{kundeBean.selectedKunde.name}"/>
 			</p:column>
 			<p:column>
 				<h:outputText value="#{labels.status}:" styleClass="alignRight statusbox"/>
 			</p:column>
 			<p:column style="width:150px;">
-				<p:selectOneMenu id="edit_kundeStatusSelect" value="#{eKunde.status}" style="width:100px" styleClass="alignRight">
+				<p:selectOneMenu id="edit_kundeStatusSelect" value="#{kundeBean.selectedKunde.status}" style="width:100px" styleClass="alignRight">
 					<f:selectItem itemLabel="#{labels.status}" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.kundeStatus}"/>
 				</p:selectOneMenu>
@@ -28,10 +28,10 @@
 	<p:panelGrid>
 		<p:row>
 			<p:column>#{labels.knr}</p:column>
-			<p:column>#{kundeBean.createKnr()}</p:column>
+			<p:column>#{kundeBean.selectedKunde.knr}</p:column>
 			<p:column>#typ:</p:column>
 			<p:column>
-				<p:selectOneMenu id="edit_newKtypSelect" value="#{eKunde.typ}" style="width:200px">
+				<p:selectOneMenu id="edit_newKtypSelect" value="#{kundeBean.selectedKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.kundeT}" />
 				</p:selectOneMenu>
@@ -40,7 +40,7 @@
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
-				<p:inputText value="#{eKunde.name}" required="true" />
+				<p:inputText value="#{kundeBean.selectedKunde.name}" required="true" />
 			</p:column>
 			<p:column>#Gruppe:</p:column>
 			<p:column>
@@ -53,10 +53,10 @@
 		<p:row>
 			<p:column>#{labels.ansprechPartner}:</p:column>
 			<p:column>
-				<p:inputText value="#{eKunde.APartner}" required="true" />
+				<p:inputText value="#{kundeBean.selectedKunde.APartner}" required="true" />
 			</p:column>
 			<p:column>#{labels.rabatt}:</p:column>
-			<p:column><p:inputText value="#{eKunde.rabatt}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.rabatt}"/></p:column>
 		</p:row>
 	</p:panelGrid>
 	</p:fieldset>
@@ -68,28 +68,28 @@
 		</p:row>
 		<p:row>
 			<p:column>#{labels.strasse}:</p:column>
-			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.strasse}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{kundeBean.selectedKunde.adresse.strasse}"/></p:column>
 			<p:column>#{labels.email}</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.email}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.email}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.hausnr}</p:column>
-			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.hausnr}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{kundeBean.selectedKunde.adresse.hausnr}"/></p:column>
 			<p:column>#{labels.telNr}</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.telefon}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.telefon}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.plz}/#{labels.stadt}</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.plz}"/>/</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.stadt}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.plz}"/>/</p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.stadt}"/></p:column>
 			<p:column>#{labels.mobil}</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.mobil}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.mobil}"/></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.land}</p:column>
-			<p:column colspan="2"><p:inputText value="#{eKunde.adresse.land}"/></p:column>
+			<p:column colspan="2"><p:inputText value="#{kundeBean.selectedKunde.adresse.land}"/></p:column>
 			<p:column>#{labels.web}</p:column>
-			<p:column><p:inputText value="#{eKunde.adresse.web}"/></p:column>
+			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
 	</p:fieldset>
