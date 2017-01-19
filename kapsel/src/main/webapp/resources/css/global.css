@@ -2,6 +2,7 @@
 
 body {
 	font-family: Trebuchet MS, Helvetica, Sans-serif;
+	background-color:#ffffff;
 }
 
 .ui-widget {
@@ -42,36 +43,29 @@ body {
 #header {
     color:black;
     text-align:center;
-    padding:5px;
-    height: 120px;
+    padding:0px !important;
 }
 
 #middle {
-	width:100%;
-	height:700px;
-}
-
-div[id="nav_container"] {
-    line-height:30px;
-    float:left;
-    width:30%;
-    height:100%;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
 }
 
 div[id="nav"] {
+	line-height:30px;
     background-color:#eeeeee;
-    height: 678px;
-	}
-	
-div[id="section_container"] {
-	position:relative;
-    float:left;
-	width:70%;
-	height:100%;
+    min-width:500px;
+    width:500px;
+    padding: 5px !important;
+    margin-right:2px;
 }
-	
+
 div[id="section"] {
-    height: 678px;
+	width: 100%;
+    padding: 0px !important;,
 }
 
 #footer {
@@ -86,52 +80,47 @@ hr {
 	color: #808080;
 }
 
-.float_frame {
-	background-color:transparent;
+.ui-accordion-content{
+	background-color: rgba(238, 238, 238, 0.7);
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.ui-accordion .ui-accordion-header{
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	outline: none;
+}
+
+.bordered-frame{
 	border:4px solid;
     border-radius: 10px;
-    border-color: black;
-    padding:5px 2% 5px 2%;
     margin-top: 1px;
-    overflow-y: auto;
 }
 
 .ui-fieldset-legend.ui-state-default{
 	padding: 5px 10px !important;
 }
 
-
-
-.ui-ribbon-bigbutton{
-	font-size: 30px !important;
-	width: 80px !important;
-	height: 60px !important;
+.ui-menuitem-icon.ui-icon.fa{
+	padding-right: 5px;
 }
 
-.ui-ribbon-bigbutton .ui-icon {
-	margin-top: -22px !important;
+a:-webkit-any-link {
+	color: #4f4f4f;
+	text-decoration: none;
+}
+
+a:hover{
+	color: #4ca6ff;
 }
 
 
 
-
-
-
-
-#testbutton{
-	height: 234px;
-	width: 333px;
-	padding: 0;
-	border: 4px outset buttonface;
-	border-radius: 25px;
-	background-color: #D9A5F9;
+.ui-state-hover a:hover{
+	color: #4ca6ff;
 }
 
-#testbutton:hover{
-	background-color: #E3B9FF;
+.ui-widget-content .ui-state-highlight a{
+	color: #4ca6ff;
 }
-#testbutton:active{
-	border: 4px inset buttonface;
-	background-color: #D9A5F9;
-	
-}	

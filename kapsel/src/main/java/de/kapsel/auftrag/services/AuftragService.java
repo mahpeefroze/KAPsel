@@ -2,6 +2,7 @@ package de.kapsel.auftrag.services;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.kapsel.auftrag.entities.Auftrag;
@@ -50,7 +51,9 @@ public class AuftragService implements IAuftragService {
 	@Override
 	@Transactional(readOnly = true)
 	public Auftrag getAuftragById(long id) {
-		return auftragDAO.getItemById(id);
+		Auftrag result = auftragDAO.getItemById(id);
+		Hibernate.initialize(result.getProdukte());
+		return result;
 	}
 
 	@Override

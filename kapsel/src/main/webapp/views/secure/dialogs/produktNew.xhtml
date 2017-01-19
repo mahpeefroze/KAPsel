@@ -8,11 +8,16 @@
 	<h:form id="dlgNewProduktPanel">
 	<p:panelGrid styleClass="fullWidth">
 		<p:row>
-			<p:column>#{labels.pnr}:</p:column>
-			<p:column>#{produktBean.createPnr()}</p:column>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
 				<p:inputText value="#{produktBean.newProdukt.name}" />
+			</p:column>
+			<p:column>#typ:</p:column>
+			<p:column>
+				<p:selectOneMenu id="newPtypSelect" value="#{produktBean.newProdukt.typ}" style="width:200px">
+					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.produktT}" var="typ" itemLabel="#{typ}" itemValue="#{produktT}" />
+				</p:selectOneMenu>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -26,14 +31,7 @@
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column colspan="2">#{labels.beschreibung}:</p:column>
-			<p:column>#typ:</p:column>
-			<p:column>
-				<p:selectOneMenu id="newPtypSelect" value="#{produktBean.newProdukt.typ}" style="width:200px">
-					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.produktT}" var="typ" itemLabel="#{typ}" itemValue="#{produktT}" />
-				</p:selectOneMenu>
-			</p:column>
+			<p:column colspan="4">#{labels.beschreibung}:</p:column>
 		</p:row>
 		<p:row>
 			<!-- Bezeichnungsfeld -->

@@ -1,10 +1,15 @@
 package de.kapsel.global.beans;
 
+import org.primefaces.component.accordionpanel.AccordionPanel;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.TabCloseEvent;
+
 public abstract class AbstractModulBean {
 	
 	protected boolean emptyList;
 	protected boolean editMode;
 	protected long passedID;
+	protected String activeTabs;
 	
 	public boolean isEmptyList() {
 		return emptyList;
@@ -32,6 +37,24 @@ public abstract class AbstractModulBean {
 	}
 	public void setPassedID(long passedID) {
 		this.passedID = passedID;
+	}
+
+	public String getActiveTabs() {
+		return activeTabs;
+	}
+
+	public void setActiveTabs(String activeTabs) {
+		this.activeTabs = activeTabs;
+	}
+	
+	public void onTabChange(TabChangeEvent event){
+		AccordionPanel ap = (AccordionPanel)event.getSource();
+		setActiveTabs(ap.getActiveIndex());
+	}
+	
+	public void onTabClose(TabCloseEvent event){
+		AccordionPanel ap = (AccordionPanel)event.getSource();
+		setActiveTabs(ap.getActiveIndex());
 	}
 	
 	public abstract void cancelEditMode();

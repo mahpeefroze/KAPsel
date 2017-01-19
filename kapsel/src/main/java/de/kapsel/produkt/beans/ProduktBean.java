@@ -14,7 +14,6 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-
 import de.kapsel.global.DTItem;
 import de.kapsel.global.beans.AbstractModulBean;
 import de.kapsel.global.beans.UtilsBean;
@@ -61,7 +60,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	@PostConstruct
     public void init() {
 		try{
-			setProdukte(produktService.getProdukteWithChildren());
+			setProdukte(getProduktService().getProdukteWithChildren());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
 			disableEditMode();
@@ -185,6 +184,14 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	public void loadProdukt(SelectEvent event) {
 		setSelectedProdukt((Produkt) event.getObject());
     }
+	
+	public void loadPassedProdukt(){
+		for(Produkt p:getProdukte()){
+			if(p.getId()==getPassedID()){
+				setSelectedProdukt(p);
+			}
+		}
+	}
 	
 	//Find Produkt in the list, alternative to query by id since all produkts are here anyway
 	public Produkt findProdukt(long id){

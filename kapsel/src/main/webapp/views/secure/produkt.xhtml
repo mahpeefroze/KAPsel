@@ -3,62 +3,88 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
     xmlns:p="http://primefaces.org/ui">
 
 <h:outputStylesheet name="global.css" library="css"/>
-<h:outputStylesheet name="produkt.css" library="css"/> 
+<h:outputStylesheet name="ribbon.css" library="css"/> 
+<h:outputStylesheet name="produkt.css" library="css"/>
+
+
+<f:metadata>
+	<f:viewParam name="pP" value="#{produktBean.passedID}"/>
+	<f:viewAction action="#{produktBean.loadPassedProdukt()}" />
+</f:metadata>
+
 
 <h:head>
-
-<title>#{labels.progName} #{labels.produkt}</title>
-
+	<title>#{labels.progName} #{labels.produkt}</title>
 </h:head>
 
 <body> 
 
-<div id="header" class="float_frame">
+	<div id="header" class="bordered-frame">
 		<h:form id="ribbon_form">
-			<p:ribbon>
-				<p:tab title="#{labels.produkt}">
-					<p:ribbonGroup>
-						<h1>#{labels.produkt}</h1>
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.action}">
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.add}" icon="fa fa-codepen"
+		
+			<p:panel styleClass="bgRibbon">
+			<p:panelGrid styleClass="fullWidth">
+						<p:row>
+						<p:column>
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.add}" icon="fa fa-codepen"
 							styleClass="ui-ribbon-bigbutton" update=":produktNewDlg" oncomplete="PF('newProdukt').show()"/>
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
+						</p:column>
+						<p:column>
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.editMode}" value="#{labels.edit}" icon="fa fa-edit"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form sect_form" onclick="lockSelection()"  /> 
-						<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList or produktBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
+						</p:column>
+						<p:column style="border-right-width: 1px !important;">
+							<p:commandButton disabled="#{loginBean.validateAccess('ADVUSER') or produktBean.emptyList or produktBean.editMode}" value="#{labels.delete}" icon="fa fa-trash"
 							styleClass="ui-ribbon-bigbutton" oncomplete="PF('delProdukt').show();"/>
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup id="editControls" label="#{labels.edit}" rendered="#{produktBean.editMode}">
-						<p:commandButton value="#{labels.ok}" icon="fa fa-check"
+						</p:column>
+						
+						
+						<p:column rendered="#{produktBean.editMode}">
+							<p:commandButton value="#{labels.ok}" icon="fa fa-check"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectOk()" oncomplete="unlockSelection()"/>
-						<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
+						</p:column>
+						<p:column rendered="#{produktBean.editMode}" style="border-right-width: 1px !important;">
+							<p:commandButton value="#{labels.cancel}" icon="fa fa-times"
 							styleClass="ui-ribbon-bigbutton" update="ribbon_form" onclick="editSectCancel()" oncomplete="unlockSelection()"/>
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.export}">
-						<p:commandButton disabled="#{produktBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-						<p:commandButton disabled="#{produktBean.editMode}" value="To Word" icon="fa fa-file-word-o"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-					</p:ribbonGroup>
-
-					<p:ribbonGroup label="#{labels.print}">
-						<p:commandButton disabled="#{produktBean.editMode}" value="Print" icon="fa fa-print"
-							styleClass="ui-ribbon-bigbutton" type="button" />
-					</p:ribbonGroup>
-					
-					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton disabled="#{produktBean.editMode}" value="#{labels.menu}" icon="fa fa-home" styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
-					</p:ribbonGroup>
-
-				</p:tab>
-
-			</p:ribbon>
+						</p:column>
+						
+						
+						<p:column>
+							<p:commandButton disabled="#{produktBean.editMode}" value="To PDF" icon="fa fa-file-pdf-o"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						<p:column style="border-right-width: 1px !important;">
+							<p:commandButton disabled="#{produktBean.editMode}" value="To Word" icon="fa fa-file-word-o"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						<p:column>
+							<p:commandButton disabled="#{produktBean.editMode}" value="Print" icon="fa fa-print"
+									styleClass="ui-ribbon-bigbutton" />
+						</p:column>
+						
+						<p:column styleClass="pageTitleCell">
+						<p>#{labels.produkt}</p>
+						</p:column>
+						
+						<p:column style="float: right;">
+							<p:commandButton disabled="#{produktBean.editMode}" value="#{labels.menu}" icon="fa fa-home" 
+								styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
+						</p:column>
+						</p:row>
+						<p:row>
+						<p:column colspan="3" style="border-right-width: 1px !important;">#{labels.action}</p:column>
+						<p:column colspan="2" rendered="#{produktBean.editMode}" style="border-right-width: 1px !important;">#{labels.edit}</p:column>
+						<p:column colspan="2" style="border-right-width: 1px !important;">#{labels.export}</p:column>
+						<p:column>#{labels.print}</p:column>
+						<p:column colspan="2"/>
+						
+						</p:row>
+					</p:panelGrid>
+			</p:panel>
 			
 		</h:form>
 		
@@ -68,216 +94,210 @@
 	<div id="middle">
 
 		<!-- LINKE SEITE -->
+		<div id="nav" class="bordered-frame">
 		<h:form id="nav_form">
 			<p:remoteCommand name="lockSelection" update="nav_form" action="#{produktBean.enableEditMode()}"/>
 			<p:remoteCommand name="unlockSelection" update="nav_form" />
-			<div id="nav_container">
-				<div id="nav" class="float_frame">
 
-					<!-- Tabelle mit allen Aufträgen -->
-					<p:dataTable id="produktDT" var="item"
-						value="#{produktBean.produkte}" selectionMode="single"
-						selection="#{produktBean.selectedProdukt}" disabledSelection="#{produktBean.editMode}"
-						rowKey="#{item.id}" sortBy="#{item.pnr}" emptyMessage="#{errors.norecords}">
-						<f:facet name="header">#{labels.prodListe}</f:facet>
+			<!-- Tabelle mit allen Aufträgen -->
+			<p:dataTable id="produktDT" var="item"
+				value="#{produktBean.produkte}" selectionMode="single"
+				selection="#{produktBean.selectedProdukt}" disabledSelection="#{produktBean.editMode}"
+				rowKey="#{item.id}" sortBy="#{item.pnr}" emptyMessage="#{errors.norecords}">
+				<f:facet name="header">#{labels.prodListe}</f:facet>
 
 
-						<p:ajax event="rowSelect" listener="#{produktBean.loadProdukt}"
-							update=":sect_form" />
+				<p:ajax event="rowSelect" listener="#{produktBean.loadProdukt}"
+					update=":sect_form" />
 
-						<p:column headerText="#{labels.p_nr}" style="width: 90px;">
-							<h:outputText value="#{item.pnr}" />
-						</p:column>
-						<p:column headerText="#{labels.nachname}">
-							<h:outputText value="#{item.name}" />
-						</p:column>
-						<p:column headerText="#{labels.erstDatum}" style="width: 85px;">
-							<h:outputText value="#{item.erstDatum}" >
-								<f:convertDateTime pattern="dd.MM.yyyy" />
-							</h:outputText>
-						</p:column>
-						<p:column headerText="#{labels.modDatum}" style="width: 85px;">
-							<h:outputText value="#{item.modDatum}">
-								<f:convertDateTime pattern="dd.MM.yyyy" />
-							</h:outputText>
-						</p:column>
-					</p:dataTable>
+				<p:column headerText="#{labels.p_nr}" style="width: 90px;">
+					<h:outputText value="#{item.pnr}" />
+				</p:column>
+				<p:column headerText="#{labels.nachname}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+				<p:column headerText="#{labels.erstDatum}" style="width: 85px;">
+					<h:outputText value="#{item.erstDatum}" >
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="#{labels.modDatum}" style="width: 85px;">
+					<h:outputText value="#{item.modDatum}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
 
-					<hr></hr>
-				</div>
-			</div>
-		</h:form>
+			</h:form>
+		</div>
+		
 		
 		<!-- RECHTE SEITE -->
-		<h:form id="sect_form">
-			<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{produktBean.onEditComplete()}"/>
-			<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{produktBean.cancelEditMode()}"/>
-			<div id="section_container">
-				<div id="section" class="float_frame">
-					<p:accordionPanel multiple="true">
-
-
-						<!-- Produktdetails -->
-						<p:tab title="#{labels.prodDetail}">
-							<p:spacer/>
-							
-							<!-- Edit Mode -->
-							<ui:fragment rendered="#{produktBean.editMode}">
-								<ui:include src="/views/secure/includes/produktEdit.xhtml"/>
-							</ui:fragment>
-							
-							<!-- Display Mode -->
-							<ui:fragment rendered="#{not produktBean.editMode}">
-								<ui:include src="/views/secure/includes/produktDisplay.xhtml"/>
-							</ui:fragment>
-
-							<p:spacer/>
-						</p:tab>
-
-						<!-- Stueckliste -->
-						<p:tab title="#{labels.stueckliste}">
-							<!-- Tabelle mit allen Produkten und Leistungen -->
-							
-							<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addBauteil}" />
-							<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteBauteil}" />
-							
-							<p:dataTable id="bauteilDT" var="item" value="#{produktBean.btToList()}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
-
-
-								<p:column headerText="#{labels.position}" style="width: 40px;">
-									<h:outputText value="#{item.position}" />
-								</p:column>
-								<p:column headerText="#{labels.stueck_zahl}" style="width: 40px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.bezeichnung}" >
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
-						           </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.prodL}" style="width: 80px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.prodB}" style="width: 80px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.prodD}" style="width: 80px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.dicke}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.dicke}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.bemerkung}">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.bemerkung}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.bemerkung}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.werkstoff}" style="width: 180px;">
-									<p:cellEditor>
-										<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
-										<f:facet name="input">
-										<p:selectOneMenu id="materialTypSelect" value="#{produktBean.materialId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
-											<p:ajax listener="#{produktBean.onMaterialChange(item)}"/>
-											<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
-											<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
-										</p:selectOneMenu>
-										</f:facet>
-									</p:cellEditor>
-								</p:column>
-
-							</p:dataTable>
-						</p:tab>
+		<div id="section" class="bordered-frame">
+			<h:form id="sect_form">
+				<p:remoteCommand name="editSectOk" process="@form" update="sect_form" action="#{produktBean.onEditComplete()}"/>
+				<p:remoteCommand name="editSectCancel" process="@form" update="sect_form"  action="#{produktBean.cancelEditMode()}"/>
+				<c:set var="activeTabs" value="#{empty produktBean.activeTabs ? 0 : produktBean.activeTabs}" scope="request" />
+				<p:accordionPanel multiple="true" activeIndex="#{activeTabs}">
+					<p:ajax event="tabChange" listener="#{produktBean.onTabChange}" />
+					<p:ajax event="tabClose" listener="#{produktBean.onTabClose}" />
+					<!-- Produktdetails -->
+					<p:tab title="#{labels.prodDetail}">
+						<p:spacer/>
 						
-						<!-- Arbeitsplan -->
-						<p:tab title="#{labels.arbeitsplan}">
-							
-							<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" action="#{produktBean.addArbeitsschritt}" />
-							<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteArbeitsschritt}" />
-							
-							<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.asToList()}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
-								rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
-
-								
-								<p:column headerText="#{labels.position}" style="width: 40px;">
-									<h:outputText value="#{item.position}" />
-								</p:column>
-								<p:column headerText="#{labels.bezeichnung}" style="min-width: 300px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
-						           </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.zeit}" style="width: 60px;">
-									<p:cellEditor>
-						               <f:facet name="output"><h:outputText value="#{item.zeit}" /></f:facet>
-						               <f:facet name="input"><p:inputText value="#{item.zeit}" style="width:96%"/></f:facet>
-						            </p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.typ}" style="width: 180px;">
-									<p:cellEditor  styleClass="full-width">
-						               <f:facet name="output"><h:outputText value="#{item.typ}" /></f:facet>
-										<f:facet name="input">
-										<p:selectOneMenu id="asTypSelect" value="#{item.typ}" styleClass="fullWidth">
-											<f:selectItem itemLabel="Typ auswählen" itemValue="" noSelectionOption="true" />
-											<f:selectItems value="#{eTypes.aschrittT}"/>
-										</p:selectOneMenu>
-										</f:facet>
-									</p:cellEditor>
-								</p:column>
-								<p:column headerText="#{labels.werkzeug}" style="width: 200px;">
-									<p:cellEditor style="width: 200px;">
-						               <f:facet name="output"><h:outputText value="#{item.werkzeug.name}" /></f:facet>
-										<f:facet name="input">
-										<p:selectOneMenu id="werkzeugSelect" value="#{produktBean.werkzeugId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
-											<p:ajax listener="#{produktBean.onWerkzeugChange(item)}"/>
-											<f:selectItem itemLabel="Werkzeug auswählen" itemValue="" noSelectionOption="true" />
-											<f:selectItems value="#{werkzeugBean.werkzeuge}" var="wz" itemLabel="#{wz.name} | #{wz.stundensatz} #{labels.waehrung}/#{labels.stundeH}" itemValue="#{wz.id}"/>				
-										</p:selectOneMenu>
-										</f:facet>
-						            </p:cellEditor>
-								</p:column>
-							
+						<!-- Edit Mode -->
+						<ui:fragment rendered="#{produktBean.editMode}">
+							<ui:include src="/views/secure/includes/produktEdit.xhtml"/>
+						</ui:fragment>
 						
+						<!-- Display Mode -->
+						<ui:fragment rendered="#{not produktBean.editMode}">
+							<ui:include src="/views/secure/includes/produktDisplay.xhtml"/>
+						</ui:fragment>
 
-							</p:dataTable>
+						<p:spacer/>
+					</p:tab>
+
+					<!-- Stueckliste -->
+					<p:tab title="#{labels.stueckliste}">
+						<!-- Tabelle mit allen Produkten und Leistungen -->
+						
+						<p:commandButton id="btAddView" update="bauteilDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" actionListener="#{produktBean.addBauteil}" />
+						<p:commandButton id="btDelView" update="bauteilDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteBauteil}" />
+						
+						<p:dataTable id="bauteilDT" var="item" value="#{produktBean.btToList()}" selectionMode="single" selection="#{produktBean.selectedBauteil}"
+							rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
+
+
+							<p:column headerText="#{labels.position}" style="width: 40px;">
+								<h:outputText value="#{item.position}" />
+							</p:column>
+							<p:column headerText="#{labels.stueck_zahl}" style="width: 40px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.bezeichnung}" >
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+					           </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.prodL}" style="width: 80px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.laenge}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.laenge}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.prodB}" style="width: 80px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.breite}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.breite}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.prodD}" style="width: 80px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.dicke}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.dicke}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.bemerkung}">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.bemerkung}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.bemerkung}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.werkstoff}" style="width: 180px;">
+								<p:cellEditor>
+									<f:facet name="output"><h:outputText value="#{item.material.name}" /></f:facet>
+									<f:facet name="input">
+									<p:selectOneMenu id="materialTypSelect" value="#{produktBean.materialId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
+										<p:ajax listener="#{produktBean.onMaterialChange(item)}"/>
+										<f:selectItem itemLabel="Material auswaehlen" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{materialBean.materialien}" var="mat" itemLabel="#{mat.name} | #{mat.preis} #{labels.waehrung}/#{mat.einheit}" itemValue="#{mat.id}"/>				
+									</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+					
+					<!-- Arbeitsplan -->
+					<p:tab title="#{labels.arbeitsplan}">
+						
+						<p:commandButton id="asAddView" update="arbeitschrittDT" title="#{labels.add}" rendered="#{produktBean.editMode}" icon="fa fa-plus" action="#{produktBean.addArbeitsschritt}" />
+						<p:commandButton id="asDelView" update="arbeitschrittDT" title="#{labels.delete}" rendered="#{produktBean.editMode}" icon="fa fa-remove" actionListener="#{produktBean.deleteArbeitsschritt}" />
+						
+						<p:dataTable id="arbeitschrittDT" var="item" value="#{produktBean.asToList()}" selectionMode="single" selection="#{produktBean.selectedAschritt}"
+							rowKey="#{item.id}" sortBy="#{item.position}" emptyMessage="#{errors.norecords}" editable="#{produktBean.editMode}" editMode="cell">
+
 							
-						</p:tab>
+							<p:column headerText="#{labels.position}" style="width: 40px;">
+								<h:outputText value="#{item.position}" />
+							</p:column>
+							<p:column headerText="#{labels.bezeichnung}" style="min-width: 300px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+					           </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.zeit}" style="width: 60px;">
+								<p:cellEditor>
+					               <f:facet name="output"><h:outputText value="#{item.zeit}" /></f:facet>
+					               <f:facet name="input"><p:inputText value="#{item.zeit}" style="width:96%"/></f:facet>
+					            </p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.typ}" style="width: 180px;">
+								<p:cellEditor  styleClass="full-width">
+					               <f:facet name="output"><h:outputText value="#{item.typ}" /></f:facet>
+									<f:facet name="input">
+									<p:selectOneMenu id="asTypSelect" value="#{item.typ}" styleClass="fullWidth">
+										<f:selectItem itemLabel="Typ auswählen" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{eTypes.aschrittT}"/>
+									</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.werkzeug}" style="width: 200px;">
+								<p:cellEditor style="width: 200px;">
+					               <f:facet name="output"><h:outputText value="#{item.werkzeug.name}" /></f:facet>
+									<f:facet name="input">
+									<p:selectOneMenu id="werkzeugSelect" value="#{produktBean.werkzeugId}" styleClass="fullWidth" filter="true" filterMatchMode="contains">
+										<p:ajax listener="#{produktBean.onWerkzeugChange(item)}"/>
+										<f:selectItem itemLabel="Werkzeug auswählen" itemValue="" noSelectionOption="true" />
+										<f:selectItems value="#{werkzeugBean.werkzeuge}" var="wz" itemLabel="#{wz.name} | #{wz.stundensatz} #{labels.waehrung}/#{labels.stundeH}" itemValue="#{wz.id}"/>				
+									</p:selectOneMenu>
+									</f:facet>
+					            </p:cellEditor>
+							</p:column>
+						
+					
 
-						<!-- Statistiken -->
-						<p:tab title="#{labels.stats}" disabled="true">
+						</p:dataTable>
+						
+					</p:tab>
 
-						</p:tab>
+					<!-- Statistiken -->
+					<p:tab title="#{labels.stats}" disabled="true">
 
-					</p:accordionPanel>
+					</p:tab>
 
-					<hr></hr>
-					<p:dialog header="Produkt löschen" modal="true" widgetVar="delProdukt" minHeight="40" resizable="false">
-						<p>Möchten Sie wirklich dieses Produkt löschen?</p>
-					    <hr></hr>
-					    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" update="nav_form sect_form" oncomplete="PF('delProdukt').hide();"/>
-					    <p:commandButton value="#{labels.nein}" onclick="PF('delProdukt').hide();"/>
-					</p:dialog>	
+				</p:accordionPanel>
 
-				</div>
-			</div>
-		</h:form>
+				<p:dialog header="Produkt löschen" modal="true" widgetVar="delProdukt" minHeight="40" resizable="false">
+					<p>Möchten Sie wirklich dieses Produkt löschen?</p>
+				    <hr></hr>
+				    <p:commandButton value="#{labels.ja}" action="#{produktBean.deleteProdukt()}" update="nav_form sect_form" oncomplete="PF('delProdukt').hide();"/>
+				    <p:commandButton value="#{labels.nein}" onclick="PF('delProdukt').hide();"/>
+				</p:dialog>	
+				
+				
+			</h:form>
+		</div>
+		
 	</div>
-
-	<div id="footer"></div>
-	
-	
 		
 	<p:dialog id="produktNewDlg" header="Neues Produkt" modal="true" widgetVar="newProdukt" style="max-width: 3000px; minHeight: 40px;"  resizable="false">
 			<ui:include src="/views/secure/dialogs/produktNew.xhtml"/>

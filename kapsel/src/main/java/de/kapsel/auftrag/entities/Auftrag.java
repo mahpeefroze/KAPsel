@@ -19,6 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.User;
 import de.kapsel.kunde.entities.Kunde;
 
 
@@ -32,6 +33,7 @@ public class Auftrag implements Serializable, Comparable<Auftrag>{
 	private String name;
 	private String text;
 	private Kunde kunde;
+	private User bearbeiter;
 	private ETypes.AuftragS status;
 	private int zeit;
 	private double preis;
@@ -98,6 +100,15 @@ public class Auftrag implements Serializable, Comparable<Auftrag>{
 
 	public void setKunde(Kunde kunde) {
 		this.kunde = kunde;
+	}
+	
+	@ManyToOne
+	public User getBearbeiter() {
+		return bearbeiter;
+	}
+
+	public void setBearbeiter(User bearbeiter) {
+		this.bearbeiter = bearbeiter;
 	}
 
 	@Column(name="status", nullable=false)

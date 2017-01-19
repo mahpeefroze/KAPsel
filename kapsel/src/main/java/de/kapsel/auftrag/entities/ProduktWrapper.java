@@ -8,9 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.CascadeType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.produkt.entities.Produkt;
@@ -59,7 +60,8 @@ public class ProduktWrapper extends AbstractKapselEntity implements Serializable
 		this.name = name;
 	}
 	
-	@OneToOne(cascade = CascadeType.MERGE)
+	@OneToOne
+	@Cascade({CascadeType.SAVE_UPDATE})
 	public Produkt getProdukt() {
 		return produkt;
 	}

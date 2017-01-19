@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
 
+body{
+	background-color: #edfbfb;
+}
+
 #statusbox {   
     height:20px;
     padding:10px 20px 10px 10px;
@@ -15,6 +19,7 @@
 #nav {
 	border-color:#388EA6;
     color:#388EA6;
+    background-color: #dcf7f8;
 }
 
 #section{
@@ -23,7 +28,31 @@
 }
 
 .ui-accordion-content{
-	background-color: rgba(56, 142, 166, 0.2);
+	background-color:#dcf7f8;
+}
+
+.ui-accordion .ui-accordion-header{
+	
+}
+
+.ui-accordion-header.ui-state-active{
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+}
+
+.ui-accordion-header.ui-state-hover{
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+}
+
+.ui-dialog-titlebar{
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+}
+
+.ui-datatable-header {
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+}
+
+.bgRibbon{
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
 }
 
 .ui-inputfield.ui-widget.ui-state-default.ui-corner-all.hasDatepicker{
@@ -35,6 +64,10 @@
 }
 
 .ui-selectonelistbox{
-	min-height: 200px;
+	min-height: 250px;
 	min-width: 450px;
+}
+
+.ui-picklist .ui-picklist-list{
+	width:300px !important;
 }

@@ -57,7 +57,7 @@
 		<jsf.version>2.2.12</jsf.version>
 		
 		<!-- PrimeFaces -->
-		<pf.version>5.3</pf.version>
+		<pf.version>6.0</pf.version>
 		
 		<!-- Spring -->
 		<spring.version>4.2.3.RELEASE</spring.version>
