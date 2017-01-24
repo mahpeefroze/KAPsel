@@ -1,0 +1,45 @@
+.ui-ribbon-bigbutton{
+	font-size: 30px !important;
+	background-color: transparent !important;
+	width: 320px !important;
+	height: 230px !important;
+	margin-right: 0px !important;
+	border-radius: 40px;
+	outline: none;
+}
+
+.ui-ribbon-bigbutton .ui-icon {
+	font-size: 120px !important;
+	margin-top: -85px !important;
+	overflow: visible;
+	left: 0.87em;
+}
+
+.ui-button-text-icon-left .ui-button-text{
+	font-size: 1.1em;
+	padding: 140px 0px 0px 0px !important;
+}
+
+.kunde-bigbutton{
+	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
+}
+
+.auftrag-bigbutton{
+	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+}
+
+.produkt-bigbutton{
+	background: linear-gradient(rgba(59, 173, 53, 0.2), rgba(59, 173, 53, 0.8));
+}
+
+.stats-bigbutton{
+	background: linear-gradient(rgba(145,168,208, 0.2),rgba(145,168,208, 0.8));
+}
+
+.settings-bigbutton{
+	background: linear-gradient(rgba(231,231,231, 0.2),rgba(196,196,196, 0.8));
+}
+
+.lager-bigbutton{
+	background: linear-gradient(rgba(217,189,102, 0.2),rgba(217,189,102, 0.8));
+}

@@ -25,9 +25,7 @@
 	border-spacing: 0px !important;
 }
 
-.bgRibbon{
-	background: linear-gradient(rgba(170,170,238, 0.2), rgba(170,170,238, 0.6));
-}
+
 
 .bgRibbon .ui-panel-content {
 	padding: 0px !important;

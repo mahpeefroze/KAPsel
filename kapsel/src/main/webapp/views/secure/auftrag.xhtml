@@ -223,57 +223,27 @@
 
 					<!-- Dokumente -->
 					<p:tab title="#{labels.doc}">
-						<p:commandButton update="dokumentTV" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('newDokument').show();" />
-						<p:commandButton update="dokumentTV" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteProduktWrapper()}" />
-						<p:tabView id="dokumentTV">
-							<p:tab title="Übersicht">
-								<h:outputText value="Aktuelle Versionen von Dateien" />
-								<p:panelGrid>
-									<p:row>
-										<p:column>Angebot</p:column>
-										<p:column></p:column>
-									</p:row>
-									<p:row>
-										<p:column>Auftragsbestätigung</p:column>
-										<p:column></p:column>
-									</p:row>
-									<p:row>
-										<p:column>Abschlagsrechnung</p:column>
-										<p:column></p:column>
-									</p:row>
-									<p:row>
-										<p:column>Rechnung</p:column>
-										<p:column></p:column>
-									</p:row>
-									<p:row>
-										<p:column>Lieferschein</p:column>
-										<p:column></p:column>
-									</p:row>
-								
-								</p:panelGrid>
-							</p:tab>
-							<p:tab title="Angebote">
-								<h:outputText value="Angebote für den Kunden" />
-								<p:dataTable value="#{auftragBean.kdToList()}" var="item" rowKey="#{item.id}" selectionMode="single" 
-								selection="#{auftragBean.selectedDokument}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
-									
-									<p:column headerText="#{labels.position}" style="width:50px;">
-										<h:outputText value="#{item.position}" />
-									</p:column>
-									<p:column headerText="#{labels.nachname}" style="width:50px;">
-										<h:outputText value="#{item.name}" />
-									</p:column>
-									<p:column headerText="#{labels.typ}" style="width:50px;">
-										<h:outputText value="#{item.typ}" />
-									</p:column>
-									<p:column headerText="#{labels.fileName}" style="width:50px;">
-										<p:commandLink id="dlDokument" value="#{item.fileName}" ajax="false" action="#{auftragBean.dlDokument(item)}" disabled="#{auftragBean.editMode}"/>
-									</p:column>
-								
-								</p:dataTable>
-							</p:tab>
+						<p:commandButton update="dokumentDT" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('newDokument').show();" />
+						<p:commandButton update="dokumentDT" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteDokument()}" />
+						<p:dataTable id="dokumentDT" value="#{auftragBean.kdToList()}" var="item" rowKey="#{item.id}" selectionMode="single" 
+						selection="#{auftragBean.selectedDokument}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
 							
-						</p:tabView>
+							<p:column headerText="#{labels.position}" style="width:50px;">
+								<h:outputText value="#{item.position}" />
+							</p:column>
+							<p:column headerText="#{labels.nachname}" >
+								<h:outputText value="#{item.name}" />
+							</p:column>
+							<p:column headerText="#{labels.typ}" style="width:200px;">
+								<h:outputText value="#{item.typ}" />
+							</p:column>
+							<p:column headerText="#{labels.fileName}" style="width:200px;">
+								<p:commandLink id="dlDokument" value="#{item.fileName}" ajax="false" disabled="#{auftragBean.editMode}">
+									<p:fileDownload contentDisposition="attachment" value="#{auftragBean.dlDokument(item)}"/>
+								</p:commandLink>
+							</p:column>
+						
+						</p:dataTable>
 						
 					</p:tab>
 					

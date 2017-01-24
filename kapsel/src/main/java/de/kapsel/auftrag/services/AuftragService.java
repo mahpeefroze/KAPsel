@@ -53,6 +53,7 @@ public class AuftragService implements IAuftragService {
 	public Auftrag getAuftragById(long id) {
 		Auftrag result = auftragDAO.getItemById(id);
 		Hibernate.initialize(result.getProdukte());
+		Hibernate.initialize(result.getDokumente());
 		return result;
 	}
 

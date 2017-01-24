@@ -8,6 +8,7 @@
     
 
 <h:outputStylesheet name="global.css" library="css"/>
+<h:outputStylesheet name="index.css" library="css"/>
 <h:outputStylesheet name="images.css" library="css"/> 
 
 <h:head>
@@ -20,17 +21,15 @@
 		<cc:userQuickMenu/>
     </div>
   
-     
-	
 	<div id="main_nav" class="centered">
 		<h:form>
 			<h:panelGrid columns="3">
-				<h:commandButton action="kunde?faces-redirect=true" class="button_splash kunde_splash"/>
-				<h:commandButton action="auftrag?faces-redirect=true" class="button_splash auftrag_splash"/>
-				<h:commandButton action="produkt?faces-redirect=true" class="button_splash produkt_splash"/>
-				<h:commandButton disabled="true" class="button_splash statistik_splash"/>
-				<h:commandButton disabled="#{loginBean.validateAccess('MOD')}" action="settings?faces-redirect=true" class="button_splash einstellung_splash"/>
-				<h:commandButton disabled="true" class="button_splash lager_splash"/>
+				<p:commandButton value="#{labels.kunden}" action="kunde?faces-redirect=true" icon="fa fa-users" styleClass="ui-ribbon-bigbutton kunde-bigbutton"/>
+				<p:commandButton value="#{labels.auftraege}" action="auftrag?faces-redirect=true" icon="fa fa-file-text-o" styleClass="ui-ribbon-bigbutton auftrag-bigbutton"/>
+				<p:commandButton value="#{labels.produkte}" action="produkt?faces-redirect=true" icon="fa fa-codepen" styleClass="ui-ribbon-bigbutton produkt-bigbutton"/>
+				<p:commandButton value="#{labels.stats}" disabled="true" icon="fa fa-bar-chart-o" styleClass="ui-ribbon-bigbutton stats-bigbutton"/>
+				<p:commandButton value="#{labels.settings}"  disabled="#{loginBean.validateAccess('MOD')}" action="settings?faces-redirect=true" icon="fa fa-cog" styleClass="ui-ribbon-bigbutton settings-bigbutton"/>
+				<p:commandButton value="#{labels.lager}" disabled="true" icon="fa fa-sitemap" styleClass="ui-ribbon-bigbutton lager-bigbutton"/>
 			</h:panelGrid>
 		</h:form>
 	</div>

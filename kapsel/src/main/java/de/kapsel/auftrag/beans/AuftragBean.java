@@ -1,12 +1,12 @@
 package de.kapsel.auftrag.beans;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -25,7 +25,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.dao.DataAccessException;
 
@@ -487,8 +489,8 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		
 		UploadedFile uploadedDokument = event.getFile();
 		String filename = FilenameUtils.getName(uploadedDokument.getFileName());
-		
-		getNewDokument().setFileName(filename);
+		String basename = FilenameUtils.getBaseName(filename) + "_";
+		String extension = "." + FilenameUtils.getExtension(filename);
 		
 		input = uploadedDokument.getInputstream();
 		String path=System.getProperty("jboss.home.dir")+"/kapselUploads/"+getSelectedAuftrag().getAnr();
@@ -505,7 +507,9 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			System.out.println("Path already exists.");
 			getNewDokument().setPath(path);
 		}
-		output = new FileOutputStream(new File(getNewDokument().getPath(), getNewDokument().getFileName()));
+		File file = File.createTempFile(basename, extension, new File(getNewDokument().getPath()));
+		output = new FileOutputStream(file);
+		getNewDokument().setFileName(file.getName());
 		
 		try{
 			IOUtils.copy(input, output);
@@ -518,28 +522,13 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		
 	}
 	
-	public void dlDokument(KapselDocument kd) throws IOException{
-		 	FacesContext fc = FacesContext.getCurrentInstance();
-		    ExternalContext ec = fc.getExternalContext();
-		    String filePath = "/"+System.getProperty("jboss.home.dir")+"/kapselUploads/"+getSelectedAuftrag().getAnr()+"/"+kd.getFileName();
-		    String fileName = kd.getFileName();
-		    ec.responseReset(); // Some JSF component library or some Filter might have set some headers in the buffer beforehand. We want to get rid of them, else it may collide.
-		    ec.setResponseContentType(ec.getMimeType(fileName)); // Check http://www.iana.org/assignments/media-types for all types. Use if necessary ExternalContext#getMimeType() for auto-detection based on filename.
-		    ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\""); // The Save As popup magic is done here. You can give it any file name you want, this only won't work in MSIE, it will use current request URL as file name instead.
-
-		    OutputStream output = ec.getResponseOutputStream();
-	    	FileInputStream input = new FileInputStream(filePath);
-		    
-	    	try{
-				IOUtils.copy(input, output);
-			}catch (IOException e){
-				e.printStackTrace();
-			}finally {
-				IOUtils.closeQuietly(input);
-				IOUtils.closeQuietly(output);
-			}
-
-		    fc.responseComplete();
+	public StreamedContent dlDokument(KapselDocument kd) throws IOException{
+		StreamedContent file;
+		FacesContext fc = FacesContext.getCurrentInstance();
+	    ExternalContext ec = fc.getExternalContext();
+		InputStream stream = new URL("http://localhost:8080/uploads/"+getSelectedAuftrag().getAnr()+"/"+kd.getFileName()).openStream();
+        file = new DefaultStreamedContent(stream, ec.getMimeType(kd.getFileName()), kd.getFileName());
+		return file;
 	}
 	
 	public void addDokument(){

@@ -6,6 +6,7 @@
     xmlns:p="http://primefaces.org/ui">
 
 <h:outputStylesheet name="global.css" library="css" />
+<h:outputStylesheet name="ribbon.css" library="css" />
 <h:outputStylesheet name="settings.css" library="css" />
 
 <h:head>
@@ -18,21 +19,22 @@
 <body>
 
 	<div id="header" class="float_frame">
-		<h:form id="ribbon">
-			<p:ribbon>
-				<p:tab title="#{labels.settings}">
-					<p:ribbonGroup>
-						<h1>#{labels.settings}</h1>
-					</p:ribbonGroup>
-					<p:ribbonGroup label="Optionen" style="float: right;">
-						<p:commandButton value="#{labels.menu}" icon="fa fa-home"
-							styleClass="ui-ribbon-bigbutton"
-							action="index?faces-redirect=true" />
-					</p:ribbonGroup>
-
-				</p:tab>
-
-			</p:ribbon>
+		<h:form id="ribbon_form">
+			<p:panel styleClass="bgRibbon">
+			<p:panelGrid styleClass="fullWidth">
+					<p:row>
+					
+					<p:column styleClass="pageTitleCell">
+					<p>#{labels.settings}</p>
+					</p:column>
+					
+					<p:column style="float: right;">
+						<p:commandButton value="#{labels.menu}" icon="fa fa-home" 
+							styleClass="ui-ribbon-bigbutton" action="index?faces-redirect=true"/>
+					</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
 		</h:form>
 
 
