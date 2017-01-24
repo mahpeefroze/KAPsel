@@ -39,6 +39,10 @@ public class ETypes {
 		return UnitT.values();
 	}
 	
+	public DocumentT[] getDocumentT(){
+		return DocumentT.values();
+	}
+	
 	public enum AuftragS{
 		Offen,
 		Bearbeitung,
@@ -108,6 +112,14 @@ public class ETypes {
 		Maschinenarbeit,
 		Bankraum,
 		Montage;
+	}
+	
+	public enum DocumentT{
+		Angebot,
+		Auftragsbestätigung,
+		Rechnung,
+		Abschlagsrechnung,
+		Lieferschein;
 	}
 	
 }

@@ -1,5 +1,11 @@
 package de.kapsel.auftrag.beans;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,14 +18,22 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.UploadedFile;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.auftrag.entities.Auftrag;
+import de.kapsel.auftrag.entities.KapselDocument;
 import de.kapsel.auftrag.entities.ProduktWrapper;
 import de.kapsel.auftrag.services.IAuftragService;
+import de.kapsel.auftrag.services.IKapselDocumentService;
 import de.kapsel.auftrag.services.IProduktWrapperService;
 import de.kapsel.global.DTItem;
 import de.kapsel.global.ETypes;
@@ -42,9 +56,12 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private Auftrag newAuftrag;
 	private ProduktWrapper selectedProduktWrapper;
 	private Produkt newProdukt;
+	private KapselDocument selectedDokument;
+	private KapselDocument newDokument;
 	private long selectedTemplateId;
 	private List<Produkt> templates;
 	private DualListModel<String> stdProdukte;
+	private UploadedFile uploadedDokument;
 	
 	private boolean newProdBool;
 	private boolean templProdBool;
@@ -53,7 +70,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private HashSet<ProduktWrapper> tempPwList;
 	private HashSet<ProduktWrapper>	tempDelPwList;
 	private HashMap<String, Produkt> produktMap;
-	
 
 	@ManagedProperty(value="#{auftragService}")
 	private IAuftragService auftragService;
@@ -63,6 +79,9 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	
 	@ManagedProperty(value="#{produktWrapperService}")
 	private IProduktWrapperService produktWrapperService;
+	
+	@ManagedProperty(value="#{kapselDocumentService}")
+	private IKapselDocumentService kapselDocumentService;
 	
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
@@ -82,6 +101,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		try{
 			setAuftraege(auftragService.getAuftraegeWithChildren());
 			setSelectedAuftrag(getAuftraege().get(0));
+			setNewDokument(new KapselDocument());
 			setEmptyList(false);
 			setEditMode(false);
 		}catch(DataAccessException e) {
@@ -101,6 +121,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		setNewAuftrag(new Auftrag());
 		getNewAuftrag().setProdukte(new HashSet<ProduktWrapper>());
 		getNewAuftrag().setKunde(new Kunde());
+		getNewAuftrag().setDokumente(new HashSet<KapselDocument>());
 	}
 	
 	//region Getter/Setter
@@ -157,6 +178,14 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		this.produktWrapperService = produktWrapperService;
 	}
 	
+	public IKapselDocumentService getKapselDocumentService() {
+		return kapselDocumentService;
+	}
+
+	public void setKapselDocumentService(IKapselDocumentService kapselDocumentService) {
+		this.kapselDocumentService = kapselDocumentService;
+	}
+
 	public UtilsBean getUtilsContainer() {
 		return utilsContainer;
 	}
@@ -189,6 +218,22 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		this.newProdukt = newProdukt;
 	}
 	
+	public KapselDocument getSelectedDokument() {
+		return selectedDokument;
+	}
+
+	public void setSelectedDokument(KapselDocument selectedDokument) {
+		this.selectedDokument = selectedDokument;
+	}
+
+	public KapselDocument getNewDokument() {
+		return newDokument;
+	}
+
+	public void setNewDokument(KapselDocument newDokument) {
+		this.newDokument = newDokument;
+	}
+
 	public long getSelectedTemplateId() {
 		return selectedTemplateId;
 	}
@@ -212,7 +257,15 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	public void setStdProdukte(DualListModel<String> stdProdukte) {
 		this.stdProdukte = stdProdukte;
 	}
-	
+
+	public UploadedFile getUploadedDokument() {
+		return uploadedDokument;
+	}
+
+	public void setUploadedDokument(UploadedFile uploadedDokument) {
+		this.uploadedDokument = uploadedDokument;
+	}
+
 	public boolean isNewProdBool() {
 		return newProdBool;
 	}
@@ -269,6 +322,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
 			getNewAuftrag().setStartdatum(new Date());
 			getNewAuftrag().getKunde().getAuftraege().add(getNewAuftrag());
+			getNewAuftrag().setbKey(AbstractKapselEntity.generateBKey());
 			getAuftragService().addAuftrag(getNewAuftrag());
 			getUtilsContainer().updateNrStorage();
 		} catch (Exception e) {
@@ -288,7 +342,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public void calculateNetto(){
-		getSelectedAuftrag().setPreis(getAuftragCalc().calculateNettoPrice(getSelectedAuftrag()));
+		getSelectedAuftrag().setNettoPreis(getAuftragCalc().calculateNettoPrice(getSelectedAuftrag()));
 	}
 	
 	public void calculateBrutto(){
@@ -297,6 +351,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	
 	public void calculateTime(){
 		getSelectedAuftrag().setZeit(getAuftragCalc().calculateTime(getSelectedAuftrag()));
+	}
+	
+	public void calculateDiscount(){
+		getSelectedAuftrag().setDiscountPreis(getAuftragCalc().calculateAfterDiscount(getSelectedAuftrag()));
 	}
 	
 	//region PRODUKT ADD/DELETE + DISPLAY
@@ -415,6 +473,92 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			return null;
 		}
 		ArrayList<ProduktWrapper> sortedList= new ArrayList<ProduktWrapper>(getSelectedAuftrag().getProdukte());
+		Collections.sort(sortedList);
+		return sortedList; 
+	}
+	
+	//endregion
+	
+	//region DOKUMENTE
+	
+	public void uploadToFile(FileUploadEvent event) throws IOException{
+		InputStream input = null;
+		OutputStream output = null;
+		
+		UploadedFile uploadedDokument = event.getFile();
+		String filename = FilenameUtils.getName(uploadedDokument.getFileName());
+		
+		getNewDokument().setFileName(filename);
+		
+		input = uploadedDokument.getInputstream();
+		String path=System.getProperty("jboss.home.dir")+"/kapselUploads/"+getSelectedAuftrag().getAnr();
+		File auftragFolder = new File(path);
+		if(!auftragFolder.exists()){
+			if(auftragFolder.mkdir()){
+				System.out.println("Directory "+auftragFolder.getPath()+" created succesfully");
+				getNewDokument().setPath(path);
+			}else{
+				System.out.println("Couldn't create "+auftragFolder.getPath());
+				getNewDokument().setPath(System.getProperty("jboss.home.dir")+"/kapselUploads");
+			}
+		}else{
+			System.out.println("Path already exists.");
+			getNewDokument().setPath(path);
+		}
+		output = new FileOutputStream(new File(getNewDokument().getPath(), getNewDokument().getFileName()));
+		
+		try{
+			IOUtils.copy(input, output);
+		}catch (IOException e){
+			e.printStackTrace();
+		}finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(output);
+		}
+		
+	}
+	
+	public void dlDokument(KapselDocument kd) throws IOException{
+		 	FacesContext fc = FacesContext.getCurrentInstance();
+		    ExternalContext ec = fc.getExternalContext();
+		    String filePath = "/"+System.getProperty("jboss.home.dir")+"/kapselUploads/"+getSelectedAuftrag().getAnr()+"/"+kd.getFileName();
+		    String fileName = kd.getFileName();
+		    ec.responseReset(); // Some JSF component library or some Filter might have set some headers in the buffer beforehand. We want to get rid of them, else it may collide.
+		    ec.setResponseContentType(ec.getMimeType(fileName)); // Check http://www.iana.org/assignments/media-types for all types. Use if necessary ExternalContext#getMimeType() for auto-detection based on filename.
+		    ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\""); // The Save As popup magic is done here. You can give it any file name you want, this only won't work in MSIE, it will use current request URL as file name instead.
+
+		    OutputStream output = ec.getResponseOutputStream();
+	    	FileInputStream input = new FileInputStream(filePath);
+		    
+	    	try{
+				IOUtils.copy(input, output);
+			}catch (IOException e){
+				e.printStackTrace();
+			}finally {
+				IOUtils.closeQuietly(input);
+				IOUtils.closeQuietly(output);
+			}
+
+		    fc.responseComplete();
+	}
+	
+	public void addDokument(){
+			getNewDokument().setbKey(AbstractKapselEntity.generateBKey());
+			getNewDokument().setPosition(getSelectedAuftrag().getDokumente().size()+1);
+			if(!getNewDokument().getPath().equals("")){
+				getSelectedAuftrag().getDokumente().add(getNewDokument());
+			}
+	}
+	
+	public void deleteDokument(){
+		getSelectedAuftrag().getDokumente().remove(getSelectedDokument());
+	}
+	
+	public ArrayList<KapselDocument> kdToList(){
+		if(getSelectedAuftrag()==null || getSelectedAuftrag().getDokumente()==null){
+			return null;
+		}
+		ArrayList<KapselDocument> sortedList= new ArrayList<KapselDocument>(getSelectedAuftrag().getDokumente());
 		Collections.sort(sortedList);
 		return sortedList; 
 	}

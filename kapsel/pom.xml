@@ -72,6 +72,7 @@
 		<!-- Apache Commons -->
 		<apachecc.version>1.4</apachecc.version>
 		<apachecl.version>3.5</apachecl.version>
+		<apachecio.version>2.5</apachecio.version>
 		
 	</properties>
 
@@ -232,6 +233,13 @@
 		    <artifactId>commons-lang3</artifactId>
 		    <version>${apachecl.version}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${apachecio.version}</version>
+		</dependency>
+		
 		
 		<!-- ___________________________________ javassist Byte Manipulation ___________________________________ -->
 		

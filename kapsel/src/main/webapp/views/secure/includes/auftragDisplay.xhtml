@@ -56,14 +56,24 @@
 	<p:fieldset legend="#{labels.calculation}">
 		<p:panelGrid>
 		<p:row>
-			<p:column>#{labels.pZeit}:</p:column>
-			<p:column>
-				<h:outputText value="#{auftragBean.selectedAuftrag.zeit}" />#{labels.zeitEinheit}
-			</p:column>
 			<p:column>#{labels.preis}:</p:column>
 			<p:column>
 				<h:outputText value="#{auftragBean.selectedAuftrag.preis}" />#{labels.waehrung}
 			</p:column>
+			<p:column>#{labels.pZeit}:</p:column>
+			<p:column>
+				<h:outputText value="#{auftragBean.selectedAuftrag.zeit}" />#{labels.zeitEinheit}
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.discountPreis}</p:column>
+			<p:column>
+				<p:outputLabel value="#{auftragBean.selectedAuftrag.discountPreis}">
+					<f:convertNumber maxFractionDigits="2"/>
+				</p:outputLabel>
+				#{labels.waehrung}
+			</p:column>
+			<p:column colspan="2"/>
 		</p:row>
 		</p:panelGrid>
 	</p:fieldset>

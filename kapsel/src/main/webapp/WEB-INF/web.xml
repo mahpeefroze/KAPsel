@@ -48,6 +48,18 @@
     <extension>woff2</extension>  
     <mime-type>application/x-font-woff2</mime-type>  
  </mime-mapping>
+ <mime-mapping>
+    <extension>pdf</extension>
+    <mime-type>application/pdf</mime-type>
+</mime-mapping>
+<mime-mapping>
+    <extension>txt</extension>
+    <mime-type>text/plain</mime-type>
+</mime-mapping>
+<mime-mapping>
+    <extension>msword</extension>
+    <mime-type>application/msword</mime-type>
+</mime-mapping>
  
  <!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
  <listener>

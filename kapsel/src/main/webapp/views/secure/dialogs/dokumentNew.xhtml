@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+	
+	<h:form id="dlgNewDokumentPanel" enctype="multipart/form-data">
+	
+	<p:panelGrid>
+		<p:row>
+			<p:column>#{labels.nachname}:</p:column>
+			<p:column>
+				<p:inputText id="docNameInput" value="#{auftragBean.newDokument.name}" style="width:200px;"/>
+				<p:tooltip for="docNameInput" value="Name" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.typ}:</p:column>
+			<p:column>
+				<p:selectOneMenu id="newDokumentTypSelect" value="#{auftragBean.newDokument.typ}" style="width:200px">
+					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{eTypes.documentT}" var="typ" itemLabel="#{typ}" itemValue="#{documentT}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.fileUpload}:</p:column>
+			<p:column>
+				 <p:fileUpload fileUploadListener="#{auftragBean.uploadToFile}" auto="true" update="dlgNewDokumentPanel"/>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.fileName}:</p:column>
+			<p:column>
+				<p:outputLabel id="fileNameOutput" value="#{auftragBean.newDokument.fileName}" style="width:200px;"/>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+	<p:message for="newDokumentTypSelect" />
+	<p:commandButton value="OK" action="#{auftragBean.addDokument()}" update="dlgNewDokumentPanel sect_form" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newDokument').hide();" />
+	<p:commandButton value="Abbrechen"  update="dlgNewDokumentPanel" oncomplete="PF('newDokument').hide();" />	
+	</h:form>
+	
+
+</ui:composition>
+
+

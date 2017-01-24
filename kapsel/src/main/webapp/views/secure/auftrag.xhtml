@@ -223,8 +223,9 @@
 
 					<!-- Dokumente -->
 					<p:tab title="#{labels.doc}">
-
-						<p:tabView>
+						<p:commandButton update="dokumentTV" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('newDokument').show();" />
+						<p:commandButton update="dokumentTV" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteProduktWrapper()}" />
+						<p:tabView id="dokumentTV">
 							<p:tab title="Übersicht">
 								<h:outputText value="Aktuelle Versionen von Dateien" />
 								<p:panelGrid>
@@ -253,40 +254,26 @@
 							</p:tab>
 							<p:tab title="Angebote">
 								<h:outputText value="Angebote für den Kunden" />
+								<p:dataTable value="#{auftragBean.kdToList()}" var="item" rowKey="#{item.id}" selectionMode="single" 
+								selection="#{auftragBean.selectedDokument}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
+									
+									<p:column headerText="#{labels.position}" style="width:50px;">
+										<h:outputText value="#{item.position}" />
+									</p:column>
+									<p:column headerText="#{labels.nachname}" style="width:50px;">
+										<h:outputText value="#{item.name}" />
+									</p:column>
+									<p:column headerText="#{labels.typ}" style="width:50px;">
+										<h:outputText value="#{item.typ}" />
+									</p:column>
+									<p:column headerText="#{labels.fileName}" style="width:50px;">
+										<p:commandLink id="dlDokument" value="#{item.fileName}" ajax="false" action="#{auftragBean.dlDokument(item)}" disabled="#{auftragBean.editMode}"/>
+									</p:column>
+								
+								</p:dataTable>
 							</p:tab>
-							<p:tab title="Auftragsbestätigung">
-								<h:outputText
-									value="Bestätigung durch Kunden - Eingescannte datei/email" />
-							</p:tab>
-							<p:tab title="Abschlagsrechnung">
-								<h:outputText
-									value="Teilrechnung wenn ein Teil der Leistungen erledigt wurden" />
-							</p:tab>
-							<p:tab title="Rechnung">
-								<h:outputText value="End/gesamtrechnung für die Bestellung" />
-							</p:tab>
-							<p:tab title="Briefe und Gesprächsprotokolle">
-								<h:outputText value="Briefe an und von Kunden" />
-							</p:tab>
-							<p:tab title="Lieferschein">
-								<h:outputText value="Lieferschein für Kunden" />
-							</p:tab>
+							
 						</p:tabView>
-						
-					</p:tab>
-
-					<p:tab title="#{labels.dateien}">
-
-
-						<p:fileUpload value="#{fileUploadView.file}" multiple="true" mode="simple"
-							skinSimple="true" />
-
-						<p:commandButton value="Submit" ajax="false" disabled="true" />
-						
-						<p:fieldset style="margin-bottom:10px;">
-						
-						
-						</p:fieldset>
 						
 					</p:tab>
 					
@@ -329,6 +316,10 @@
 	
 	<p:dialog id="produktAddDlg" header="Neuer Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">
 		<ui:include src="/views/secure/dialogs/produktAdd.xhtml"/>
+	</p:dialog>
+	
+	<p:dialog id="dokumentNewDlg" header="Neues Dokument" modal="true" widgetVar="newDokument" minHeight="40" resizable="false">
+		<ui:include src="/views/secure/dialogs/dokumentNew.xhtml"/>
 	</p:dialog>
 	
 </body>

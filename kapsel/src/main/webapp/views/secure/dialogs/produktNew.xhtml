@@ -39,6 +39,16 @@
 				<p:inputTextarea styleClass="fullWidth" value="#{produktBean.newProdukt.text}"  placeholder="Kurze Beschreibung des Produkts..."/>
 			</p:column>
 		</p:row>
+		<p:row>
+			<p:column>#{labels.templ}:</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox value="#{produktBean.newProdukt.tempFlag}" />
+			</p:column>
+			<p:column>#{labels.std}:</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox value="#{produktBean.newProdukt.stdFlag}" />
+			</p:column>
+		</p:row>
 	</p:panelGrid>
 		
 	

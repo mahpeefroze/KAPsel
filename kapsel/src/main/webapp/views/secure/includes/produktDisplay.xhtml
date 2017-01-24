@@ -5,8 +5,12 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-	<p:panelGrid columns="2" styleClass="fullWidth">
-		<h:outputText value="#{produktBean.selectedProdukt.name}" />
+	<p:panelGrid styleClass="fullWidth" style="height: 42px;">
+		<p:row>
+			<p:column><h:outputText value="#{produktBean.selectedProdukt.name}" /></p:column>
+			<p:column style="width:150px;"><p:panel rendered="#{produktBean.selectedProdukt.tempFlag}" styleClass="produkt-tag produkt-tag-template">#{labels.templ}</p:panel></p:column>
+			<p:column style="width:150px;"><p:panel rendered="#{produktBean.selectedProdukt.stdFlag}" styleClass="produkt-tag produkt-tag-standard">#{labels.std}</p:panel></p:column>
+		</p:row>
 	</p:panelGrid>
 	<br></br>
 	<p:fieldset style="margin-bottom:10px;">

@@ -53,3 +53,21 @@ body{
 	margin-left: -14px;
 	margin-top: -8px;
 }
+
+.produkt-tag{
+	width: 150px;
+}
+
+.produkt-tag.ui-panel .ui-panel-content{
+	padding: 0.1em .2em;
+}
+
+.produkt-tag-template{
+	background-color: #8EC1E7; 
+	width: 75px;
+}
+
+.produkt-tag-standard{
+	background-color: #FF7976; 
+	width: 125px;
+}

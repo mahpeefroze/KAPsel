@@ -4,9 +4,15 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-
-	<p:panelGrid columns="2" styleClass="fullWidth">
-		<p:inputText value="#{produktBean.selectedProdukt.name}"/>
+	
+	<p:panelGrid styleClass="fullWidth" style="height: 42px;">
+		<p:row>
+			<p:column><p:inputText value="#{produktBean.selectedProdukt.name}"/></p:column>
+			<p:column style="width:110px;">#{labels.templ}:</p:column>
+			<p:column style="width:40px;"><p:selectBooleanCheckbox value="#{produktBean.selectedProdukt.tempFlag}" /></p:column>
+			<p:column style="width:110px;">#{labels.std}:</p:column>
+			<p:column style="width:40px;"><p:selectBooleanCheckbox value="#{produktBean.selectedProdukt.stdFlag}" /></p:column>
+		</p:row>
 	</p:panelGrid>
 	<br></br>
 	<p:fieldset style="margin-bottom:10px;">
@@ -47,7 +53,7 @@
 					<p:inputText id="preisInput" value="#{produktBean.selectedProdukt.preis}">
 						<f:convertNumber maxFractionDigits="2"/>
 					</p:inputText>
-					<p:commandButton action="#{produktBean.calculatePrice}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
+					<p:commandButton action="#{produktBean.calculateNetto}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
 				</p:column>
 				<p:column>#{labels.pZeit}</p:column>
 				<p:column>

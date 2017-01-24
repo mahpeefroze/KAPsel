@@ -28,6 +28,7 @@
             	<!-- Core -->
                 <value>de.kapsel.auftrag.entities.Auftrag</value> <!-- Without this, Auftrag is unknown entity -->
                 <value>de.kapsel.auftrag.entities.ProduktWrapper</value>
+                <value>de.kapsel.auftrag.entities.KapselDocument</value>
                 <value>de.kapsel.kunde.entities.Kunde</value>
                 <value>de.kapsel.kunde.entities.KGruppe</value>
                 <value>de.kapsel.produkt.entities.Produkt</value>
@@ -80,6 +81,13 @@
 		<property name="produktWrapperDAO" ref="produktWrapperDAO" />
 	</bean>
 	<bean id="produktWrapperDAO" class="de.kapsel.auftrag.dao.ProduktWrapperDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <bean id="kapselDocumentService" class="de.kapsel.auftrag.services.KapselDocumentService">
+		<property name="kapselDocumentDAO" ref="kapselDocumentDAO" />
+	</bean>
+	<bean id="kapselDocumentDAO" class="de.kapsel.auftrag.dao.KapselDocumentDAO">
     	<property name="sessionFactory" ref="sessionFactory" />
     </bean>
     	

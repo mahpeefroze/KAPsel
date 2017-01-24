@@ -10,4 +10,6 @@ public interface IKapselCalculator<T extends Serializable> {
 	
 	double calculateBruttoPrice(T t);
 	
+	double calculateAfterDiscount(T t);
+	
 }

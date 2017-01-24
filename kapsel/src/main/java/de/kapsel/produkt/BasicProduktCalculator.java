@@ -100,6 +100,18 @@ public class BasicProduktCalculator implements Serializable, IKapselCalculator<P
 		price*= (1+getUtilsContainer().getUtilsMap().get("USt").getValue()/100);
 		return price;
 	}
+
+	@Override
+	public double calculateAfterDiscount(Produkt p) {
+		double rabatt = 0;
+		double price = calculateBruttoPrice(p);
+		if(getUtilsContainer().getUtilsMap().get("RabAlleS").getValue()==1 &&
+				getUtilsContainer().getUtilsMap().get("RabAlle").getValue()>rabatt){
+			rabatt=getUtilsContainer().getUtilsMap().get("RabAlle").getValue();
+		}
+		price=price * ((100-rabatt)/100);
+		return price;
+	}
 	
 	
 

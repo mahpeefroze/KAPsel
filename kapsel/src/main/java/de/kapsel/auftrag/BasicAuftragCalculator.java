@@ -8,6 +8,7 @@ import javax.faces.bean.ViewScoped;
 
 import de.kapsel.auftrag.entities.Auftrag;
 import de.kapsel.auftrag.entities.ProduktWrapper;
+import de.kapsel.global.ETypes;
 import de.kapsel.global.IKapselCalculator;
 import de.kapsel.global.beans.UtilsBean;
 
@@ -49,8 +50,36 @@ public class BasicAuftragCalculator implements Serializable, IKapselCalculator<A
 	}
 
 	public double calculateBruttoPrice(Auftrag a) {
-		double price=a.getPreis();
-		price*= (1+getUtilsContainer().getUtilsMap().get("USt").getValue());
+		double price=calculateNettoPrice(a);
+		price*= (1+getUtilsContainer().getUtilsMap().get("USt").getValue()/100);
+		return price;
+	}
+
+	@Override
+	public double calculateAfterDiscount(Auftrag a) {
+		double rabatt = a.getKunde().getRabatt();
+		double price = calculateBruttoPrice(a);
+		if(a.getKunde().getGruppe()!=null && a.getKunde().getGruppe().getRabatt()>rabatt){
+			rabatt=a.getKunde().getGruppe().getRabatt();
+		}
+		if(getUtilsContainer().getUtilsMap().get("RabAlleS").getValue()==1 &&
+				getUtilsContainer().getUtilsMap().get("RabAlle").getValue()>rabatt){
+			rabatt=getUtilsContainer().getUtilsMap().get("RabAlle").getValue();
+		}
+		if(a.getKunde().getTyp()==ETypes.KundeT.Öffentlich &&
+				getUtilsContainer().getUtilsMap().get("RabOeffS").getValue()==1 &&
+				getUtilsContainer().getUtilsMap().get("RabOeff").getValue()>rabatt){
+			rabatt=getUtilsContainer().getUtilsMap().get("RabOeff").getValue();
+		}else if(a.getKunde().getTyp()==ETypes.KundeT.Firma &&
+				getUtilsContainer().getUtilsMap().get("RabFiS").getValue()==1 &&
+				getUtilsContainer().getUtilsMap().get("RabFi").getValue()>rabatt){
+			rabatt=getUtilsContainer().getUtilsMap().get("RabFi").getValue();
+		}else if(a.getKunde().getTyp()==ETypes.KundeT.Privat &&
+				getUtilsContainer().getUtilsMap().get("RabPrivS").getValue()==1 &&
+				getUtilsContainer().getUtilsMap().get("RabPriv").getValue()>rabatt){
+			rabatt=getUtilsContainer().getUtilsMap().get("RabPriv").getValue();
+		}
+		price=price * ((100-rabatt)/100);
 		return price;
 	}
 	

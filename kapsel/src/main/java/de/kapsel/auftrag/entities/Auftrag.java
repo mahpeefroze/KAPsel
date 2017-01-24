@@ -19,13 +19,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.global.ETypes;
+import de.kapsel.global.entities.AbstractKapselEntity;
 import de.kapsel.global.entities.User;
 import de.kapsel.kunde.entities.Kunde;
 
 
 @Entity
 @Table(name = "auftraege")
-public class Auftrag implements Serializable, Comparable<Auftrag>{
+public class Auftrag extends AbstractKapselEntity implements Serializable, Comparable<Auftrag>{
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -36,13 +37,16 @@ public class Auftrag implements Serializable, Comparable<Auftrag>{
 	private User bearbeiter;
 	private ETypes.AuftragS status;
 	private int zeit;
-	private double preis;
+	private double preis=0;
+	private double nettoPreis=0;
+	private double discountPreis=0;
 	private Date sollenddatum;
 	private Date startdatum;
 	private Date enddatum;
 	private Timestamp erstDatum;
 	private Timestamp modDatum;
 	private Set<ProduktWrapper> produkte;
+	private Set<KapselDocument> dokumente;
 	
 
 	
@@ -138,6 +142,24 @@ public class Auftrag implements Serializable, Comparable<Auftrag>{
 		this.preis = preis;
 	}
 	
+	@Column(name="nettoPreis")
+	public double getNettoPreis() {
+		return nettoPreis;
+	}
+
+	public void setNettoPreis(double nettoPreis) {
+		this.nettoPreis = nettoPreis;
+	}
+	
+	@Column(name="discountPreis")
+	public double getDiscountPreis() {
+		return discountPreis;
+	}
+
+	public void setDiscountPreis(double discountPreis) {
+		this.discountPreis = discountPreis;
+	}
+
 	@Column(name="soll_enddatum")
 	public Date getSollenddatum() {
 		return sollenddatum;
@@ -193,7 +215,15 @@ public class Auftrag implements Serializable, Comparable<Auftrag>{
 	public void setProdukte(Set<ProduktWrapper> produkte) {
 		this.produkte = produkte;
 	}
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<KapselDocument> getDokumente() {
+		return dokumente;
+	}
 
+	public void setDokumente(Set<KapselDocument> dokumente) {
+		this.dokumente = dokumente;
+	}
 
 	@Override
 	public int compareTo(Auftrag a) {

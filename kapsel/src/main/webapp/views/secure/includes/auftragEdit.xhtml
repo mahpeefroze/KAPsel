@@ -46,7 +46,7 @@
 					<p:commandButton icon="fa fa-user-plus" oncomplete="PF('editKundeSelect').show()"/>
 				</p:column>
 				<p:column>#{labels.terminL}:</p:column>
-				<p:column ><p:calendar showOn="button" pattern="dd.MM.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}" /></p:column>
+				<p:column ><p:calendar showOn="button" pattern="dd.MM.yyyy" pages="3" value="#{auftragBean.newAuftrag.sollenddatum}" icon="fa fa-calendar"/></p:column>
 			</p:row>
 			<p:row>
 				<p:column>#{labels.verantwortlichMA}:</p:column>
@@ -68,14 +68,28 @@
 	<p:fieldset legend="#{labels.calculation}">
 		<p:panelGrid>
 		<p:row>
-			<p:column>#{labels.pZeit}:</p:column>
-			<p:column>
-				<p:inputText value="#{auftragBean.selectedAuftrag.zeit}" />#{labels.zeitEinheit}
-			</p:column>
 			<p:column>#{labels.preis}:</p:column>
 			<p:column>
-				<p:inputText value="#{auftragBean.selectedAuftrag.preis}" />#{labels.waehrung}
+				<p:inputText id="preisInput" value="#{auftragBean.selectedAuftrag.preis}">
+						<f:convertNumber maxFractionDigits="2"/>
+					</p:inputText>
+					<p:commandButton action="#{auftragBean.calculateBrutto}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
 			</p:column>
+			<p:column>#{labels.pZeit}:</p:column>
+			<p:column>
+				<p:inputText id="zeitInput" value="#{auftragBean.selectedAuftrag.zeit}"/>
+				<p:commandButton action="#{auftragBean.calculateTime}" update="zeitInput" icon="fa fa-calculator" title="#{labels.calcZeit}"/>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>#{labels.discountPreis}</p:column>
+			<p:column>
+				<p:outputLabel id="discountOutput" value="#{auftragBean.selectedAuftrag.discountPreis}" >
+					<f:convertNumber maxFractionDigits="2"/>
+				</p:outputLabel>
+				<p:commandButton action="#{auftragBean.calculateDiscount()}" update="discountOutput" icon="fa fa-calculator" title="#{labels.calcDiscount}"/>
+			</p:column>
+			<p:column colspan="2"/>
 		</p:row>
 		</p:panelGrid>
 	</p:fieldset>

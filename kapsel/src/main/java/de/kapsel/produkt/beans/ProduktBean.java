@@ -234,7 +234,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		return pnr + 1;
 	}
 	
-	public void calculatePrice(){
+	public void calculateNetto(){
 		getSelectedProdukt().setPreis(getProduktCalc().calculateNettoPrice(getSelectedProdukt()));
 	}
 	
