@@ -24,7 +24,7 @@ import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name="produkte")
-public class Produkt extends AbstractKapselEntity implements Serializable {
+public class Produkt extends AbstractKapselEntity implements Serializable, Comparable<Produkt> {
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -185,6 +185,13 @@ public class Produkt extends AbstractKapselEntity implements Serializable {
         return new EqualsBuilder().
                 append(getbKey(), p.getbKey()).
                 isEquals();
+	}
+	@Override
+	public int compareTo(Produkt p) {
+		if(p==null){
+			return -1;
+		}
+		return Long.compare(getPnr(), p.getPnr());
 	}
 	
 }

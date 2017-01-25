@@ -45,7 +45,10 @@ public class AuftragService implements IAuftragService {
 	@Override
 	@Transactional(readOnly = true)
 	public Auftrag getAuftragByName(String name) {
-		return auftragDAO.getItemByName(name);
+		Auftrag result = auftragDAO.getItemByName(name);
+		Hibernate.initialize(result.getProdukte());
+		Hibernate.initialize(result.getDokumente());
+		return result;
 	}
 
 	@Override

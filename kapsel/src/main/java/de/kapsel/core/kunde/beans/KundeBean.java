@@ -49,6 +49,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
     public void myInit() {
 		try{
 			setKunden(getKundeService().getKundenWithChildren());
+			Collections.sort(getKunden());
 			setSelectedKunde(getKunden().get(0));
 			setEmptyList(false);
 			disableEditMode();

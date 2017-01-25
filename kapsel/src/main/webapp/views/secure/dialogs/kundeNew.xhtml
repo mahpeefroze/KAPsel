@@ -82,7 +82,7 @@
 	</p:panelGrid>
 	
 	
-	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgNewKundePanel nav_form ribbon_form" oncomplete="PF('newKunde').hide();">
+	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgNewKundePanel nav_form ribbon_form sect_form" oncomplete="PF('newKunde').hide();">
 		<p:resetInput target="newKgruppeSelect" />
 	</p:commandButton>
 	<p:commandButton value="Abbrechen" action="#{kundeBean.resetNewKunde()}" update="dlgNewKundePanel" oncomplete="PF('newKunde').hide();" />

@@ -22,7 +22,7 @@ import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name = "kunden")
-public class Kunde extends AbstractKapselEntity implements Serializable {
+public class Kunde extends AbstractKapselEntity implements Serializable, Comparable<Kunde> {
 
 	private static final long serialVersionUID = 1L;
 	private long id;
@@ -138,6 +138,13 @@ public class Kunde extends AbstractKapselEntity implements Serializable {
         return new EqualsBuilder().
                 append(getbKey(), k.getbKey()).
                 isEquals();
+	}
+	@Override
+	public int compareTo(Kunde k) {
+		if(k==null){
+			return -1;
+		}
+		return Long.compare(getKnr(), k.getKnr());
 	}
 	
 }

@@ -2,6 +2,7 @@ package de.kapsel.core.kunde.services;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.kapsel.core.kunde.entities.Kunde;
@@ -37,12 +38,16 @@ public class KundeService implements IKundeService{
 
 	@Transactional(readOnly = true)
 	public Kunde getKundeByName(String name) {
-		return kundeDAO.getItemByName(name);
+		Kunde result = kundeDAO.getItemByName(name);
+		Hibernate.initialize(result.getAuftraege());
+		return result;
 	}
 
 	@Transactional(readOnly = true)
 	public Kunde getKundeById(long id) {
-		return kundeDAO.getItemById(id);
+		Kunde result = kundeDAO.getItemById(id);
+		Hibernate.initialize(result.getAuftraege());
+		return result;
 	}
 
 	@Transactional(readOnly = true)

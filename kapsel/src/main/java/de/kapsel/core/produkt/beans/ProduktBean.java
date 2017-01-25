@@ -65,6 +65,7 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
     public void myInit() {
 		try{
 			setProdukte(getProduktService().getProdukteWithChildren());
+			Collections.sort(getProdukte());
 			setSelectedProdukt(getProdukte().get(0));
 			setEmptyList(false);
 			disableEditMode();

@@ -52,7 +52,7 @@
 	</p:panelGrid>
 		
 	
-	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgNewProduktPanel nav_form ribbon_form" oncomplete="PF('newProdukt').hide();" />
+	<p:commandButton value="OK" action="#{produktBean.addProdukt()}" update="dlgNewProduktPanel nav_form ribbon_form sect_form" oncomplete="PF('newProdukt').hide();" />
 	<p:commandButton value="Abbrechen" action="#{produktBean.resetNewProdukt()}" update="dlgNewProduktPanel" oncomplete="PF('newProdukt').hide();" />
 	
 	</h:form>

@@ -3,14 +3,12 @@ package de.kapsel.core.util.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.faces.bean.ManagedProperty;
 
 import org.hibernate.SessionFactory;
 
 @SuppressWarnings({"unchecked" ,"rawtypes"})
 public abstract class AbstractDAO<T extends Serializable>{
 
-	@ManagedProperty(value="#{sessionFactory}")
 	protected SessionFactory sessionFactory;
 
 	//Getter and setter for managed property

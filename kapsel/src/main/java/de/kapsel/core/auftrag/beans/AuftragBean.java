@@ -102,10 +102,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
     public void myInit() {
 		try{
 			setAuftraege(auftragService.getAuftraegeWithChildren());
+			Collections.sort(getAuftraege());
 			setSelectedAuftrag(getAuftraege().get(0));
-			setNewDokument(new KapselDocument());
 			setEmptyList(false);
-			setEditMode(false);
+			disableEditMode();
 		}catch(DataAccessException e) {
 			System.out.println(e.getStackTrace());
 		}catch(NullPointerException e) {
@@ -124,6 +124,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		getNewAuftrag().setProdukte(new HashSet<ProduktWrapper>());
 		getNewAuftrag().setKunde(new Kunde());
 		getNewAuftrag().setDokumente(new HashSet<KapselDocument>());
+		setNewDokument(new KapselDocument());
 	}
 	
 	//region Getter/Setter
@@ -443,7 +444,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		if(getStdProdukte()==null){
 			ArrayList<String> prodNames = new ArrayList<>();
 			produktMap = new HashMap<>();
-			for(Produkt p:getProduktService().getProdukte()){
+			for(Produkt p:getProduktService().getNonTemplates()){
 				produktMap.put(p.getName(), p);
 				prodNames.add(p.getName());
 			}
@@ -539,7 +540,10 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	}
 	
 	public void deleteDokument(){
-		getSelectedAuftrag().getDokumente().remove(getSelectedDokument());
+		if(getSelectedDokument()!=null){
+			updateItemPosition(getSelectedDokument().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getDokumente()));
+			getSelectedAuftrag().getDokumente().remove(getSelectedDokument());
+		}
 	}
 	
 	public ArrayList<KapselDocument> kdToList(){

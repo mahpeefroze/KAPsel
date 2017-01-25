@@ -10,12 +10,13 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import de.kapsel.core.util.DTItem;
 import de.kapsel.core.util.ETypes;
 import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name = "dokumente")
-public class KapselDocument extends AbstractKapselEntity implements Serializable, Comparable<KapselDocument>{
+public class KapselDocument extends AbstractKapselEntity implements Serializable, Comparable<KapselDocument>, DTItem{
 	
 	private static final long serialVersionUID = 1L;
 	private long id;

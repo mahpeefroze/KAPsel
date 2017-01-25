@@ -43,33 +43,25 @@ public class ProduktService implements IProduktService{
 	@Override
 	@Transactional(readOnly = true)
 	public Produkt getProduktByName(String name) {
-		return produktDAO.getItemByName(name);
+		Produkt result = produktDAO.getItemByName(name);
+		Hibernate.initialize(result.getAschritte());
+		Hibernate.initialize(result.getBauteile());
+		return result;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Produkt getProduktById(long id) {
-		Produkt p = produktDAO.getItemById(id);
-		Hibernate.initialize(p.getAschritte());
-		Hibernate.initialize(p.getBauteile());
-		return p;
+		Produkt result = produktDAO.getItemById(id);
+		Hibernate.initialize(result.getAschritte());
+		Hibernate.initialize(result.getBauteile());
+		return result;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<Produkt> getProdukte() {
-		ArrayList<Produkt> nontemps = new ArrayList<Produkt>();
-		List<Produkt> produkte = produktDAO.getItems();
-		for(Produkt p:produkte){
-			if(!p.isTempFlag()){
-				nontemps.add(p);
-			}
-			
-		}
-		if(!nontemps.isEmpty()){
-			return nontemps;
-		}
-		return null;
+		return produktDAO.getItems();
 	}
 
 	@Override
@@ -90,6 +82,21 @@ public class ProduktService implements IProduktService{
 		}
 		if(!temps.isEmpty()){
 			return temps;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Produkt> getNonTemplates() {
+		List<Produkt> nontemps = new ArrayList<Produkt>();
+		for(Produkt p:produktDAO.getItems()){
+			if(!p.isTempFlag()){
+				nontemps.add(p);
+			}
+			
+		}
+		if(!nontemps.isEmpty()){
+			return nontemps;
 		}
 		return null;
 	}
