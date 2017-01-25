@@ -155,12 +155,12 @@
 						
 						<!-- Edit Mode -->
 						<ui:fragment rendered="#{auftragBean.editMode}">
-							<ui:include src="/views/secure/includes/auftragEdit.xhtml"/>
+							<ui:include src="/WEB-INF/includes/auftragEdit.xhtml"/>
 						</ui:fragment>
 						
 						<!-- Display Mode -->
 						<ui:fragment rendered="#{not auftragBean.editMode}">
-							<ui:include src="/views/secure/includes/auftragDisplay.xhtml"/>
+							<ui:include src="/WEB-INF/includes/auftragDisplay.xhtml"/>
 						</ui:fragment>
 							
 					</p:tab>
@@ -263,11 +263,11 @@
 	</div>
 
 	<p:dialog id="auftragNewDlg" header="Neuer Auftrag" modal="true" widgetVar="newAuftrag" minHeight="40" resizable="false">
-		<ui:include src="/views/secure/dialogs/auftragNew.xhtml"/>
+		<ui:include src="/WEB-INF/includes/dialogs/auftragNew.xhtml"/>
 	</p:dialog>
 	
 	<p:dialog id="miniKListeDlgEdit" header="Kunden auswählen" modal="true" widgetVar="editKundeSelect" minHeight="40" width="450" resizable="false">
-		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml">
+		<ui:include src="/WEB-INF/includes/dialogs/miniKundenList.xhtml">
 			<ui:param name="targetKunde" value="#{auftragBean.selectedAuftrag.kunde}" />
 			<ui:param name="targetUpdate" value="sect_form" />
 		</ui:include>
@@ -276,7 +276,7 @@
 	</p:dialog>
 	
 	<p:dialog id="miniBListeDlgEdit" header="Bearbeiter auswählen" modal="true" widgetVar="editBearbeiterSelect" minHeight="40" width="400" resizable="false">
-		<ui:include src="/views/secure/dialogs/miniBearbeiterList.xhtml">
+		<ui:include src="/WEB-INF/includes/dialogs/miniBearbeiterList.xhtml">
 			<ui:param name="targetBearbeiter" value="#{auftragBean.selectedAuftrag.bearbeiter}" />
 			<ui:param name="targetUpdate" value="sect_form" />
 		</ui:include>
@@ -285,11 +285,11 @@
 	</p:dialog>
 	
 	<p:dialog id="produktAddDlg" header="Neuer Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">
-		<ui:include src="/views/secure/dialogs/produktAdd.xhtml"/>
+		<ui:include src="/WEB-INF/includes/produktAdd.xhtml"/>
 	</p:dialog>
 	
 	<p:dialog id="dokumentNewDlg" header="Neues Dokument" modal="true" widgetVar="newDokument" minHeight="40" resizable="false">
-		<ui:include src="/views/secure/dialogs/dokumentNew.xhtml"/>
+		<ui:include src="/WEB-INF/includes/dialogs/dokumentNew.xhtml"/>
 	</p:dialog>
 	
 </body>

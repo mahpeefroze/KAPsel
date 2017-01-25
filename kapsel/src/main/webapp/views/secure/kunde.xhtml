@@ -138,14 +138,14 @@
 						
 						<!-- Edit Mode -->
 						<ui:fragment rendered="#{kundeBean.editMode}">
-							<ui:include src="/views/secure/includes/kundeEdit.xhtml">
+							<ui:include src="/WEB-INF/includes/kundeEdit.xhtml">
 								<ui:param name="eKunde" value="#{kundeBean.selectedKunde}"/>
 							</ui:include>
 						</ui:fragment>
 						
 						<!-- Display Mode -->
 						<ui:fragment rendered="#{not kundeBean.editMode}">
-							<ui:include src="/views/secure/includes/kundeDisplay.xhtml"/>
+							<ui:include src="/WEB-INF/includes/kundeDisplay.xhtml"/>
 						</ui:fragment>
 						
 						<p:spacer/>
@@ -203,7 +203,7 @@
 	</div>
 		
 	<p:dialog id="kundeNewDlg" header="Neuer Kunde" modal="true" widgetVar="newKunde" minHeight="40" resizable="false">
-			<ui:include src="/views/secure/dialogs/kundeNew.xhtml"/>
+			<ui:include src="/WEB-INF/includes/dialogs/kundeNew.xhtml"/>
 	</p:dialog>
 
 </body>

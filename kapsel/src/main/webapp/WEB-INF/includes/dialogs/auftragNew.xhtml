@@ -55,7 +55,7 @@
 	</h:form>
 	
 	<p:dialog id="miniKListeDlgNew" header="Kunden auswählen"  widgetVar="newKundeSelect" minHeight="40" width="450" resizable="false" modal="true" appendTo="@(body)">
-		<ui:include src="/views/secure/dialogs/miniKundenList.xhtml">
+		<ui:include src="miniKundenList.xhtml">
 			<ui:param name="targetKunde" value="#{auftragBean.newAuftrag.kunde}" />
 			<ui:param name="targetUpdate" value=":dlgNewAuftragPanel" />
 		</ui:include>
@@ -64,7 +64,7 @@
 	</p:dialog>
 	
 	<p:dialog id="miniBListeDlgNew" header="Bearbeiter auswählen"  widgetVar="newBearbeiterSelect" minHeight="40" width="400" resizable="false" modal="true" appendTo="@(body)">
-		<ui:include src="/views/secure/dialogs/miniBearbeiterList.xhtml">
+		<ui:include src="miniBearbeiterList.xhtml">
 			<ui:param name="targetBearbeiter" value="#{auftragBean.newAuftrag.bearbeiter}" />
 			<ui:param name="targetUpdate" value=":dlgNewAuftragPanel" />
 		</ui:include>

@@ -147,12 +147,12 @@
 						
 						<!-- Edit Mode -->
 						<ui:fragment rendered="#{produktBean.editMode}">
-							<ui:include src="/views/secure/includes/produktEdit.xhtml"/>
+							<ui:include src="/WEB-INF/includes/produktEdit.xhtml"/>
 						</ui:fragment>
 						
 						<!-- Display Mode -->
 						<ui:fragment rendered="#{not produktBean.editMode}">
-							<ui:include src="/views/secure/includes/produktDisplay.xhtml"/>
+							<ui:include src="/WEB-INF/includes/produktDisplay.xhtml"/>
 						</ui:fragment>
 
 						<p:spacer/>
@@ -300,7 +300,7 @@
 	</div>
 		
 	<p:dialog id="produktNewDlg" header="Neues Produkt" modal="true" widgetVar="newProdukt" style="max-width: 3000px; minHeight: 40px;"  resizable="false">
-			<ui:include src="/views/secure/dialogs/produktNew.xhtml"/>
+			<ui:include src="/WEB-INF/includes/dialogs/produktNew.xhtml"/>
 	</p:dialog>
 
 </body> 
