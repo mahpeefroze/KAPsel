@@ -10,9 +10,9 @@ import javax.faces.bean.ManagedProperty;
 
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.core.global.entities.AbstractKapselEntity;
 import de.kapsel.core.produkt.entities.Material;
 import de.kapsel.core.produkt.services.IMaterialService;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ApplicationScoped

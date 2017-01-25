@@ -2,9 +2,9 @@ package de.kapsel.core.produkt.dao;
 
 import java.util.List;
 
-import de.kapsel.core.global.dao.AbstractDAO;
-import de.kapsel.core.global.dao.ILazyLoadDAO;
 import de.kapsel.core.produkt.entities.Produkt;
+import de.kapsel.core.util.dao.AbstractDAO;
+import de.kapsel.core.util.dao.ILazyLoadDAO;
 
 public class ProduktDAO extends AbstractDAO<Produkt> implements ILazyLoadDAO<Produkt> {
 

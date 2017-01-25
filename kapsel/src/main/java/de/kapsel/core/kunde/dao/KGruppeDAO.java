@@ -2,9 +2,9 @@ package de.kapsel.core.kunde.dao;
 
 import java.util.List;
 
-import de.kapsel.core.global.dao.AbstractDAO;
 import de.kapsel.core.kunde.entities.KGruppe;
 import de.kapsel.core.kunde.entities.Kunde;
+import de.kapsel.core.util.dao.AbstractDAO;
 
 public class KGruppeDAO extends AbstractDAO<KGruppe> implements IKGruppeDAO {
 

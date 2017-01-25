@@ -37,15 +37,15 @@ import de.kapsel.core.auftrag.entities.ProduktWrapper;
 import de.kapsel.core.auftrag.services.IAuftragService;
 import de.kapsel.core.auftrag.services.IKapselDocumentService;
 import de.kapsel.core.auftrag.services.IProduktWrapperService;
-import de.kapsel.core.global.DTItem;
-import de.kapsel.core.global.ETypes;
-import de.kapsel.core.global.IKapselCalculator;
-import de.kapsel.core.global.beans.AbstractModulBean;
-import de.kapsel.core.global.beans.UtilsBean;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
 import de.kapsel.core.kunde.entities.Kunde;
 import de.kapsel.core.produkt.entities.Produkt;
 import de.kapsel.core.produkt.services.IProduktService;
+import de.kapsel.core.util.DTItem;
+import de.kapsel.core.util.ETypes;
+import de.kapsel.core.util.IKapselCalculator;
+import de.kapsel.core.util.beans.AbstractModulBean;
+import de.kapsel.core.util.beans.UtilsBean;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ViewScoped
@@ -323,7 +323,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			getNewAuftrag().setAnr(getUtilsContainer().getNextMax("ANR"));
 			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
 			getNewAuftrag().setStartdatum(new Date());
-			getNewAuftrag().getKunde().getAuftraege().add(getNewAuftrag());
 			getNewAuftrag().setbKey(AbstractKapselEntity.generateBKey());
 			getAuftragService().addAuftrag(getNewAuftrag());
 			getUtilsContainer().updateNrStorage();

@@ -16,8 +16,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import de.kapsel.core.global.ETypes;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
+import de.kapsel.core.util.ETypes;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;

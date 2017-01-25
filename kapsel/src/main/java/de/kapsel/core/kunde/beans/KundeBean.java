@@ -15,13 +15,13 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
-import de.kapsel.core.global.beans.AbstractModulBean;
-import de.kapsel.core.global.beans.UtilsBean;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
-import de.kapsel.core.global.entities.Adresse;
+import de.kapsel.core.kunde.entities.Adresse;
 import de.kapsel.core.kunde.entities.Kunde;
 import de.kapsel.core.kunde.services.IKGruppeService;
 import de.kapsel.core.kunde.services.IKundeService;
+import de.kapsel.core.util.beans.AbstractModulBean;
+import de.kapsel.core.util.beans.UtilsBean;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ViewScoped

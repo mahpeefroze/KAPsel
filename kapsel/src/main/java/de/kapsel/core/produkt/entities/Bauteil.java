@@ -11,8 +11,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import de.kapsel.core.global.DTItem;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
+import de.kapsel.core.util.DTItem;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="bauteile")

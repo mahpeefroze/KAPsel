@@ -14,15 +14,15 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.core.global.DTItem;
-import de.kapsel.core.global.IKapselCalculator;
-import de.kapsel.core.global.beans.AbstractModulBean;
-import de.kapsel.core.global.beans.UtilsBean;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
 import de.kapsel.core.produkt.entities.Arbeitsschritt;
 import de.kapsel.core.produkt.entities.Bauteil;
 import de.kapsel.core.produkt.entities.Produkt;
 import de.kapsel.core.produkt.services.IProduktService;
+import de.kapsel.core.util.DTItem;
+import de.kapsel.core.util.IKapselCalculator;
+import de.kapsel.core.util.beans.AbstractModulBean;
+import de.kapsel.core.util.beans.UtilsBean;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ViewScoped

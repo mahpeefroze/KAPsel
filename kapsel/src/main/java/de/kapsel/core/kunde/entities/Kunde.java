@@ -17,9 +17,8 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
-import de.kapsel.core.global.ETypes;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
-import de.kapsel.core.global.entities.Adresse;
+import de.kapsel.core.util.ETypes;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name = "kunden")
@@ -121,7 +120,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable {
 		this.status = status;
 	}
 	
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kunde")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kunde")
 	public Set<Auftrag> getAuftraege() {
 		return auftraege;
 	}

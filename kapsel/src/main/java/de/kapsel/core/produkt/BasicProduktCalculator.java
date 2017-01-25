@@ -6,11 +6,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import de.kapsel.core.global.IKapselCalculator;
-import de.kapsel.core.global.beans.UtilsBean;
 import de.kapsel.core.produkt.entities.Arbeitsschritt;
 import de.kapsel.core.produkt.entities.Bauteil;
 import de.kapsel.core.produkt.entities.Produkt;
+import de.kapsel.core.util.IKapselCalculator;
+import de.kapsel.core.util.beans.UtilsBean;
 
 @ManagedBean
 @ViewScoped

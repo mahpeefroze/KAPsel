@@ -3,7 +3,7 @@ package de.kapsel.core.auftrag.services;
 import java.util.List;
 
 import de.kapsel.core.auftrag.entities.ProduktWrapper;
-import de.kapsel.core.global.dao.IGenericDAO;
+import de.kapsel.core.util.dao.IGenericDAO;
 
 public class ProduktWrapperService implements IProduktWrapperService{
 	

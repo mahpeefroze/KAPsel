@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
-import de.kapsel.core.global.dao.ILazyLoadDAO;
+import de.kapsel.core.util.dao.ILazyLoadDAO;
 
 public class AuftragService implements IAuftragService {
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.core.global.dao.IGenericDAO;
 import de.kapsel.core.produkt.entities.Werkzeug;
+import de.kapsel.core.util.dao.IGenericDAO;
 
 public class WerkzeugService implements IWerkzeugService {
 	

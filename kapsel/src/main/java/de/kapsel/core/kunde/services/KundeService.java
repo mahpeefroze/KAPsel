@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.core.global.dao.ILazyLoadDAO;
 import de.kapsel.core.kunde.entities.Kunde;
+import de.kapsel.core.util.dao.ILazyLoadDAO;
 
 public class KundeService implements IKundeService{
 

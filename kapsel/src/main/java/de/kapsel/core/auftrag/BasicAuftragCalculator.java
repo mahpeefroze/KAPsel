@@ -8,9 +8,9 @@ import javax.faces.bean.ViewScoped;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
 import de.kapsel.core.auftrag.entities.ProduktWrapper;
-import de.kapsel.core.global.ETypes;
-import de.kapsel.core.global.IKapselCalculator;
-import de.kapsel.core.global.beans.UtilsBean;
+import de.kapsel.core.util.ETypes;
+import de.kapsel.core.util.IKapselCalculator;
+import de.kapsel.core.util.beans.UtilsBean;
 
 @ManagedBean
 @ViewScoped

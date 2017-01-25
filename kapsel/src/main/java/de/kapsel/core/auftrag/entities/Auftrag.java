@@ -18,10 +18,10 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import de.kapsel.core.global.ETypes;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
-import de.kapsel.core.global.entities.User;
 import de.kapsel.core.kunde.entities.Kunde;
+import de.kapsel.core.util.ETypes;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
+import de.kapsel.core.util.entities.User;
 
 
 @Entity

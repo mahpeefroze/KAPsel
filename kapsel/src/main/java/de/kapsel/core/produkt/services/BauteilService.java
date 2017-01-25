@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.core.global.dao.IGenericDAO;
 import de.kapsel.core.produkt.entities.Bauteil;
+import de.kapsel.core.util.dao.IGenericDAO;
 
 public class BauteilService implements IBauteilService {
 	

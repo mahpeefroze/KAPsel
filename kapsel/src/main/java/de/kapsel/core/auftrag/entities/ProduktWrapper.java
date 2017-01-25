@@ -13,9 +13,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import de.kapsel.core.global.DTItem;
-import de.kapsel.core.global.entities.AbstractKapselEntity;
 import de.kapsel.core.produkt.entities.Produkt;
+import de.kapsel.core.util.DTItem;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="produktwrapper")

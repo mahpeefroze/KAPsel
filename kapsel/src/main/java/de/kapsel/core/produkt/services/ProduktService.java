@@ -6,8 +6,8 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.kapsel.core.global.dao.ILazyLoadDAO;
 import de.kapsel.core.produkt.entities.Produkt;
+import de.kapsel.core.util.dao.ILazyLoadDAO;
 
 public class ProduktService implements IProduktService{
 
