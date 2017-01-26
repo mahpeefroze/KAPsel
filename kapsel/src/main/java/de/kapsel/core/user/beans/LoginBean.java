@@ -16,10 +16,10 @@ import javax.faces.validator.ValidatorException;
 
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.core.user.SessionUtils;
 import de.kapsel.core.user.entities.User;
 import de.kapsel.core.user.services.IUserService;
 import de.kapsel.core.util.ETypes;
-import de.kapsel.core.util.SessionUtils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.context.RequestContext;

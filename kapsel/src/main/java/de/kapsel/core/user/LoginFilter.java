@@ -1,4 +1,4 @@
-package de.kapsel.core.util.filter;
+package de.kapsel.core.user;
 
 import java.io.IOException;
 

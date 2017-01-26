@@ -1,4 +1,4 @@
-package de.kapsel.core.util;
+package de.kapsel.core.user;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;

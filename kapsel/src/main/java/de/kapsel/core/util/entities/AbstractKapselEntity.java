@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.kapsel.core.util.SessionUtils;
+import de.kapsel.core.user.SessionUtils;
 
 import java.util.Date;
 
