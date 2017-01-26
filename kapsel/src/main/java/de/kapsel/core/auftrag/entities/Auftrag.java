@@ -19,9 +19,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.core.kunde.entities.Kunde;
+import de.kapsel.core.user.entities.User;
 import de.kapsel.core.util.ETypes;
 import de.kapsel.core.util.entities.AbstractKapselEntity;
-import de.kapsel.core.util.entities.User;
 
 
 @Entity

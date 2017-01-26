@@ -1,4 +1,4 @@
-package de.kapsel.core.util.beans;
+package de.kapsel.core.user.beans;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,8 +10,8 @@ import javax.faces.bean.ViewScoped;
 
 import org.springframework.dao.DataAccessException;
 
-import de.kapsel.core.util.entities.User;
-import de.kapsel.core.util.services.IUserService;
+import de.kapsel.core.user.entities.User;
+import de.kapsel.core.user.services.IUserService;
 
 
 @ManagedBean

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.kapsel.core.util.beans.LoginBean;
+import de.kapsel.core.user.beans.LoginBean;
 
 @WebFilter("/views/secure/*")
 public class LoginFilter implements Filter{
@@ -31,7 +31,6 @@ public class LoginFilter implements Filter{
         HttpSession session = request.getSession(false);
         
         if(session==null || ((LoginBean) session.getAttribute("loginBean")).isLogged()==false){
-        	//Maybe sent filled forms before redirect
         	response.sendRedirect(request.getContextPath() + "/views/home.xhtml");
         }else{
         	chain.doFilter(req, res);

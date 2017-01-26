@@ -1,4 +1,4 @@
-package de.kapsel.core.util.beans;
+package de.kapsel.core.user.beans;
 
 import java.io.Serializable;
 import java.security.MessageDigest;
@@ -16,10 +16,10 @@ import javax.faces.validator.ValidatorException;
 
 import org.springframework.dao.DataAccessException;
 
+import de.kapsel.core.user.entities.User;
+import de.kapsel.core.user.services.IUserService;
 import de.kapsel.core.util.ETypes;
 import de.kapsel.core.util.SessionUtils;
-import de.kapsel.core.util.entities.User;
-import de.kapsel.core.util.services.IUserService;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.context.RequestContext;

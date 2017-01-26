@@ -216,24 +216,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		}
 		return null;
 	}
-		
-	//Basic strategy for creating new ProduktNr, get highest existing and icrement it by 1
-	public long createPnr(){
-		long pnr=0;
-		long tempPnr;
-		try{
-			pnr = getProdukte().get(0).getPnr();
-			for(Produkt p : getProdukte()){
-				tempPnr = p.getPnr();
-				if(tempPnr>pnr){
-					pnr=tempPnr;
-				}
-			}
-		}catch(IndexOutOfBoundsException e){
-			System.out.println(e.getMessage() + ": keine Produkte vorhanden");
-		}
-		return pnr + 1;
-	}
 	
 	public void calculateNetto(){
 		getSelectedProdukt().setPreis(getProduktCalc().calculateNettoPrice(getSelectedProdukt()));

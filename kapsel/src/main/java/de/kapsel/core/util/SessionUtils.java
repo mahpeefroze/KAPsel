@@ -4,7 +4,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import de.kapsel.core.util.entities.User;
+import de.kapsel.core.user.entities.User;
 
 public class SessionUtils {
 

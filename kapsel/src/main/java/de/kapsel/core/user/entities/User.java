@@ -1,4 +1,4 @@
-package de.kapsel.core.util.entities;
+package de.kapsel.core.user.entities;
 
 import java.io.Serializable;
 

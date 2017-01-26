@@ -1,11 +1,11 @@
-package de.kapsel.core.util.services;
+package de.kapsel.core.user.services;
 
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import de.kapsel.core.user.entities.User;
 import de.kapsel.core.util.dao.IGenericDAO;
-import de.kapsel.core.util.entities.User;
 
 public class UserService implements IUserService{
 

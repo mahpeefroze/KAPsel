@@ -20,32 +20,32 @@ public class KapselDocumentService implements IKapselDocumentService{
 	}
 	
 	
-	@Transactional
+	@Transactional(readOnly = false)
 	public void addKapselDocument(KapselDocument kapselDocument) {
 		kapselDocumentDAO.addItem(kapselDocument);
 	}
 
-	@Transactional
+	@Transactional(readOnly = false)
 	public void updateKapselDocument(KapselDocument kapselDocument) {
 		kapselDocumentDAO.updateItem(kapselDocument);
 	}
 
-	@Transactional
+	@Transactional(readOnly = false)
 	public void deleteKapselDocument(KapselDocument kapselDocument) {
 		kapselDocumentDAO.deleteItem(kapselDocument);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public KapselDocument getKapselDocumentByName(String name) {
 		return kapselDocumentDAO.getItemByName(name);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public KapselDocument getKapselDocumentById(long id) {
 		return kapselDocumentDAO.getItemById(id);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<KapselDocument> getKapselDocument() {
 		return kapselDocumentDAO.getItems();
 	}

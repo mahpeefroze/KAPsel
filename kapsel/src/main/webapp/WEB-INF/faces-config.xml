@@ -12,8 +12,7 @@
 	</managed-bean>
 
 	<application>
-		<!-- JSF and Spring are integrated -->
-		<!-- It allows SpringBeans to be used with #{notation} inside xhtml pages -->
+		<!-- Allows SpringBeans to be used with EL #{notation} inside xhtml pages -->
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 		<!-- Localised bundles with specified language properties files -->
 		<resource-bundle>
