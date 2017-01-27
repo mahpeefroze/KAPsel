@@ -367,6 +367,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
 			pw.setProdukt(getNewProdukt());
 		}
+		newProdBool=false;
 	}
 	
 	public void addProduktFromTemplate(){
@@ -490,6 +491,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		UploadedFile uploadedDokument = event.getFile();
 		String filename = FilenameUtils.getName(uploadedDokument.getFileName());
 		String basename = FilenameUtils.getBaseName(filename) + "_";
+		basename = basename.replaceAll("\\s+", "_");
 		String extension = "." + FilenameUtils.getExtension(filename);
 		
 		input = uploadedDokument.getInputstream();

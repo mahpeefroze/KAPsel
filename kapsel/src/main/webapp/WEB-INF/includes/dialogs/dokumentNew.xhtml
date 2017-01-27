@@ -26,16 +26,18 @@
 		<p:row>
 			<p:column>#{labels.fileUpload}:</p:column>
 			<p:column style="width:250px;">
-				 <p:fileUpload fileUploadListener="#{auftragBean.uploadToFile}" auto="true" update="dlgNewDokumentPanel"/>
+				 <p:fileUpload id="dokUpload" fileUploadListener="#{auftragBean.uploadToFile}" allowTypes="/(\.|\/)(txt|doc|docx|xls|xlsx|pdf)$/" auto="true" update="fileNameOutput"/>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.fileName}:</p:column>
 			<p:column>
+				
 				<p:outputLabel id="fileNameOutput" value="#{auftragBean.newDokument.fileName}" style="width:200px;"/>
 			</p:column>
 		</p:row>
 	</p:panelGrid>
+	<p:message for="dokUpload" showSummary="true" showDetail="true" autoUpdate="true" />
 	<p:message for="newDokumentTypSelect" />
 	<p:commandButton value="OK" action="#{auftragBean.addDokument()}" update="dlgNewDokumentPanel sect_form" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newDokument').hide();" />
 	<p:commandButton value="Abbrechen"  update="dlgNewDokumentPanel" oncomplete="PF('newDokument').hide();" />	

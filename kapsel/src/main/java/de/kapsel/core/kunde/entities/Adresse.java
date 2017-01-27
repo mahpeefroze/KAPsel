@@ -25,8 +25,8 @@ public class Adresse extends AbstractKapselEntity implements Serializable{
 	private String stadt;
 	private String land;
 	private String email;
-	private long telefon;
-	private long mobil;
+	private String telefon;
+	private String mobil;
 	private String web;
 
 	@Id
@@ -88,18 +88,18 @@ public class Adresse extends AbstractKapselEntity implements Serializable{
 	}
 
 	@Column(name="telefon", nullable=true)
-	public long getTelefon() {
+	public String getTelefon() {
 		return telefon;
 	}
-	public void setTelefon(long telefon) {
+	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
 
 	@Column(name="mobil", nullable=true)
-	public long getMobil() {
+	public String getMobil() {
 		return mobil;
 	}
-	public void setMobil(long mobil) {
+	public void setMobil(String mobil) {
 		this.mobil = mobil;
 	}
 	

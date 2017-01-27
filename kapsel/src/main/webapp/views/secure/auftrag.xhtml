@@ -237,7 +237,7 @@
 							<p:column headerText="#{labels.typ}" style="width:200px;">
 								<h:outputText value="#{item.typ}" />
 							</p:column>
-							<p:column headerText="#{labels.fileName}" style="width:200px;">
+							<p:column headerText="#{labels.fileName}" style="width:400px;">
 								<p:commandLink id="dlDokument" value="#{item.fileName}" ajax="false" disabled="#{auftragBean.editMode}">
 									<p:fileDownload contentDisposition="attachment" value="#{auftragBean.dlDokument(item)}"/>
 								</p:commandLink>
@@ -285,7 +285,7 @@
 	</p:dialog>
 	
 	<p:dialog id="produktAddDlg" header="Neuer Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">
-		<ui:include src="/WEB-INF/includes/produktAdd.xhtml"/>
+		<ui:include src="/WEB-INF/includes/dialogs/produktAdd.xhtml"/>
 	</p:dialog>
 	
 	<p:dialog id="dokumentNewDlg" header="Neues Dokument" modal="true" widgetVar="newDokument" minHeight="40" resizable="false">

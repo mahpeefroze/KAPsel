@@ -64,7 +64,8 @@ public class BasicProduktCalculator implements Serializable, IKapselCalculator<P
 		double mgk=getUtilsContainer().getUtilsMap().get("MGK").getValue();
 		if(p.getBauteile()!=null && !p.getBauteile().isEmpty()){
 			for(Bauteil b:p.getBauteile()){
-				mek+=b.getMenge()*getUoA(b)*
+				mek+=b.getMenge()*
+						(b.getMaterial()!=null ? getUoA(b) : 0)*
 						(b.getMaterial()!=null ? b.getMaterial().getPreis() : 0)*
 						(b.getMaterial()!=null ? (1+b.getMaterial().getVerschnitt()/100) : 1);
 			}

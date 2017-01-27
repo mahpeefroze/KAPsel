@@ -87,6 +87,7 @@ public class ProduktService implements IProduktService{
 	}
 
 	@Override
+	@Transactional
 	public List<Produkt> getNonTemplates() {
 		List<Produkt> nontemps = new ArrayList<Produkt>();
 		for(Produkt p:produktDAO.getItems()){

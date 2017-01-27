@@ -33,7 +33,7 @@ public class BasicAuftragCalculator implements Serializable, IKapselCalculator<A
 		int time=0;
 		if(a.getProdukte()!=null && !a.getProdukte().isEmpty()){
 			for(ProduktWrapper pw:a.getProdukte()){
-				time+=pw.getProdukt().getZeit();
+				time+=pw.getProdukt().getZeit()*pw.getStueckzahl();
 			}
 		}
 		return time;

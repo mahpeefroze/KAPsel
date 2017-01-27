@@ -160,7 +160,7 @@
 					<p:fieldset id="rabatte" toggleable="false" legend="#{labels.settingsRabatte}">
 						<p:selectManyCheckbox id="basic" value="#{utilsBean.rabatteCB}">
 							 <p:ajax update="rabatte"/>
-							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabOeffS') or utils.grabRabStatus('RabFiS') or utilsBean.grabRabStatus('RabPrivS')}" 
+							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabOeffS') or utilsBean.grabRabStatus('RabFiS') or utilsBean.grabRabStatus('RabPrivS')}" 
 							 	itemLabel="Alle" itemValue="RabAlleS" />
 							 <f:selectItem itemDisabled="#{utilsBean.grabRabStatus('RabAlleS')}" 
 							 	itemLabel="#{labels['kunde.typ.OEFFENTLICH']}" itemValue="RabOeffS" />
@@ -180,7 +180,7 @@
 								</p:column>
 								<p:column/>
 								<p:column>
-									<p:inputText placeholder="0%" value=" #{utilsBean.utilsMap['RabFi'].value}" disabled="#{not utilsBean.grabRabStatus('RabFiS')}" styleClass="number_input"/>
+									<p:inputText placeholder="0%" value="#{utilsBean.utilsMap['RabFi'].value}" disabled="#{not utilsBean.grabRabStatus('RabFiS')}" styleClass="number_input"/>
 								</p:column>
 								<p:column/>
 								<p:column>

@@ -184,13 +184,14 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	
 	//Check if Adresse is empty with Reflection
 	private boolean isAdresseEmpty(){
-		Field[] fields = Adresse.class.getFields();
+		Field[] fields = Adresse.class.getDeclaredFields();
 		Object v;
 		@SuppressWarnings("rawtypes")
 		Class t;
 		for(Field f:fields){
 			t = f.getType();
 			try {
+				f.setAccessible(true);
 				v = f.get(getNewKunde().getAdresse());
 				if(t.isPrimitive() && ((Number) v).longValue() != 0){
 					   return false;
