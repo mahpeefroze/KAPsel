@@ -9,7 +9,8 @@
 
 	<p:panelGrid columns="3" styleClass="fullWidth">
 		<h:outputText value="#{kundeBean.selectedKunde.name}" />
-		<h:outputText value="#{labels.status}: #{kundeBean.selectedKunde.status}" styleClass="statusbox"/>
+		<h:outputText value="#{labels.aktiv}: " styleClass="statusbox"/>
+		<p:selectBooleanCheckbox disabled="true" value="#{kundeBean.selectedKunde.aktiv}" />
 	</p:panelGrid>
 	<p:spacer/>
 	<p:fieldset style="margin-bottom:10px;">
@@ -34,7 +35,7 @@
 			</p:row>
 		</p:panelGrid>
 	</p:fieldset>
-	<p:fieldset toggleable="false">
+	<p:fieldset toggleable="false" style="margin-bottom:10px;">
 		<p:panelGrid>
 			<p:row>
 				<p:column colspan="3">#{labels.adresse}</p:column>
@@ -65,6 +66,10 @@
 				<p:column>#{kundeBean.selectedKunde.adresse.web}</p:column>
 			</p:row>
 		</p:panelGrid>
+	</p:fieldset>
+	
+	<p:fieldset toggleable="false" legend="#{labels.notizen}">
+		#{kundeBean.selectedKunde.text}
 	</p:fieldset>
 
 </ui:composition>

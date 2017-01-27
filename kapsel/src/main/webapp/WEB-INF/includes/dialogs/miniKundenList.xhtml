@@ -5,7 +5,7 @@
     xmlns:p="http://primefaces.org/ui">
 
 	<h:form>
-	<p:dataTable var="item" value="#{kundeBean.kunden}"
+	<p:dataTable var="item" value="#{kundeBean.aktiveKunden}"
 		selectionMode="single" selection="#{targetKunde}"
 		rowKey="#{item.knr}" emptyMessage="#{errors_msgs.norecords}" sortBy="#{item.knr}">
 		

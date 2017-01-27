@@ -13,13 +13,10 @@
 				<h:outputText value="#{kundeBean.selectedKunde.name}"/>
 			</p:column>
 			<p:column>
-				<h:outputText value="#{labels.status}:" styleClass="alignRight statusbox"/>
+				<h:outputText value="#{labels.aktiv}:" styleClass="alignRight statusbox"/>
 			</p:column>
-			<p:column style="width:150px;">
-				<p:selectOneMenu id="edit_kundeStatusSelect" value="#{kundeBean.selectedKunde.status}" style="width:100px" styleClass="alignRight">
-					<f:selectItem itemLabel="#{labels.status}" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeStatus}"/>
-				</p:selectOneMenu>
+			<p:column style="width:30px;">
+				<p:selectBooleanCheckbox value="#{kundeBean.selectedKunde.aktiv}" />
 			</p:column>
 		</p:row>
 	</p:panelGrid>
@@ -60,7 +57,7 @@
 		</p:row>
 	</p:panelGrid>
 	</p:fieldset>
-	<p:fieldset toggleable="false">
+	<p:fieldset toggleable="false" style="margin-bottom:10px;">
 	<p:panelGrid>
 		<p:row>
 			<p:column colspan="3">#{labels.adresse}</p:column>
@@ -92,6 +89,10 @@
 			<p:column><p:inputText value="#{kundeBean.selectedKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
+	</p:fieldset>
+	
+	<p:fieldset legend="#{labels.notizen}">
+		<p:inputTextarea value="#{kundeBean.selectedKunde.text}" styleClass="fullWidth"/>
 	</p:fieldset>
 
 </ui:composition>

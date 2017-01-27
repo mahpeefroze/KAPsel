@@ -67,78 +67,9 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		setNewKunde(new Kunde());
 		getNewKunde().setAdresse(new Adresse());
 		setkGruppeId(0);
-	}
-
-	
-	//region Getter/Setter
-	//Container for SingleSelectTable Items
-	public List<Kunde> getKunden() {
-		return kunden;
-	}
-
-	public void setKunden(List<Kunde> kunden) {
-		this.kunden = kunden;
+		getNewKunde().setAktiv(true);
 	}
 	
-	//Tried to lazy load Kunden for miniKundenListe -> multiple selects fired -> need to investigate
-	public List<Kunde> getLazyKunden(){
-		return getKundeService().getKunden();
-	}
-	
-	//SingleSelection Item
-	public Kunde getSelectedKunde() {
-		return selectedKunde;
-	}
-
-	public void setSelectedKunde(Kunde selectedKunde) {
-		this.selectedKunde = selectedKunde;
-	}
-
-	//Add New Item
-	public Kunde getNewKunde() {
-		return newKunde;
-	}
-
-	public void setNewKunde(Kunde newKunde) {
-		this.newKunde = newKunde;
-	}
-	
-	//Find kGruppe over ID
-	public long getkGruppeId() {
-		return kGruppeId;
-	}
-
-	public void setkGruppeId(long kGruppeId) {
-		this.kGruppeId = kGruppeId;
-	}
-
-	//Getter and Setter for the Services
-	public IKundeService getKundeService() {
-		return kundeService;
-	}
-
-	public void setKundeService(IKundeService kundeService) {
-		this.kundeService = kundeService;
-	}
-	
-	public IKGruppeService getkGruppeService() {
-		return kGruppeService;
-	}
-
-	public void setkGruppeService(IKGruppeService kGruppeService) {
-		this.kGruppeService = kGruppeService;
-	}
-	
-	public UtilsBean getUtilsContainer() {
-		return utilsContainer;
-	}
-
-	public void setUtilsContainer(UtilsBean utilsContainer) {
-		this.utilsContainer = utilsContainer;
-	}
-	
-	//endregion Getter/Setter
-
 
 
 	//Select Kunde passed as Attribute from another View
@@ -166,7 +97,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			getNewKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 			getNewKunde().setbKey(AbstractKapselEntity.generateBKey());
 			getNewKunde().setKnr(getUtilsContainer().getNextMax("KNR"));
-			if(isAdresseEmpty()){
+			if(isAdresseEmpty(getNewKunde().getAdresse())){
 				getNewKunde().setAdresse(null);
 			}else{
 				getNewKunde().getAdresse().setbKey(AbstractKapselEntity.generateBKey());
@@ -183,7 +114,7 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	}
 	
 	//Check if Adresse is empty with Reflection
-	private boolean isAdresseEmpty(){
+	private boolean isAdresseEmpty(Adresse adresse){
 		Field[] fields = Adresse.class.getDeclaredFields();
 		Object v;
 		@SuppressWarnings("rawtypes")
@@ -192,10 +123,10 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			t = f.getType();
 			try {
 				f.setAccessible(true);
-				v = f.get(getNewKunde().getAdresse());
-				if(t.isPrimitive() && ((Number) v).longValue() != 0){
-					   return false;
-				}else if(!t.isPrimitive() && v != null){
+				v = f.get(adresse);
+				if(t.isPrimitive()){
+					   continue;
+				}else if(!t.isPrimitive() && v != null && !v.equals("")){
 					   return false;
 				}
 			} catch (IllegalArgumentException e) {
@@ -241,6 +172,11 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		if(getkGruppeId()>0){
 			getSelectedKunde().setGruppe(getkGruppeService().getKGruppeById(getkGruppeId()));
 		}
+		if(isAdresseEmpty(getSelectedKunde().getAdresse())){
+			getSelectedKunde().setAdresse(null);
+		}else{
+			getSelectedKunde().getAdresse().setbKey(AbstractKapselEntity.generateBKey());
+		}
 		updateKunde();
 		disableEditMode();
 	}
@@ -254,4 +190,78 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	}
 
 	
+	//region Getter/Setter
+	public List<Kunde> getAktiveKunden(){
+		List<Kunde> liste = new ArrayList<Kunde>();
+		for(Kunde k:getKunden()){
+			if(k.isAktiv()){
+				liste.add(k);
+			}
+		}
+		return liste;
+	}
+	
+	public List<Kunde> getKunden() {
+		return kunden;
+	}
+
+	public void setKunden(List<Kunde> kunden) {
+		this.kunden = kunden;
+	}
+	
+	public List<Kunde> getLazyKunden(){
+		return getKundeService().getKunden();
+	}
+	
+	public Kunde getSelectedKunde() {
+		return selectedKunde;
+	}
+
+	public void setSelectedKunde(Kunde selectedKunde) {
+		this.selectedKunde = selectedKunde;
+	}
+
+	public Kunde getNewKunde() {
+		return newKunde;
+	}
+
+	public void setNewKunde(Kunde newKunde) {
+		this.newKunde = newKunde;
+	}
+	
+	public long getkGruppeId() {
+		return kGruppeId;
+	}
+
+	public void setkGruppeId(long kGruppeId) {
+		this.kGruppeId = kGruppeId;
+	}
+
+	public IKundeService getKundeService() {
+		return kundeService;
+	}
+
+	public void setKundeService(IKundeService kundeService) {
+		this.kundeService = kundeService;
+	}
+	
+	public IKGruppeService getkGruppeService() {
+		return kGruppeService;
+	}
+
+	public void setkGruppeService(IKGruppeService kGruppeService) {
+		this.kGruppeService = kGruppeService;
+	}
+	
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
+	}
+	
+	//endregion Getter/Setter
+
+
 }

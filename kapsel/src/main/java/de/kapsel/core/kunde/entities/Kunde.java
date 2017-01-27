@@ -34,7 +34,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable, Compara
 	private String text;
 	private Adresse adresse;
 	private double rabatt;
-	private ETypes.KundeStatus status;
+	private boolean aktiv;
 	private Set<Auftrag> auftraege;
 
 
@@ -112,12 +112,12 @@ public class Kunde extends AbstractKapselEntity implements Serializable, Compara
 		this.rabatt = rabatt;
 	}
 	
-	@Column(name="status", nullable=false)
-	public ETypes.KundeStatus getStatus() {
-		return status;
+	@Column(name="aktiv", nullable=false)
+	public boolean isAktiv() {
+		return aktiv;
 	}
-	public void setStatus(ETypes.KundeStatus status) {
-		this.status = status;
+	public void setAktiv(boolean aktiv) {
+		this.aktiv = aktiv;
 	}
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kunde")

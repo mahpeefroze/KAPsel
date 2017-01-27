@@ -30,19 +30,16 @@
 			<p:column>
 				<p:selectOneMenu id="newKgruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
 					<f:selectItem itemLabel="Gruppe | Rabatt" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{kGruppeBean.kGruppen}" var="kGruppe" itemLabel="#{kGruppe.name} | #{kGruppe.rabatt}%" itemValue="#{kGruppe.id}" />
+					<f:selectItems value="#{kGruppeBean.aktiveGruppen}" var="kGruppe" itemLabel="#{kGruppe.name} | #{kGruppe.rabatt}%" itemValue="#{kGruppe.id}" />
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.rabatt}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.rabatt}"/></p:column>
-			<p:column>#{labels.status}</p:column>
+			<p:column>#{labels.aktiv}</p:column>
 			<p:column>
-				<p:selectOneMenu id="newKstatusSelect" value="#{kundeBean.newKunde.status}" style="width:200px">
-					<f:selectItem itemLabel="Status" itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{eTypes.kundeStatus}" var="typ" itemLabel="#{typ}" itemValue="#{kundeStatus}" />
-				</p:selectOneMenu>
+				<p:selectBooleanCheckbox value="#{kundeBean.newKunde.aktiv}" />
 			</p:column>
 		</p:row>
 		</p:panelGrid>

@@ -1,6 +1,7 @@
 package de.kapsel.core.kunde.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -66,6 +67,16 @@ public class KGruppeBean implements Serializable{
 	
 
 	//region getter & setter
+	public List<KGruppe> getAktiveGruppen(){
+		List<KGruppe> liste = new ArrayList<KGruppe>();
+		for(KGruppe k:getkGruppen()){
+			if(k.isAktiv()){
+				liste.add(k);
+			}
+		}
+		return liste;
+	}
+	
 	public KGruppe getNewKGruppe() {
 		return newKGruppe;
 	}
