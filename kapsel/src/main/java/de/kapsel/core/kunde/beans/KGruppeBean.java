@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 
 import de.kapsel.core.kunde.entities.KGruppe;
 import de.kapsel.core.kunde.services.IKGruppeService;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ViewScoped
@@ -44,6 +45,7 @@ public class KGruppeBean implements Serializable{
 	}
 	
 	public void addKGruppe(){
+		getNewKGruppe().setbKey(AbstractKapselEntity.generateBKey());
 		getNewKGruppe().setAktiv(true);
 		getkGruppeService().addKGruppe(getNewKGruppe());
 		myInit();

@@ -86,3 +86,19 @@ body{
 	margin-top: -8px;
 }
 
+.ui-fileupload.ui-widget{
+	height: 61px;
+	overflow: hidden;
+	border: none;
+}
+
+.ui-fileupload .ui-fileupload-buttonbar{
+	border:none;
+	background: transparent;
+	padding:0px;
+}
+
+.ui-button-text-icon-left.ui-fileupload-choose{
+	width: 99%;
+	font-size: 40px;
+}

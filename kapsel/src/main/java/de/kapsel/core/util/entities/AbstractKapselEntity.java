@@ -37,5 +37,6 @@ public abstract class AbstractKapselEntity {
 				toHashCode();
 	}
 
+	public abstract boolean equals(Object obj);
 	
 }

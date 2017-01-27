@@ -8,9 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
+import de.kapsel.core.util.entities.AbstractKapselEntity;
+
 @Entity
 @Table(name="adressen")
-public class Adresse implements Serializable{
+public class Adresse extends AbstractKapselEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -107,7 +111,17 @@ public class Adresse implements Serializable{
 		this.web = web;
 	}
 
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Adresse)) return false;
+        if (obj == this) return true;
+        
+        Adresse a = (Adresse) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), a.getbKey()).
+                isEquals();
+	}
 
 
 }

@@ -8,9 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
+import de.kapsel.core.util.entities.AbstractKapselEntity;
+
 @Entity
 @Table(name="werkzeuge")
-public class Werkzeug implements Serializable{
+public class Werkzeug extends AbstractKapselEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -54,5 +58,16 @@ public class Werkzeug implements Serializable{
 		this.notiz = notiz;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Werkzeug)) return false;
+        if (obj == this) return true;
+        
+        Werkzeug w = (Werkzeug) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), w.getbKey()).
+                isEquals();
+	}
 	
 }

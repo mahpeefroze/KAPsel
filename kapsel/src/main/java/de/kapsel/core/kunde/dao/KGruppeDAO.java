@@ -20,11 +20,11 @@ public class KGruppeDAO extends AbstractDAO<KGruppe> implements IKGruppeDAO {
 			if(k.getGruppe()!=null && k.getGruppe().getId()==kgruppe.getId()){
 				k.setGruppe(null);
 				sessionFactory.getCurrentSession().update(k);
-				//KGruppe obtained once to fill DT isn't equal to the one passed by the method -> hibernate uses object equality and not equals method
-				//So 2 different objects but with the same primarykey
-				deleteItem((KGruppe)sessionFactory.getCurrentSession().merge(kgruppe));
 			}
 		}
+		//KGruppe obtained once to fill DT isn't equal to the one passed by the method -> hibernate uses object equality and not equals method
+		//So 2 different objects but with the same primarykey
+		deleteItem((KGruppe)sessionFactory.getCurrentSession().merge(kgruppe));
 	}
 
 }

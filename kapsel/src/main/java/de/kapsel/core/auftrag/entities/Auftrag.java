@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -231,6 +232,18 @@ public class Auftrag extends AbstractKapselEntity implements Serializable, Compa
 			return -1;
 		}
 		return Long.compare(getAnr(), a.getAnr());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Auftrag)) return false;
+		if (obj == this) return true;
+
+		Auftrag a = (Auftrag) obj;
+		
+		return new EqualsBuilder().
+                append(a.getbKey(), getbKey()).
+                isEquals();
 	}
 
 }

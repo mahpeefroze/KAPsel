@@ -9,11 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.CreationTimestamp;
+
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @Entity
 @Table(name="k_gruppen")
-public class KGruppe implements Serializable{
+public class KGruppe extends AbstractKapselEntity implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
@@ -65,5 +68,17 @@ public class KGruppe implements Serializable{
 	public void setDatum(Date datum) {
 		this.datum = datum;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof KGruppe)) return false;
+        if (obj == this) return true;
+        
+        KGruppe kG = (KGruppe) obj;
+		
+        return new EqualsBuilder().
+                append(getbKey(), kG.getbKey()).
+                isEquals();
+	}
+	
 }

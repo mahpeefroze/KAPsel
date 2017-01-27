@@ -168,6 +168,8 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 			getNewKunde().setKnr(getUtilsContainer().getNextMax("KNR"));
 			if(isAdresseEmpty()){
 				getNewKunde().setAdresse(null);
+			}else{
+				getNewKunde().getAdresse().setbKey(AbstractKapselEntity.generateBKey());
 			}
 			getKundeService().addKunde(getNewKunde());
 			getUtilsContainer().updateNrStorage();

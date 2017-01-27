@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 
 import de.kapsel.core.produkt.entities.Werkzeug;
 import de.kapsel.core.produkt.services.IWerkzeugService;
+import de.kapsel.core.util.entities.AbstractKapselEntity;
 
 @ManagedBean
 @ApplicationScoped
@@ -92,6 +93,7 @@ public class WerkzeugBean implements Serializable{
 	}
 	
 	public void addWerkzeug(){
+		getNewWerkzeug().setbKey(AbstractKapselEntity.generateBKey());
 		getWerkzeugService().addWerkzeug(getNewWerkzeug());
 		myInit();
 	}
