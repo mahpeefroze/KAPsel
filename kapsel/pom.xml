@@ -16,7 +16,7 @@
 	<groupId>de.kapsel</groupId>
 	<artifactId>kapsel-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<name>KAPsel</name>
 	<description>Software zur Kalkulation und Datenhaltung in Handwerksbetrieben</description>
 
@@ -334,4 +334,7 @@
 		</plugins>
 	</build>
 
+	<modules>
+		<module>stats</module>
+	</modules>
 </project>
