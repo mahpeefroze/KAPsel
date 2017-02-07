@@ -25,7 +25,7 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 	private int position=0;
 	private String name="";
 	private int zeit=0;
-	private String notiz="";
+	private String bemerkung="";
 	private ETypes.AschrittT typ;
 	private Werkzeug werkzeug;
 	
@@ -64,13 +64,13 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		this.zeit = zeit;
 	}
 	
-	@Column(name="notiz", nullable=true)
-	public String getNotiz() {
-		return notiz;
+	@Column(name="bemerkung", nullable=true)
+	public String getBemerkung() {
+		return bemerkung;
 	}
 	
-	public void setNotiz(String notiz) {
-		this.notiz = notiz;
+	public void setBemerkung(String bemerkung) {
+		this.bemerkung = bemerkung;
 	}
 	
 	@Column(name="typ", nullable=false)
@@ -96,7 +96,7 @@ public class Arbeitsschritt extends AbstractKapselEntity implements Serializable
 		a.setPosition(getPosition());
 		a.setName(getName());
 		a.setZeit(getZeit());
-		a.setNotiz(getNotiz());
+		a.setBemerkung(getBemerkung());
 		a.setTyp(getTyp());
 		a.setWerkzeug(getWerkzeug());
 		return a;

@@ -25,41 +25,7 @@ public class WerkzeugBean implements Serializable{
 	
 	@ManagedProperty(value="#{werkzeugService}")
 	private IWerkzeugService werkzeugService;
-	
-	//region Getter & Setter
-	public Werkzeug getNewWerkzeug() {
-		return newWerkzeug;
-	}
 
-	public void setNewWerkzeug(Werkzeug newWerkzeug) {
-		this.newWerkzeug = newWerkzeug;
-	}
-
-	public Werkzeug getSelectedWerkzeug() {
-		return selectedWerkzeug;
-	}
-
-	public void setSelectedWerkzeug(Werkzeug selectedWerkzeug) {
-		this.selectedWerkzeug = selectedWerkzeug;
-	}
-
-	public List<Werkzeug> getWerkzeuge() {
-		return werkzeuge;
-	}
-
-	public void setWerkzeuge(List<Werkzeug> werkzeuge) {
-		this.werkzeuge = werkzeuge;
-	}
-
-	public IWerkzeugService getWerkzeugService() {
-		return werkzeugService;
-	}
-
-	public void setWerkzeugService(IWerkzeugService werkzeugService) {
-		this.werkzeugService = werkzeugService;
-	}
-	//endregion
-	
 	@PostConstruct
     public void myInit() {
 		try{
@@ -108,6 +74,41 @@ public class WerkzeugBean implements Serializable{
 	}
 	
 	
+	//region Getter & Setter
+	public Werkzeug getNewWerkzeug() {
+		return newWerkzeug;
+	}
+
+	public void setNewWerkzeug(Werkzeug newWerkzeug) {
+		this.newWerkzeug = newWerkzeug;
+	}
+
+	public Werkzeug getSelectedWerkzeug() {
+		return selectedWerkzeug;
+	}
+
+	public void setSelectedWerkzeug(Werkzeug selectedWerkzeug) {
+		this.selectedWerkzeug = selectedWerkzeug;
+	}
+
+	public List<Werkzeug> getWerkzeuge() {
+		return werkzeuge;
+	}
+
+	public void setWerkzeuge(List<Werkzeug> werkzeuge) {
+		this.werkzeuge = werkzeuge;
+	}
+
+	public IWerkzeugService getWerkzeugService() {
+		return werkzeugService;
+	}
+
+	public void setWerkzeugService(IWerkzeugService werkzeugService) {
+		this.werkzeugService = werkzeugService;
+	}
+	//endregion
+	
+
 	
 	
 }

@@ -37,10 +37,6 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	private long materialId;
 	private long werkzeugId;
 	
-	//No getters, for intern use only
-	private HashSet<Bauteil> tempBtSet;
-	private HashSet<Arbeitsschritt> tempAsSet;
-
 	@ManagedProperty(value="#{produktService}")
 	private IProduktService produktService;
 	
@@ -56,11 +52,8 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{basicProduktCalculator}")
 	private IKapselCalculator<Produkt> produktCalc;
 	
-	public ProduktBean(){
-		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
-	}
+	public ProduktBean(){}
 	
-	//Prepare data for first display or update after insert/delete
 	@PostConstruct
     public void myInit() {
 		try{
@@ -87,6 +80,145 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 		setMaterialId(0);
 		setWerkzeugId(0);
 	}
+	
+
+	//Load data of specific Item into details-table; not called on page load -> additional load in init()
+	public void loadProdukt(SelectEvent event) {
+		setSelectedProdukt((Produkt) event.getObject());
+    }
+	
+	public void loadPassedProdukt(){
+		for(Produkt p:getProdukte()){
+			if(p.getId()==getPassedID()){
+				setSelectedProdukt(p);
+			}
+		}
+	}
+	
+	public void calculateNetto(){
+		getSelectedProdukt().setPreis(getProduktCalc().calculateNettoPrice(getSelectedProdukt()));
+	}
+	
+	public void calculateTime(){
+		getSelectedProdukt().setZeit(getProduktCalc().calculateTime(getSelectedProdukt()));
+	}
+
+
+	public void addProdukt(){
+		try {
+			//Implement logic for creating new PNR and also put it
+			getNewProdukt().setPnr(getUtilsContainer().getNextMax("PNR"));
+			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
+			getProduktService().addProdukt(getNewProdukt());
+			getUtilsContainer().updateNrStorage();
+		} catch (Exception e) {
+			getUtilsContainer().rollbackLast("PNR");
+			e.printStackTrace();
+		}
+		myInit();
+	}
+	
+	public void updateProdukt(){
+		getProduktService().updateProdukt(getSelectedProdukt());
+	}
+
+	public void deleteProdukt(){
+		getProduktService().deleteProdukt(getSelectedProdukt());
+		myInit();
+	}
+	
+	
+	//region BAUTEIL SECTION-----------------------------------------------------//
+	
+	//Set to List converter -> for displaying in PF DataTable
+	public ArrayList<Bauteil> btToList(){
+		if(getSelectedProdukt()==null || getSelectedProdukt().getBauteile()==null){
+			return null;
+		}
+		ArrayList<Bauteil> sortedList= new ArrayList<Bauteil>(getSelectedProdukt().getBauteile());
+		Collections.sort(sortedList);
+		return sortedList;
+	}
+	
+	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
+	public void addBauteil(){
+		Bauteil b = new Bauteil();
+		b.setPosition(getSelectedProdukt().getBauteile().size()+1);
+		b.setbKey(AbstractKapselEntity.generateBKey());
+		getSelectedProdukt().getBauteile().add(b);
+		setMaterialId(0); 
+	}
+	
+	//Material change listener
+	public void onMaterialChange(Bauteil b){
+		b.setMaterial(getMaterialContainer().findMaterial(getMaterialId()));
+	}
+	
+	public void deleteBauteil(){
+		if(getSelectedBauteil()!=null){
+			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getBauteile()));
+			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
+		}
+	}
+	
+	//endregion
+
+	//region ARBEITSSCHRITT SECTION-----------------------------------------------------//
+	
+	//Set to List converter -> for displaying in PF DataTable
+	public ArrayList<Arbeitsschritt> asToList(){
+		if(getSelectedProdukt()==null || getSelectedProdukt().getAschritte()==null){
+			return null;
+		}
+		ArrayList<Arbeitsschritt> sortedList= new ArrayList<Arbeitsschritt>(getSelectedProdukt().getAschritte());
+		Collections.sort(sortedList);
+		return sortedList;
+	}
+	
+	public void addArbeitsschritt(){
+		Arbeitsschritt a = new Arbeitsschritt();
+		a.setPosition(getSelectedProdukt().getAschritte().size()+1);
+		a.setbKey(AbstractKapselEntity.generateBKey());
+		getSelectedProdukt().getAschritte().add(a);
+		setWerkzeugId(0);
+	}
+	
+	//Werkzeug change listener
+	public void onWerkzeugChange(Arbeitsschritt as){
+		as.setWerkzeug(getWerkzeugContainer().findWerkzeug(getWerkzeugId()));
+	}
+	
+	public void deleteArbeitsschritt(){
+		if(getSelectedAschritt()!=null){
+			updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getAschritte()));
+			getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
+		}
+	}
+	
+	//endregion
+	
+	
+	//region editMode
+	public void enableEditMode(){
+		super.enableEditMode();
+	}
+
+	@Override
+	public void onEditComplete() {
+		updateProdukt();
+		disableEditMode();
+	}
+
+	@Override
+	public void cancelEditMode() {
+		Produkt orig = getProduktService().getProduktById(getSelectedProdukt().getId());
+		getProdukte().set(getProdukte().indexOf(getSelectedProdukt()), orig);
+		setSelectedProdukt(orig);
+		disableEditMode();
+	}
+	
+	//endregion
+	
 
 	//region Getters/Setters
 	public Produkt getNewProdukt() {
@@ -192,157 +324,5 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	}
 	
 	//endregion Getters/Setters
-	
 
-	//Load data of specific Item into details-table; not called on page load -> additional load in init()
-	public void loadProdukt(SelectEvent event) {
-		setSelectedProdukt((Produkt) event.getObject());
-    }
-	
-	public void loadPassedProdukt(){
-		for(Produkt p:getProdukte()){
-			if(p.getId()==getPassedID()){
-				setSelectedProdukt(p);
-			}
-		}
-	}
-	
-	//Find Produkt in the list, alternative to query by id since all produkts are here anyway
-	public Produkt findProdukt(long id){
-		for(Produkt p:getProdukte()){
-			if(p.getId()==id){
-				return p;
-			}
-		}
-		return null;
-	}
-	
-	public void calculateNetto(){
-		getSelectedProdukt().setPreis(getProduktCalc().calculateNettoPrice(getSelectedProdukt()));
-	}
-	
-	public void calculateTime(){
-		getSelectedProdukt().setZeit(getProduktCalc().calculateTime(getSelectedProdukt()));
-	}
-
-
-	public void addProdukt(){
-		try {
-			//Implement logic for creating new PNR and also put it
-			getNewProdukt().setPnr(getUtilsContainer().getNextMax("PNR"));
-			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
-			getProduktService().addProdukt(getNewProdukt());
-			getUtilsContainer().updateNrStorage();
-		} catch (Exception e) {
-			getUtilsContainer().rollbackLast("PNR");
-			e.printStackTrace();
-		}
-		myInit();
-	}
-	
-	public void updateProdukt(){
-		getProduktService().updateProdukt(getSelectedProdukt());
-	}
-
-	public void deleteProdukt(){
-		getProduktService().deleteProdukt(getSelectedProdukt());
-		myInit();
-	}
-	
-	
-	//region BAUTEIL SECTION-----------------------------------------------------//
-	
-	//Set to List converter -> for displaying in PF DataTable
-	public ArrayList<Bauteil> btToList(){
-		if(getSelectedProdukt()==null || getSelectedProdukt().getBauteile()==null){
-			return null;
-		}
-		ArrayList<Bauteil> sortedList= new ArrayList<Bauteil>(getSelectedProdukt().getBauteile());
-		Collections.sort(sortedList);
-		return sortedList;
-	}
-	
-	//Add 1 Bauteil with default Values to Stueckliste-DT of NewProdukt
-	public void addBauteil(){
-		Bauteil b = new Bauteil();
-		b.setPosition(getSelectedProdukt().getBauteile().size()+1);
-		b.setbKey(AbstractKapselEntity.generateBKey());
-		getSelectedProdukt().getBauteile().add(b);
-		tempBtSet.add(b);
-		setMaterialId(0); 
-	}
-	
-	//Material change listener
-	public void onMaterialChange(Bauteil b){
-		b.setMaterial(getMaterialContainer().findMaterial(getMaterialId()));
-	}
-	
-	public void deleteBauteil(){
-		if(getSelectedBauteil()!=null){
-			updateItemPosition(getSelectedBauteil().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getBauteile()));
-			getSelectedProdukt().getBauteile().remove(getSelectedBauteil());
-		}
-	}
-	
-	//endregion
-
-	//region ARBEITSSCHRITT SECTION-----------------------------------------------------//
-	
-	//Set to List converter -> for displaying in PF DataTable
-	public ArrayList<Arbeitsschritt> asToList(){
-		if(getSelectedProdukt()==null || getSelectedProdukt().getAschritte()==null){
-			return null;
-		}
-		ArrayList<Arbeitsschritt> sortedList= new ArrayList<Arbeitsschritt>(getSelectedProdukt().getAschritte());
-		Collections.sort(sortedList);
-		return sortedList;
-	}
-	
-	public void addArbeitsschritt(){
-		Arbeitsschritt a = new Arbeitsschritt();
-		a.setPosition(getSelectedProdukt().getAschritte().size()+1);
-		a.setbKey(AbstractKapselEntity.generateBKey());
-		getSelectedProdukt().getAschritte().add(a);
-		tempAsSet.add(a);
-		setWerkzeugId(0);
-	}
-	
-	//Werkzeug change listener
-	public void onWerkzeugChange(Arbeitsschritt as){
-		as.setWerkzeug(getWerkzeugContainer().findWerkzeug(getWerkzeugId()));
-	}
-	
-	public void deleteArbeitsschritt(){
-		if(getSelectedAschritt()!=null){
-			updateItemPosition(getSelectedAschritt().getPosition(), new ArrayList<DTItem>(getSelectedProdukt().getAschritte()));
-			getSelectedProdukt().getAschritte().remove(getSelectedAschritt());
-		}
-	}
-	
-	//endregion
-	
-	
-	//region editMode
-	public void enableEditMode(){
-		super.enableEditMode();
-		tempBtSet = new HashSet<Bauteil>();
-		tempAsSet = new HashSet<Arbeitsschritt>();
-	}
-
-	@Override
-	public void onEditComplete() {
-		updateProdukt();
-		disableEditMode();
-	}
-
-	@Override
-	public void cancelEditMode() {
-		Produkt orig = getProduktService().getProduktById(getSelectedProdukt().getId());
-		getProdukte().set(getProdukte().indexOf(getSelectedProdukt()), orig);
-		setSelectedProdukt(orig);
-		disableEditMode();
-	}
-	
-	//endregion
-	
 }

@@ -176,14 +176,14 @@
 							value="#{auftragBean.pwToList()}" rowKey="#{item.id}" editable="#{auftragBean.editMode}" editMode="cell" 
 							selectionMode="single" selection="#{auftragBean.selectedProduktWrapper}" emptyMessage="#{errors.norecords}" sortBy="#{item.position}">
 
-							<p:column headerText="#{labels.position}" style="width:50px;">
+							<p:column headerText="#{labels.position}" style="width:30px;">
 								<h:outputText value="#{item.position}" />
 							</p:column>
 							<p:column headerText="#{labels.p_nr}" style="width:100px;">
 								<p:commandLink id="toProduktView" value="#{item.produkt.pnr}" action="#{auftragBean.redirectToProdukt(item.produkt.id)}" disabled="#{auftragBean.editMode}"/>
 								<p:tooltip for="toProduktView" value="In Produktansicht anzeigen" position="top" />
 							</p:column>
-							<p:column headerText="#{labels.stueckzahl}" style="width:80px;">
+							<p:column headerText="#{labels.stueck_zahl}" style="width:40px;">
 								<p:cellEditor>
 									<f:facet name="input"><p:spinner value="#{item.stueckzahl}"/></f:facet>
 									<f:facet name="output"><h:outputText value="#{item.stueckzahl}" /></f:facet>
@@ -195,7 +195,7 @@
 									<f:facet name="output"><h:outputText value="#{item.produkt.name}" /></f:facet>
 								</p:cellEditor>
 							</p:column>
-							<p:column headerText="#{labels.bezeichnung}">
+							<p:column headerText="#{labels.beschreibung}">
 								<p:cellEditor>
 									<f:facet name="input"><p:inputText value="#{item.produkt.text}" disabled="#{item.produkt.stdFlag}"/></f:facet>
 									<f:facet name="output"><h:outputText value="#{item.produkt.text}" /></f:facet>
@@ -222,7 +222,7 @@
 
 
 					<!-- Dokumente -->
-					<p:tab title="#{labels.doc}">
+					<p:tab title="#{labels.doc}" rendered="#{not loginBean.validateAccess('MOD')}">
 						<p:commandButton update="dokumentDT" title="#{labels.add}" rendered="#{auftragBean.editMode}" icon="fa fa-plus" oncomplete="PF('newDokument').show();" />
 						<p:commandButton update="dokumentDT" title="#{labels.delete}" rendered="#{auftragBean.editMode}" icon="fa fa-remove" actionListener="#{auftragBean.deleteDokument()}" />
 						<p:dataTable id="dokumentDT" value="#{auftragBean.kdToList()}" var="item" rowKey="#{item.id}" selectionMode="single" 
@@ -232,17 +232,13 @@
 								<h:outputText value="#{item.position}" />
 							</p:column>
 							<p:column headerText="#{labels.nachname}" >
-								<h:outputText value="#{item.name}" />
+								<p:commandLink id="dlDokument" value="#{item.name}" ajax="false" disabled="#{auftragBean.editMode}">
+									<p:fileDownload contentDisposition="attachment" value="#{auftragBean.downloadDokument(item)}"/>
+								</p:commandLink>
 							</p:column>
 							<p:column headerText="#{labels.typ}" style="width:200px;">
 								<h:outputText value="#{item.typ}" />
 							</p:column>
-							<p:column headerText="#{labels.fileName}" style="width:400px;">
-								<p:commandLink id="dlDokument" value="#{item.fileName}" ajax="false" disabled="#{auftragBean.editMode}">
-									<p:fileDownload contentDisposition="attachment" value="#{auftragBean.dlDokument(item)}"/>
-								</p:commandLink>
-							</p:column>
-						
 						</p:dataTable>
 						
 					</p:tab>
@@ -284,7 +280,7 @@
 		<p:commandButton value="Abbrechen" oncomplete="PF('editBearbeiterSelect').hide();" />
 	</p:dialog>
 	
-	<p:dialog id="produktAddDlg" header="Neuer Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">
+	<p:dialog id="produktAddDlg" header="Neues Produkt" modal="true" widgetVar="addProdukt" minHeight="40" resizable="false">
 		<ui:include src="/WEB-INF/includes/dialogs/produktAdd.xhtml"/>
 	</p:dialog>
 	

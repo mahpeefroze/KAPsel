@@ -44,7 +44,7 @@
 		<p:accordionPanel id="settingsPanel" multiple="false">
 
 			<!-- User Settings -->
-			<p:tab title="#{labels.settingsUser}">
+			<p:tab title="#{labels.settingsUser}" rendered="#{not loginBean.validateAccess('MOD')}">
 				
 				<div id="nav_1" class="float_frame">
 					<br/>
@@ -71,7 +71,10 @@
 			            	</p:cellEditor>
 						</p:column>
 						<p:column headerText="#{labels.userName}" sortBy="#{item.name}">
-				            <h:outputText value="#{item.name}" />
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{item.name}" style="width:96%"/></f:facet>
+			            	</p:cellEditor>
 						</p:column>
 						<p:column headerText="#{labels.userRole}" sortBy="#{item.role}" style="width: 200px;">
 							<p:cellEditor>
@@ -103,11 +106,11 @@
 			</p:tab>
 
 			<!-- Kunden Settings -->
-			<p:tab title="#{labels.settingsKunde}">
+			<p:tab title="#{labels.settingsKunde}" rendered="#{not loginBean.validateAccess('MOD')}">
 			
 				<div id="nav_2" class="float_frame">
 					<br/>
-					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+					<p:panelGrid>
 						<p:commandButton id="newKGruppe" value="#{labels.add}" oncomplete="PF('newKGruppe').show();"/>
 						<p:commandButton id="delKGruppe" value="#{labels.delete}" oncomplete="PF('delKGruppe').show();"/>
 					</p:panelGrid>
@@ -130,7 +133,7 @@
 			            	</p:cellEditor>
 						</p:column>
 						<p:column headerText="#{labels.erstDatum}">
-							<h:outputText value="#{item.datum}">
+							<h:outputText value="#{item.erstDatum}">
 								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputText>
 						</p:column>
@@ -199,19 +202,19 @@
 			
 			</p:tab>
 			
-			<p:tab title="#{labels.settingsProdukt}" rendered="#{not loginBean.validateAccess('MOD')}">
+			<p:tab title="#{labels.settingsProdukt}">
 				
 				<div id="nav_3" class="float_frame fullWidth">
 					<br/>
 						
-					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+					<p:panelGrid>
 						<p:commandButton value="#{labels.add}" oncomplete="PF('newMaterial').show();"/>
 						<p:commandButton value="#{labels.delete}" oncomplete="PF('delMaterial').show();"/>
 					</p:panelGrid>
 					<p:dataTable id="materialienDT" var="item"
 						value="#{materialBean.materialien}" selectionMode="single"
 						selection="#{materialBean.selectedMaterial}" rowKey="#{item.id}"
-						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('MOD')}" editMode="cell">
+						emptyMessage="#{errors.norecords}" editable="true" editMode="cell">
 
 						<f:facet name="header">#{labels.materialien}</f:facet>
 						
@@ -271,14 +274,14 @@
 					<br/>
 					<p:separator/>
 					
-					<p:panelGrid rendered="#{not loginBean.validateAccess('MOD')}">
+					<p:panelGrid>
 						<p:commandButton value="#{labels.add}" oncomplete="PF('newWerkzeug').show();"/>
 						<p:commandButton value="#{labels.delete}" oncomplete="PF('delWerkzeug').show();"/>
 					</p:panelGrid>
 					<p:dataTable id="werkzeugeDT" var="item"
 						value="#{werkzeugBean.werkzeuge}" selectionMode="single"
 						selection="#{werkzeugBean.selectedWerkzeug}" rowKey="#{item.id}"
-						emptyMessage="#{errors.norecords}" editable="#{not loginBean.validateAccess('MOD')}" editMode="cell">
+						emptyMessage="#{errors.norecords}" editable="true" editMode="cell">
 
 						<f:facet name="header">#{labels.werkzeuge}</f:facet>
 						

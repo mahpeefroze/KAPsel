@@ -47,8 +47,6 @@ public class KundeService implements IKundeService{
 	public Kunde getKundeById(long id) {
 		Kunde result = kundeDAO.getItemById(id);
 		Hibernate.initialize(result.getAuftraege());
-		Hibernate.initialize(result.getGruppe());
-		Hibernate.initialize(result.getAdresse());
 		return result;
 	}
 

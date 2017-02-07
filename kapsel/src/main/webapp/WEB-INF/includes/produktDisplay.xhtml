@@ -4,22 +4,22 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-
-	<p:panelGrid styleClass="fullWidth" style="height: 42px;">
+	
+	<p:fieldset>
+	<p:panelGrid styleClass="fullWidth borderless" style="height: 42px;">
 		<p:row>
 			<p:column><h:outputText value="#{produktBean.selectedProdukt.name}" /></p:column>
 			<p:column style="width:150px;"><p:panel rendered="#{produktBean.selectedProdukt.tempFlag}" styleClass="produkt-tag produkt-tag-template">#{labels.templ}</p:panel></p:column>
 			<p:column style="width:150px;"><p:panel rendered="#{produktBean.selectedProdukt.stdFlag}" styleClass="produkt-tag produkt-tag-standard">#{labels.std}</p:panel></p:column>
 		</p:row>
 	</p:panelGrid>
+	</p:fieldset>
 	<br></br>
 	<p:fieldset style="margin-bottom:10px;">
-		<p:panelGrid>
+		<p:panelGrid styleClass="borderless">
 			<p:row>
 				<p:column>#{labels.pnr}:</p:column>
 				<p:column>#{produktBean.selectedProdukt.pnr}</p:column>
-				<p:column>#{labels.typ}:</p:column>
-				<p:column>#{produktBean.selectedProdukt.typ}</p:column>
 				<p:column>#{labels.erstDatum}</p:column>
 				<p:column>
 					<h:outputText value="#{produktBean.selectedProdukt.erstDatum}">
@@ -28,11 +28,8 @@
 				</p:column>
 			</p:row>
 			<p:row>
-				<p:column colspan="4">
-					<p:fieldset legend="#{labels.beschreibung}" toggleable="false">
-						<h:outputText value="#{produktBean.selectedProdukt.text}"></h:outputText>
-					</p:fieldset>
-				</p:column>
+				<p:column>#{labels.typ}:</p:column>
+				<p:column>#{produktBean.selectedProdukt.typ}</p:column>
 				<p:column>#{labels.modDatum}:</p:column>
 				<p:column>
 					<h:outputText value="#{produktBean.selectedProdukt.modDatum}">
@@ -40,6 +37,7 @@
 					</h:outputText>
 				</p:column>
 			</p:row>
+			
 			<p:row>
 				<p:column>#{labels.preis}</p:column>
 				<p:column>#{produktBean.selectedProdukt.preis}</p:column>
@@ -48,7 +46,22 @@
 			</p:row>
 		</p:panelGrid>
 	</p:fieldset>	
-
+	
+	<p:fieldset legend="#{labels.beschreibung}" toggleable="false" style="margin-bottom:10px;">
+		<h:outputText value="#{produktBean.selectedProdukt.text}"></h:outputText>
+	</p:fieldset>
+	
+	<p:fieldset legend="#{labels.calculation}" toggleable="false">
+		<p:panelGrid styleClass="borderless">
+			<p:row>
+				<p:column>#{labels.preis}</p:column>
+				<p:column>#{produktBean.selectedProdukt.preis} #{labels.waehrung}</p:column>
+				<p:column>#{labels.pZeit}</p:column>
+				<p:column>#{produktBean.selectedProdukt.zeit} #{labels.zeitEinheit}</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:fieldset>
+	
 </ui:composition>
 
 

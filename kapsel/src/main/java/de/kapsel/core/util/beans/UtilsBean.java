@@ -26,73 +26,9 @@ public class UtilsBean implements Serializable{
 	@ManagedProperty(value="#{utilsService}")
 	private IUtilsService utilsService;
 	
-	private Utils selectedUtils;
 	private HashMap<String, Utils> utilsMap;
 	private BusinessNumberStorage nrStorage;
 	private String[] rabatteCB;
-	
-	//region Getter und Setter
-
-	public IUtilsService getUtilsService() {
-		return utilsService;
-	}
-
-	public void setUtilsService(IUtilsService utilsService) {
-		this.utilsService = utilsService;
-	}
-	
-	public Utils getSelectedUtils() {
-		return selectedUtils;
-	}
-
-	public void setSelectedUtils(Utils selectedUtils) {
-		this.selectedUtils = selectedUtils;
-	}
-
-	public HashMap<String, Utils> getUtilsMap() {
-		return utilsMap;
-	}
-
-	public void setUtilsMap(HashMap<String, Utils> utilsMap) {
-		this.utilsMap = utilsMap;
-	}
-
-	public String[] getRabatteCB() {
-		ArrayList<String> rabatte = new ArrayList<String>();
-		if(getUtilsMap()!=null){
-			for(String key: getUtilsMap().keySet()){
-				if(key.startsWith("Rab") && key.endsWith("S") && getUtilsMap().get(key).getValue()==1){
-					rabatte.add(key);
-				}
-			}
-		}
-		this.rabatteCB = new String[rabatte.size()];
-		for(int i=0; i<rabatte.size(); i++){
-			this.rabatteCB[i]=rabatte.get(i);
-		}
-		
-		return this.rabatteCB;
-	}
-
-	public void setRabatteCB(String[] rabatteCB) {
-		this.rabatteCB = rabatteCB;
-		//Set all statuses 0
-		setRabattActivity("RabAlleS", 0);
-		setRabattActivity("RabOeffS", 0);
-		setRabattActivity("RabFiS", 0);
-		setRabattActivity("RabPrivS", 0);
-		
-		for(int i=0; i<this.rabatteCB.length; i++){
-			//Set all activated Statuses to 1 
-			setRabattActivity(this.rabatteCB[i],1);
-		}
-	}
-	
-	private void setRabattActivity(String rabName, int value){
-		getUtilsMap().get(rabName).setValue(value);
-	}
-	
-	//endregion
 
 	@PostConstruct
 	public void myInit(){
@@ -127,10 +63,6 @@ public class UtilsBean implements Serializable{
 	}
 
 	//region UTILS Settings
-	public void updateUtils(){
-		getUtilsService().updateUtils(getSelectedUtils());
-	}
-	
 	public void updateUtilsByType(char type){
 		for(Utils u:getUtilsMap().values()){
 			if(u.getTyp()!=type){
@@ -149,4 +81,60 @@ public class UtilsBean implements Serializable{
 	
 	//endregion UTILS
 
+	
+	//region Getter und Setter
+	public String[] getRabatteCB() {
+		ArrayList<String> rabatte = new ArrayList<String>();
+		if(getUtilsMap()!=null){
+			for(String key: getUtilsMap().keySet()){
+				if(key.startsWith("Rab") && key.endsWith("S") && getUtilsMap().get(key).getValue()==1){
+					rabatte.add(key);
+				}
+			}
+		}
+		this.rabatteCB = new String[rabatte.size()];
+		for(int i=0; i<rabatte.size(); i++){
+			this.rabatteCB[i]=rabatte.get(i);
+		}
+		
+		return this.rabatteCB;
+	}
+
+	public void setRabatteCB(String[] rabatteCB) {
+		this.rabatteCB = rabatteCB;
+		//Set all statuses 0
+		setRabattActivity("RabAlleS", 0);
+		setRabattActivity("RabOeffS", 0);
+		setRabattActivity("RabFiS", 0);
+		setRabattActivity("RabPrivS", 0);
+		
+		for(int i=0; i<this.rabatteCB.length; i++){
+			//Set all activated Statuses to 1 
+			setRabattActivity(this.rabatteCB[i],1);
+		}
+	}
+	
+	private void setRabattActivity(String rabName, int value){
+		getUtilsMap().get(rabName).setValue(value);
+	}
+
+	public IUtilsService getUtilsService() {
+		return utilsService;
+	}
+
+	public void setUtilsService(IUtilsService utilsService) {
+		this.utilsService = utilsService;
+	}
+
+	public HashMap<String, Utils> getUtilsMap() {
+		return utilsMap;
+	}
+
+	public void setUtilsMap(HashMap<String, Utils> utilsMap) {
+		this.utilsMap = utilsMap;
+	}
+	
+	//endregion
+
+	
 }

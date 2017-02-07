@@ -6,27 +6,26 @@
 
 
 	<h:form id="dlgNewKundePanel">
-	<p:panelGrid>
+	<p:panelGrid styleClass="borderless">
 		<p:row>
 			<p:column>#{labels.nachname}:</p:column>
 			<p:column>
 				<p:inputText value="#{kundeBean.newKunde.name}"/>
 			</p:column>
-			<p:column>#typ:</p:column>
+			<p:column>#{labels.typ}:</p:column>
 			<p:column>
 				<p:selectOneMenu id="newKtypSelect" value="#{kundeBean.newKunde.typ}" style="width:200px">
 					<f:selectItem itemLabel="Typ" itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{eTypes.kundeT}"/>
 				</p:selectOneMenu>
 			</p:column>
-			<p:column rowspan="3">#Bild</p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.ansprechPartner}:</p:column>
 			<p:column>
 				<p:inputText value="#{kundeBean.newKunde.APartner}" />
 			</p:column>
-			<p:column>#Gruppe:</p:column>
+			<p:column>#{labels.gruppe}:</p:column>
 			<p:column>
 				<p:selectOneMenu id="newKgruppeSelect" value="#{kundeBean.kGruppeId}" style="width:200px">
 					<f:selectItem itemLabel="Gruppe | Rabatt" itemValue="" noSelectionOption="true" />
@@ -37,47 +36,45 @@
 		<p:row>
 			<p:column>#{labels.rabatt}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.rabatt}"/></p:column>
-			<p:column>#{labels.aktiv}</p:column>
+			<p:column>#{labels.aktiv}:</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox value="#{kundeBean.newKunde.aktiv}" />
 			</p:column>
 		</p:row>
-		</p:panelGrid>
-
-		<p:spacer/>
-
-		<p:panelGrid>
 		<p:row>
-			<p:column colspan="3">#{labels.adresse}</p:column>
-			<p:column colspan="2">#{labels.kontakt}</p:column>
+		<p:column colspan="4"><br></br></p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="2"><b>#{labels.adresse}:</b></p:column>
+			<p:column colspan="2"><b>#{labels.kontakt}:</b></p:column>
 		</p:row>
 		<p:row>
 			<p:column>#{labels.strasse}:</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.strasse}"/></p:column>
-			<p:column>#{labels.email}</p:column>
+			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.strasse}"/></p:column>
+			<p:column>#{labels.email}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.email}"/></p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.hausnr}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.hausnr}"/></p:column>
-			<p:column>#{labels.telNr}</p:column>
+			<p:column>#{labels.hausnr}:</p:column>
+			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.hausnr}"/></p:column>
+			<p:column>#{labels.telNr}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.telefon}"/></p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.plz}/#{labels.stadt}</p:column>
-			<p:column style="width: 80px;"><p:inputText value="#{kundeBean.newKunde.adresse.plz}" style="width: 95%;"/></p:column>
-			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.stadt}"/></p:column>
-			<p:column>#{labels.mobil}</p:column>
+			<p:column>#{labels.plz}/#{labels.stadt}:</p:column>
+			<p:column ><p:inputText value="#{kundeBean.newKunde.adresse.plz}" style="width: 60px;"/>
+				<p:inputText value="#{kundeBean.newKunde.adresse.stadt}"/></p:column>
+			<p:column>#{labels.mobil}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.mobil}"/></p:column>
 		</p:row>
 		<p:row>
-			<p:column>#{labels.land}</p:column>
-			<p:column colspan="2"><p:inputText value="#{kundeBean.newKunde.adresse.land}"/></p:column>
-			<p:column>#{labels.web}</p:column>
+			<p:column>#{labels.land}:</p:column>
+			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.land}"/></p:column>
+			<p:column>#{labels.web}:</p:column>
 			<p:column><p:inputText value="#{kundeBean.newKunde.adresse.web}"/></p:column>
 		</p:row>
 	</p:panelGrid>
-	
+	<p:separator/>
 	
 	<p:commandButton value="OK" action="#{kundeBean.addKunde()}" update="dlgNewKundePanel nav_form ribbon_form sect_form" oncomplete="PF('newKunde').hide();">
 		<p:resetInput target="newKgruppeSelect" />

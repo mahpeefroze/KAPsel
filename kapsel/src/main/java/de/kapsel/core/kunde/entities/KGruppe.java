@@ -1,7 +1,6 @@
 package de.kapsel.core.kunde.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.hibernate.annotations.CreationTimestamp;
 
 import de.kapsel.core.util.entities.AbstractKapselEntity;
 
@@ -24,7 +22,6 @@ public class KGruppe extends AbstractKapselEntity implements Serializable{
 	private String name;
 	private double rabatt;
 	private boolean aktiv;
-	private Date datum;
 
 	@Column(name="id", nullable=false, unique=true)
 	@GeneratedValue
@@ -58,15 +55,6 @@ public class KGruppe extends AbstractKapselEntity implements Serializable{
 	}
 	public void setAktiv(boolean aktiv) {
 		this.aktiv = aktiv;
-	}
-	
-	@CreationTimestamp
-	@Column(name="datum", nullable=true)
-	public Date getDatum() {
-		return datum;
-	}
-	public void setDatum(Date datum) {
-		this.datum = datum;
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -80,7 +79,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable, Compara
 		this.typ = typ;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	public KGruppe getGruppe() {
 		return gruppe;
 	}
@@ -96,7 +95,7 @@ public class Kunde extends AbstractKapselEntity implements Serializable, Compara
 		this.text = text;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToOne(cascade=CascadeType.ALL, orphanRemoval=true)
 	public Adresse getAdresse() {
 		return adresse;
 	}

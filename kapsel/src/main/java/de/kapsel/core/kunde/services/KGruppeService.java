@@ -24,7 +24,6 @@ public class KGruppeService implements IKGruppeService {
 	@Override
 	@Transactional(readOnly = false)
 	public void addKGruppe(KGruppe kgruppe) {
-		//java.sql.Date sqlDate = new java.sql.Date(kgruppe.getDatum().getTime());
 		this.kgruppeDAO.addItem(kgruppe);
 	}
 
@@ -37,7 +36,7 @@ public class KGruppeService implements IKGruppeService {
 	@Override
 	@Transactional(readOnly = false)
 	public void deleteKGruppe(KGruppe kgruppe) {
-		this.kgruppeDAO.deleteKGruppe(kgruppe);
+		this.kgruppeDAO.unregisterDelete(kgruppe);
 	}
 
 	@Override

@@ -58,11 +58,11 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private Auftrag newAuftrag;
 	private ProduktWrapper selectedProduktWrapper;
 	private Produkt newProdukt;
-	private KapselDocument selectedDokument;
-	private KapselDocument newDokument;
 	private long selectedTemplateId;
 	private List<Produkt> templates;
 	private DualListModel<String> stdProdukte;
+	private KapselDocument selectedDokument;
+	private KapselDocument newDokument;
 	private UploadedFile uploadedDokument;
 	
 	private boolean newProdBool;
@@ -70,7 +70,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	private boolean selProdBool;
 	
 	private HashSet<ProduktWrapper> tempPwList;
-	private HashSet<ProduktWrapper>	tempDelPwList;
 	private HashMap<String, Produkt> produktMap;
 
 	@ManagedProperty(value="#{auftragService}")
@@ -91,12 +90,7 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	@ManagedProperty(value="#{basicAuftragCalculator}")
 	private IKapselCalculator<Auftrag> auftragCalc;
 	
-	//Gather Items to fill the table
-	public AuftragBean(){
-		//Cant call the Service at Bean creation time, because injection happens later so NullPointer would be thrown
-		//setAuftraege(auftragService.getAuftraege());  -> Moved to postconstruct init()
-		this.newAuftrag = new Auftrag();
-	}
+	public AuftragBean(){}
 
 	@PostConstruct
     public void myInit() {
@@ -126,6 +120,306 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		getNewAuftrag().setDokumente(new HashSet<KapselDocument>());
 		setNewDokument(new KapselDocument());
 	}
+	
+	//Listener for Selection in auftragDT in Nav Panel
+	public void loadAuftrag(SelectEvent event) {
+		setSelectedAuftrag((Auftrag) event.getObject());
+    }
+	
+	public void loadPassedAuftrag(){
+		for(Auftrag a:getAuftraege()){
+			if(a.getId()==getPassedID()){
+				setSelectedAuftrag(a);
+			}
+		}
+	}
+	
+	public String redirectToKunde(long id){
+		//pK is the name of variable in viewParam [kunde]
+		return "kunde.xhtml?faces-redirect=true&pK="+id;
+	}
+	
+	public String redirectToProdukt(long id){
+		return "produkt.xhtml?faces-redirect=true&pP="+id;
+	}
+	
+	public void addAuftrag(){
+		try {
+	
+			getNewAuftrag().setAnr(getUtilsContainer().getNextMax("ANR"));
+			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
+			getNewAuftrag().setStartdatum(new Date());
+			getNewAuftrag().setbKey(AbstractKapselEntity.generateBKey());
+			getAuftragService().addAuftrag(getNewAuftrag());
+			getUtilsContainer().updateNrStorage();
+		} catch (Exception e) {
+			getUtilsContainer().rollbackLast("ANR");
+			e.printStackTrace();
+		}
+		myInit();
+	}
+
+	public void updateAuftrag(){
+		getAuftragService().updateAuftrag(this.selectedAuftrag);
+	}
+
+	public void deleteAuftrag(){
+		getAuftragService().deleteAuftrag(this.selectedAuftrag);
+		myInit();
+	}
+	
+	public void calculatePreise(){
+		getSelectedAuftrag().setPreis(getAuftragCalc().calculateBruttoPrice(getSelectedAuftrag()));
+		getSelectedAuftrag().setNettoPreis(getAuftragCalc().calculateNettoPrice(getSelectedAuftrag()));
+	}
+	
+	public void calculateTime(){
+		getSelectedAuftrag().setZeit(getAuftragCalc().calculateTime(getSelectedAuftrag()));
+	}
+	
+	public void calculateDiscount(){
+		getSelectedAuftrag().setDiscountPreis(getAuftragCalc().calculateAfterDiscount(getSelectedAuftrag()));
+	}
+	
+	//region PRODUKT ADD/DELETE + DISPLAY
+	
+	public void addProduktNew(){
+		if(getNewProdukt()!=null){
+			ProduktWrapper pw = createProduktWrapper();
+			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
+			pw.setProdukt(getNewProdukt());
+		}
+		newProdBool=false;
+	}
+	
+	public void addProduktFromTemplate(){
+		if(getSelectedTemplateId()!=0){
+			ProduktWrapper pw = createProduktWrapper();
+			pw.setProdukt(new Produkt().createFromTemplate(getProduktService().getProduktById((getSelectedTemplateId()))));
+			pw.setName(pw.getProdukt().getName()+"Wrapper");
+		}
+	}
+	
+	public void addProduktFromSelection(){
+		boolean contained=false;
+		boolean firstRun=false;
+		ProduktWrapper pw;
+		Produkt p;
+		if(tempPwList.isEmpty() && getSelectedAuftrag().getProdukte().isEmpty()){
+			firstRun=true;
+		}
+		for(String prodName:getStdProdukte().getTarget()){
+			p=produktMap.get(prodName);
+			if(!firstRun){
+				contained=false;
+				if(!getSelectedAuftrag().getProdukte().isEmpty()){
+					for(ProduktWrapper wrapper: getSelectedAuftrag().getProdukte()){
+						if(wrapper.getProdukt().equals(p)){
+							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
+							contained=true;
+							break;
+						}
+					}
+				}
+				if(!tempPwList.isEmpty() && !contained && !getSelectedAuftrag().getProdukte().containsAll(tempPwList)){
+					for(ProduktWrapper wrapper:tempPwList){
+						if(wrapper.getProdukt().equals(p)){
+							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
+							contained=true;
+							break;
+						}
+					}
+				}
+			}
+			
+			if(!contained){
+				pw = createProduktWrapper();
+				pw.setProdukt(p);
+				pw.setName(pw.getProdukt().getName()+"Wrapper");
+			}
+		}
+	}
+	
+	public void addProduktDisplayChange(int source){
+		newProdBool=false;
+		templProdBool=false;
+		selProdBool=false;
+		switch(source){
+		case 0: newProdBool=true;
+				newProdukt = new Produkt();
+				break;
+		case 1: templProdBool=true;
+				prepareProduktTemplates();
+				break;
+		case 2: prepareProduktSelection(); 
+				break;
+		}
+	}
+	
+	private void prepareProduktTemplates(){
+		if(getTemplates()==null){
+			setTemplates(getProduktService().getTemplates());
+		}
+	}
+	
+	private void prepareProduktSelection(){
+		try{
+			if(getStdProdukte()==null){
+				ArrayList<String> prodNames = new ArrayList<>();
+				produktMap = new HashMap<>();
+				for(Produkt p:getProduktService().getNonTemplates()){
+					produktMap.put(p.getName(), p);
+					prodNames.add(p.getName());
+				}
+				setStdProdukte(new DualListModel<>(prodNames, new ArrayList<String>()));
+			}
+			selProdBool=true;
+		}catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private ProduktWrapper createProduktWrapper(){
+		ProduktWrapper pw = new ProduktWrapper();
+		pw.setPosition(getSelectedAuftrag().getProdukte().size()+1);
+		pw.setbKey(AbstractKapselEntity.generateBKey());
+		pw.setStueckzahl(1);
+		getSelectedAuftrag().getProdukte().add(pw);
+		tempPwList.add(pw);
+		return pw;
+	}
+	
+	public void deleteProduktWrapper(){
+		if(getSelectedProduktWrapper()!=null){
+			updateItemPosition(getSelectedProduktWrapper().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getProdukte()));
+			getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
+		}
+	}
+	
+	public ArrayList<ProduktWrapper> pwToList(){
+		if(getSelectedAuftrag()==null || getSelectedAuftrag().getProdukte()==null){
+			return null;
+		}
+		ArrayList<ProduktWrapper> sortedList= new ArrayList<ProduktWrapper>(getSelectedAuftrag().getProdukte());
+		Collections.sort(sortedList);
+		return sortedList; 
+	}
+	
+	//endregion
+	
+	//region DOKUMENTE
+	
+	public void uploadToFile(FileUploadEvent event) throws IOException{
+		InputStream input = null;
+		OutputStream output = null;
+		
+		UploadedFile uploadedDokument = event.getFile();
+		String filename = FilenameUtils.getName(uploadedDokument.getFileName());
+		String basename = FilenameUtils.getBaseName(filename) + "_";
+		basename = basename.replaceAll("\\s+", "_");
+		String extension = "." + FilenameUtils.getExtension(filename);
+		
+		input = uploadedDokument.getInputstream();
+		String path="/kapselUploads/"+getSelectedAuftrag().getAnr();
+		getNewDokument().setPath(path);
+		File auftragFolder = new File(System.getProperty("jboss.home.dir")+path);
+		if(!auftragFolder.exists()){
+			if(auftragFolder.mkdir()){
+				System.out.println("Directory "+auftragFolder.getPath()+" created succesfully");
+			}else{
+				System.out.println("Couldn't create "+auftragFolder.getPath());
+				getNewDokument().setPath("/kapselUploads");
+			}
+		}else{
+			System.out.println("Path already exists.");
+		}
+		
+		File file = File.createTempFile(basename, extension, new File(System.getProperty("jboss.home.dir")+getNewDokument().getPath()));
+		output = new FileOutputStream(file);
+		getNewDokument().setFileName(file.getName());
+		
+		try{
+			IOUtils.copy(input, output);
+		}catch (IOException e){
+			e.printStackTrace();
+		}finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(output);
+		}
+		
+	}
+	
+	public StreamedContent downloadDokument(KapselDocument kd) throws IOException{
+		StreamedContent file;
+		FacesContext fc = FacesContext.getCurrentInstance();
+	    ExternalContext ec = fc.getExternalContext();
+		InputStream stream = new URL("http://localhost:8080/uploads/"+getSelectedAuftrag().getAnr()+"/"+kd.getFileName()).openStream();
+        file = new DefaultStreamedContent(stream, ec.getMimeType(kd.getFileName()), kd.getFileName());
+		return file;
+	}
+	
+	public void addDokument(){
+			getNewDokument().setbKey(AbstractKapselEntity.generateBKey());
+			getNewDokument().setPosition(getSelectedAuftrag().getDokumente().size()+1);
+			if(getNewDokument().getName().equals("")){
+				getNewDokument().setName(getNewDokument().getFileName());
+			}
+			if(!getNewDokument().getPath().equals("")){
+				getSelectedAuftrag().getDokumente().add(getNewDokument());
+			}
+	}
+	
+	public void deleteDokument(){
+		if(getSelectedDokument()!=null){
+			updateItemPosition(getSelectedDokument().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getDokumente()));
+			getSelectedAuftrag().getDokumente().remove(getSelectedDokument());
+		}
+	}
+	
+	public ArrayList<KapselDocument> kdToList(){
+		if(getSelectedAuftrag()==null || getSelectedAuftrag().getDokumente()==null){
+			return null;
+		}
+		ArrayList<KapselDocument> sortedList= new ArrayList<KapselDocument>(getSelectedAuftrag().getDokumente());
+		Collections.sort(sortedList);
+		return sortedList; 
+	}
+	
+	//endregion
+	
+	@Override
+	public void enableEditMode() {
+		super.enableEditMode();
+		tempPwList = new HashSet<ProduktWrapper>();
+		setSelectedTemplateId(0);
+	}
+	
+	@Override
+	public void onEditComplete() {
+		if(tempPwList!=null && !tempPwList.isEmpty()){
+			Produkt p;
+			for(ProduktWrapper pw:tempPwList){
+				p=pw.getProdukt();
+				//Nur für die neuerstellte Produkte (new oder fromTemplate)
+				if(p.getPnr()==0){
+					p.setPnr(getUtilsContainer().getNextMax("PNR"));
+					p.setName("Produkt_" + p.getPnr());
+				}
+			}
+		}
+		updateAuftrag();
+		getUtilsContainer().updateNrStorage();
+		disableEditMode();
+	}
+
+	@Override
+	public void cancelEditMode() {
+		Auftrag orig = getAuftragService().getAuftragById(getSelectedAuftrag().getId());
+		getAuftraege().set(getAuftraege().indexOf(getSelectedAuftrag()), orig);
+		setSelectedAuftrag(orig);
+		disableEditMode();
+	}
+
 	
 	//region Getter/Setter
 	
@@ -295,302 +589,6 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 	
 	//endregion Getter/Setter
 
-	
-	//Listener for Selection in auftragDT in Nav Panel
-	public void loadAuftrag(SelectEvent event) {
-		setSelectedAuftrag((Auftrag) event.getObject());
-    }
-	
-	public void loadPassedAuftrag(){
-		for(Auftrag a:getAuftraege()){
-			if(a.getId()==getPassedID()){
-				setSelectedAuftrag(a);
-			}
-		}
-	}
-	
-	public String redirectToKunde(long id){
-		//pK is the name of variable in viewParam [kunde]
-		return "kunde.xhtml?faces-redirect=true&pK="+id;
-	}
-	
-	public String redirectToProdukt(long id){
-		return "produkt.xhtml?faces-redirect=true&pP="+id;
-	}
-	
-	public void addAuftrag(){
-		try {
-	
-			getNewAuftrag().setAnr(getUtilsContainer().getNextMax("ANR"));
-			getNewAuftrag().setStatus(ETypes.AuftragS.Offen);
-			getNewAuftrag().setStartdatum(new Date());
-			getNewAuftrag().setbKey(AbstractKapselEntity.generateBKey());
-			getAuftragService().addAuftrag(getNewAuftrag());
-			getUtilsContainer().updateNrStorage();
-		} catch (Exception e) {
-			getUtilsContainer().rollbackLast("ANR");
-			e.printStackTrace();
-		}
-		myInit();
-	}
 
-	public void updateAuftrag(){
-		getAuftragService().updateAuftrag(this.selectedAuftrag);
-	}
-
-	public void deleteAuftrag(){
-		getAuftragService().deleteAuftrag(this.selectedAuftrag);
-		myInit();
-	}
 	
-	public void calculateNetto(){
-		getSelectedAuftrag().setNettoPreis(getAuftragCalc().calculateNettoPrice(getSelectedAuftrag()));
-	}
-	
-	public void calculateBrutto(){
-		getSelectedAuftrag().setPreis(getAuftragCalc().calculateBruttoPrice(getSelectedAuftrag()));
-	}
-	
-	public void calculateTime(){
-		getSelectedAuftrag().setZeit(getAuftragCalc().calculateTime(getSelectedAuftrag()));
-	}
-	
-	public void calculateDiscount(){
-		getSelectedAuftrag().setDiscountPreis(getAuftragCalc().calculateAfterDiscount(getSelectedAuftrag()));
-	}
-	
-	//region PRODUKT ADD/DELETE + DISPLAY
-	
-	public void addProduktNew(){
-		if(getNewProdukt()!=null){
-			ProduktWrapper pw = createProduktWrapper();
-			getNewProdukt().setbKey(AbstractKapselEntity.generateBKey());
-			pw.setProdukt(getNewProdukt());
-		}
-		newProdBool=false;
-	}
-	
-	public void addProduktFromTemplate(){
-		if(getSelectedTemplateId()!=0){
-			ProduktWrapper pw = createProduktWrapper();
-			pw.setProdukt(new Produkt().createFromTemplate(getProduktService().getProduktById((getSelectedTemplateId()))));
-			pw.setName(pw.getProdukt().getName()+"Wrapper");
-		}
-	}
-	
-	public void addProduktFromSelection(){
-		boolean contained=false;
-		boolean firstRun=false;
-		ProduktWrapper pw;
-		Produkt p;
-		if(tempPwList.isEmpty() && getSelectedAuftrag().getProdukte().isEmpty()){
-			firstRun=true;
-		}
-		for(String prodName:getStdProdukte().getTarget()){
-			p=produktMap.get(prodName);
-			if(!firstRun){
-				contained=false;
-				if(!getSelectedAuftrag().getProdukte().isEmpty()){
-					for(ProduktWrapper wrapper: getSelectedAuftrag().getProdukte()){
-						if(wrapper.getProdukt().equals(p)){
-							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
-							contained=true;
-							break;
-						}
-					}
-				}
-				if(!tempPwList.isEmpty() && !contained && !getSelectedAuftrag().getProdukte().containsAll(tempPwList)){
-					for(ProduktWrapper wrapper:tempPwList){
-						if(wrapper.getProdukt().equals(p)){
-							wrapper.setStueckzahl(wrapper.getStueckzahl()+1);
-							contained=true;
-							break;
-						}
-					}
-				}
-			}
-			
-			if(!contained){
-				pw = createProduktWrapper();
-				pw.setProdukt(p);
-				pw.setName(pw.getProdukt().getName()+"Wrapper");
-			}
-		}
-	}
-	
-	public void addProduktDisplayChange(int source){
-		newProdBool=false;
-		templProdBool=false;
-		selProdBool=false;
-		switch(source){
-		case 0: newProdBool=true;
-				newProdukt = new Produkt();
-				break;
-		case 1: templProdBool=true;
-				prepareProduktTemplates();
-				break;
-		case 2: selProdBool=true;
-				prepareProduktSelection();
-				break;
-		}
-	}
-	
-	private void prepareProduktTemplates(){
-		if(getTemplates()==null){
-			setTemplates(getProduktService().getTemplates());
-		}
-	}
-	
-	private void prepareProduktSelection(){
-		if(getStdProdukte()==null){
-			ArrayList<String> prodNames = new ArrayList<>();
-			produktMap = new HashMap<>();
-			for(Produkt p:getProduktService().getNonTemplates()){
-				produktMap.put(p.getName(), p);
-				prodNames.add(p.getName());
-			}
-			setStdProdukte(new DualListModel<>(prodNames, new ArrayList<String>()));
-		}
-	}
-	
-	private ProduktWrapper createProduktWrapper(){
-		ProduktWrapper pw = new ProduktWrapper();
-		pw.setPosition(getSelectedAuftrag().getProdukte().size()+1);
-		pw.setbKey(AbstractKapselEntity.generateBKey());
-		pw.setStueckzahl(1);
-		getSelectedAuftrag().getProdukte().add(pw);
-		tempPwList.add(pw);
-		return pw;
-	}
-	
-	public void deleteProduktWrapper(){
-		if(getSelectedProduktWrapper()!=null){
-			tempDelPwList.add(getSelectedProduktWrapper());
-			updateItemPosition(getSelectedProduktWrapper().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getProdukte()));
-			getSelectedAuftrag().getProdukte().remove(getSelectedProduktWrapper());
-		}
-	}
-	
-	public ArrayList<ProduktWrapper> pwToList(){
-		if(getSelectedAuftrag()==null || getSelectedAuftrag().getProdukte()==null){
-			return null;
-		}
-		ArrayList<ProduktWrapper> sortedList= new ArrayList<ProduktWrapper>(getSelectedAuftrag().getProdukte());
-		Collections.sort(sortedList);
-		return sortedList; 
-	}
-	
-	//endregion
-	
-	//region DOKUMENTE
-	
-	public void uploadToFile(FileUploadEvent event) throws IOException{
-		InputStream input = null;
-		OutputStream output = null;
-		
-		UploadedFile uploadedDokument = event.getFile();
-		String filename = FilenameUtils.getName(uploadedDokument.getFileName());
-		String basename = FilenameUtils.getBaseName(filename) + "_";
-		basename = basename.replaceAll("\\s+", "_");
-		String extension = "." + FilenameUtils.getExtension(filename);
-		
-		input = uploadedDokument.getInputstream();
-		String path=System.getProperty("jboss.home.dir")+"/kapselUploads/"+getSelectedAuftrag().getAnr();
-		File auftragFolder = new File(path);
-		if(!auftragFolder.exists()){
-			if(auftragFolder.mkdir()){
-				System.out.println("Directory "+auftragFolder.getPath()+" created succesfully");
-				getNewDokument().setPath(path);
-			}else{
-				System.out.println("Couldn't create "+auftragFolder.getPath());
-				getNewDokument().setPath(System.getProperty("jboss.home.dir")+"/kapselUploads");
-			}
-		}else{
-			System.out.println("Path already exists.");
-			getNewDokument().setPath(path);
-		}
-		File file = File.createTempFile(basename, extension, new File(getNewDokument().getPath()));
-		output = new FileOutputStream(file);
-		getNewDokument().setFileName(file.getName());
-		
-		try{
-			IOUtils.copy(input, output);
-		}catch (IOException e){
-			e.printStackTrace();
-		}finally {
-			IOUtils.closeQuietly(input);
-			IOUtils.closeQuietly(output);
-		}
-		
-	}
-	
-	public StreamedContent dlDokument(KapselDocument kd) throws IOException{
-		StreamedContent file;
-		FacesContext fc = FacesContext.getCurrentInstance();
-	    ExternalContext ec = fc.getExternalContext();
-		InputStream stream = new URL("http://localhost:8080/uploads/"+getSelectedAuftrag().getAnr()+"/"+kd.getFileName()).openStream();
-        file = new DefaultStreamedContent(stream, ec.getMimeType(kd.getFileName()), kd.getFileName());
-		return file;
-	}
-	
-	public void addDokument(){
-			getNewDokument().setbKey(AbstractKapselEntity.generateBKey());
-			getNewDokument().setPosition(getSelectedAuftrag().getDokumente().size()+1);
-			if(!getNewDokument().getPath().equals("")){
-				getSelectedAuftrag().getDokumente().add(getNewDokument());
-			}
-	}
-	
-	public void deleteDokument(){
-		if(getSelectedDokument()!=null){
-			updateItemPosition(getSelectedDokument().getPosition(), new ArrayList<DTItem>(getSelectedAuftrag().getDokumente()));
-			getSelectedAuftrag().getDokumente().remove(getSelectedDokument());
-		}
-	}
-	
-	public ArrayList<KapselDocument> kdToList(){
-		if(getSelectedAuftrag()==null || getSelectedAuftrag().getDokumente()==null){
-			return null;
-		}
-		ArrayList<KapselDocument> sortedList= new ArrayList<KapselDocument>(getSelectedAuftrag().getDokumente());
-		Collections.sort(sortedList);
-		return sortedList; 
-	}
-	
-	//endregion
-	
-	@Override
-	public void enableEditMode() {
-		super.enableEditMode();
-		tempPwList = new HashSet<ProduktWrapper>();
-		tempDelPwList = new HashSet<ProduktWrapper>();
-		setSelectedTemplateId(0);
-	}
-	
-	@Override
-	public void onEditComplete() {
-		if(tempPwList!=null && !tempPwList.isEmpty()){
-			Produkt p;
-			for(ProduktWrapper pw:tempPwList){
-				p=pw.getProdukt();
-				//Nur für die neuerstellte Produkte (new oder fromTemplate)
-				if(p.getPnr()==0){
-					p.setPnr(getUtilsContainer().getNextMax("PNR"));
-					p.setName("Produkt_" + p.getPnr());
-				}
-			}
-		}
-		updateAuftrag();
-		getUtilsContainer().updateNrStorage();
-		disableEditMode();
-	}
-
-	@Override
-	public void cancelEditMode() {
-		Auftrag orig = getAuftragService().getAuftragById(getSelectedAuftrag().getId());
-		getAuftraege().set(getAuftraege().indexOf(getSelectedAuftrag()), orig);
-		setSelectedAuftrag(orig);
-		disableEditMode();
-	}
-
 }

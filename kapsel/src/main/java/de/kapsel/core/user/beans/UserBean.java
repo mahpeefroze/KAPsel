@@ -28,59 +28,12 @@ public class UserBean implements Serializable{
 	private User selectedUser;
 	private User newUser;
 	private List<User> users;
-	private long id;
-	
-	
-	//region Getter und Setter
-	public IUserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(IUserService userService) {
-        this.userService = userService;
-    }
-
-	public List<User> getUsers() {
-        return this.users;
-    }
-
-	public void setUsers(List<User> userList) {
-        this.users = userList;
-    }
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-    
-	public User getSelectedUser() {
-		return selectedUser;
-	}
-
-	public void setSelectedUser(User selectedUser) {
-		this.selectedUser = selectedUser;
-	}
-    
-    public User getNewUser() {
-		return newUser;
-	}
-
-	public void setNewUser(User newUser) {
-		this.newUser = newUser;
-	}
-	
-	//endregion
-
 
 	@PostConstruct
 	public void myInit(){
 		try {
 			setUsers(getUserService().getUsers());
 			setSelectedUser(getUsers().get(0));
-			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}catch(IndexOutOfBoundsException e){
@@ -102,8 +55,7 @@ public class UserBean implements Serializable{
 	}
 	
 	public void onUserEdit(User u){
-		setSelectedUser(u);
-		updateUser();
+		updateUser(u);
 	}
 	
 	public void resetNewUser(){
@@ -111,17 +63,13 @@ public class UserBean implements Serializable{
 	}
 	
 	public void resetPassword(User u){
-		u.setPassword(u.getName());
+		u.setPassword("");
 		u.setResPw(true);
-		getUserService().updateUser(u);
+		updateUser(u);
 	}
 	
 	public void updateUser(User u){
 		getUserService().updateUser(u);
-	}
-	
-	public void updateUser(){
-		getUserService().updateUser(getSelectedUser());
 	}
 		
 	public void deleteUser(){
@@ -130,10 +78,39 @@ public class UserBean implements Serializable{
 	}
 	
 	
+	//region Getter und Setter
+	public IUserService getUserService() {
+        return userService;
+    }
 
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
+    }
 
+	public List<User> getUsers() {
+        return this.users;
+    }
+
+	public void setUsers(List<User> userList) {
+        this.users = userList;
+    }
+
+	public User getSelectedUser() {
+		return selectedUser;
+	}
+
+	public void setSelectedUser(User selectedUser) {
+		this.selectedUser = selectedUser;
+	}
+    
+    public User getNewUser() {
+		return newUser;
+	}
+
+	public void setNewUser(User newUser) {
+		this.newUser = newUser;
+	}
 	
-	
-	
+	//endregion
 
 }

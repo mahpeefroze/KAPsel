@@ -1,7 +1,6 @@
 package de.kapsel.core.auftrag.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.core.kunde.entities.Kunde;
 import de.kapsel.core.user.entities.User;
@@ -44,8 +41,6 @@ public class Auftrag extends AbstractKapselEntity implements Serializable, Compa
 	private Date sollenddatum;
 	private Date startdatum;
 	private Date enddatum;
-	private Timestamp erstDatum;
-	private Timestamp modDatum;
 	private Set<ProduktWrapper> produkte;
 	private Set<KapselDocument> dokumente;
 	
@@ -188,26 +183,6 @@ public class Auftrag extends AbstractKapselEntity implements Serializable, Compa
 		this.enddatum = enddatum;
 	}
 
-	@CreationTimestamp
-	@Column(name="erst_datum", nullable=false)
-	public Timestamp getErstDatum() {
-		return erstDatum;
-	}
-
-	public void setErstDatum(Timestamp erstDatum) {
-		this.erstDatum = erstDatum;
-	}
-	
-	@UpdateTimestamp
-	@Column(name="mod_datum", nullable=false)
-	public Timestamp getModDatum() {
-		return modDatum;
-	}
-
-	public void setModDatum(Timestamp modDatum) {
-		this.modDatum = modDatum;
-	}
-	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<ProduktWrapper> getProdukte() {
 		return produkte;

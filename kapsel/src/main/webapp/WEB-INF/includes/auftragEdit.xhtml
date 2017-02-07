@@ -12,7 +12,7 @@
 			<p:column>
 				<p:inputText value="#{auftragBean.selectedAuftrag.name}" />
 			</p:column>
-			<p:column>
+			<p:column style="width:100px;">
 				<h:outputText value="#{labels.status}:" styleClass="alignRight statusbox"/>
 			</p:column>
 			<p:column style="width:150px;">
@@ -50,7 +50,7 @@
 			</p:row>
 			<p:row>
 				<p:column>#{labels.verantwortlichMA}:</p:column>
-				<p:column>#{auftragBean.selectedAuftrag.bearbeiter.name}</p:column>
+				<p:column>#{auftragBean.selectedAuftrag.bearbeiter.fullname}</p:column>
 				<p:column style="width:40px;">
 					<p:commandButton icon="fa fa-user-plus" oncomplete="PF('editBearbeiterSelect').show()"/>
 				</p:column>
@@ -73,7 +73,7 @@
 				<p:inputText id="preisInput" value="#{auftragBean.selectedAuftrag.preis}">
 						<f:convertNumber maxFractionDigits="2"/>
 					</p:inputText>
-					<p:commandButton action="#{auftragBean.calculateBrutto}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
+					<p:commandButton action="#{auftragBean.calculatePreise}" update="preisInput" icon="fa fa-calculator" title="#{labels.calcPreis}"/>
 			</p:column>
 			<p:column>#{labels.pZeit}:</p:column>
 			<p:column>

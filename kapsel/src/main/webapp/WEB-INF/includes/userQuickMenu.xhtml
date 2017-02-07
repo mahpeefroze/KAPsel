@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ccs="http://xmlns.jcp.org/jsf/composite/ccs"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<h:form id="userSettingsForm">
+	<p:menubar>
+        <p:submenu label="Hi, #{loginBean.loginUser.fullname}" icon="fa fa-user" style="float:right;font-size:0.8em;">
+            <p:menuitem value="#{labels.ownSettings}" icon="fa fa-cogs" oncomplete="PF('mySettings').show();"/>
+            <p:separator />
+            <p:menuitem value="Logout" action="#{loginBean.logoutUser()}" icon="fa fa-power-off"/>
+        </p:submenu>
+     </p:menubar>
+     </h:form>
+     
+     <p:dialog id="mySettingsDlg" header="#{labels.ownSettings}" modal="true" widgetVar="mySettings" minHeight="40" resizable="false">
+     	<ui:include src="/WEB-INF/includes/dialogs/userSettings.xhtml"/>
+     </p:dialog>
+	
+</ui:composition>
+
+

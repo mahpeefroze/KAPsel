@@ -5,6 +5,6 @@ import de.kapsel.core.util.dao.IGenericDAO;
 
 public interface IKGruppeDAO extends IGenericDAO<KGruppe> {
 
-	void deleteKGruppe(KGruppe kgruppe);
+	void unregisterDelete(KGruppe kgruppe);
 
 }

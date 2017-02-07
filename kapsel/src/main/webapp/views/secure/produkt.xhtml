@@ -175,7 +175,7 @@
 							<p:column headerText="#{labels.stueck_zahl}" style="width: 40px;">
 								<p:cellEditor>
 					               <f:facet name="output"><h:outputText value="#{item.menge}" /></f:facet>
-					               <f:facet name="input"><p:inputText value="#{item.menge}" style="width:96%"/></f:facet>
+					               <f:facet name="input"><p:spinner value="#{item.menge}" /></f:facet>
 					            </p:cellEditor>
 							</p:column>
 							<p:column headerText="#{labels.bezeichnung}" >

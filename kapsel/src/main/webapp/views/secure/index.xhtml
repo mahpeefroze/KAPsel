@@ -18,7 +18,7 @@
 </h:head>
 <h:body>
 	<div id="logout" style="float:right;">
-		<cc:userQuickMenu/>
+		<ui:include src="/WEB-INF/includes/userQuickMenu.xhtml"/>
     </div>
   
 	<div id="main_nav" class="centered">
@@ -28,7 +28,7 @@
 				<p:commandButton value="#{labels.auftraege}" action="auftrag?faces-redirect=true" icon="fa fa-file-text-o" styleClass="ui-ribbon-bigbutton auftrag-bigbutton"/>
 				<p:commandButton value="#{labels.produkte}" action="produkt?faces-redirect=true" icon="fa fa-codepen" styleClass="ui-ribbon-bigbutton produkt-bigbutton"/>
 				<p:commandButton value="#{labels.stats}" disabled="true" icon="fa fa-bar-chart-o" styleClass="ui-ribbon-bigbutton stats-bigbutton"/>
-				<p:commandButton value="#{labels.settings}"  disabled="#{loginBean.validateAccess('MOD')}" action="settings?faces-redirect=true" icon="fa fa-cog" styleClass="ui-ribbon-bigbutton settings-bigbutton"/>
+				<p:commandButton value="#{labels.settings}"  disabled="#{loginBean.validateAccess('ADVUSER')}" action="settings?faces-redirect=true" icon="fa fa-cog" styleClass="ui-ribbon-bigbutton settings-bigbutton"/>
 				<p:commandButton value="#{labels.lager}" disabled="true" icon="fa fa-sitemap" styleClass="ui-ribbon-bigbutton lager-bigbutton"/>
 			</h:panelGrid>
 		</h:form>

@@ -7,9 +7,11 @@
 
 
 
-	<p:panelGrid columns="3" styleClass="fullWidth">
-		<h:outputText value="#{auftragBean.selectedAuftrag.name}" />
-		<h:outputText value="#{labels.status}: #{auftragBean.selectedAuftrag.status}" styleClass="statusbox"/>
+	<p:panelGrid styleClass="fullWidth">
+		<p:row>
+			<p:column><h:outputText value="#{auftragBean.selectedAuftrag.name}" /></p:column>
+			<p:column style="width: 150px;"><h:outputText value="#{labels.status}: #{auftragBean.selectedAuftrag.status}" styleClass="statusbox"/></p:column>
+		</p:row>
 	</p:panelGrid>
 	<p:spacer/>
 	<br></br>
@@ -41,7 +43,7 @@
 			</p:row>
 			<p:row>
 				<p:column>#{labels.verantwortlichMA}:</p:column>
-				<p:column>#{auftragBean.selectedAuftrag.bearbeiter.name}</p:column>
+				<p:column>#{auftragBean.selectedAuftrag.bearbeiter.fullname}</p:column>
 				<p:column></p:column>
 				<p:column></p:column>
 			</p:row>
@@ -58,11 +60,11 @@
 		<p:row>
 			<p:column>#{labels.preis}:</p:column>
 			<p:column>
-				<h:outputText value="#{auftragBean.selectedAuftrag.preis}" />#{labels.waehrung}
+				<h:outputText value="#{auftragBean.selectedAuftrag.preis}" /> #{labels.waehrung}
 			</p:column>
 			<p:column>#{labels.pZeit}:</p:column>
 			<p:column>
-				<h:outputText value="#{auftragBean.selectedAuftrag.zeit}" />#{labels.zeitEinheit}
+				<h:outputText value="#{auftragBean.selectedAuftrag.zeit}" /> #{labels.zeitEinheit}
 			</p:column>
 		</p:row>
 		<p:row>
@@ -70,8 +72,8 @@
 			<p:column>
 				<p:outputLabel value="#{auftragBean.selectedAuftrag.discountPreis}">
 					<f:convertNumber maxFractionDigits="2"/>
-				</p:outputLabel>
-				#{labels.waehrung}
+				</p:outputLabel> #{labels.waehrung}
+				
 			</p:column>
 			<p:column colspan="2"/>
 		</p:row>

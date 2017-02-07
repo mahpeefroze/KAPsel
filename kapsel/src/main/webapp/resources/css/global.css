@@ -24,6 +24,14 @@ body {
 	background-color: #fff;
 }
 
+.borderless tr{
+	border: none !important;
+}
+
+.borderless td{
+	border: none !important;
+}
+
 .centered{
 	position: absolute;
 	left: 50%;

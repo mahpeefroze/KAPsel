@@ -12,7 +12,7 @@ public class KGruppeDAO extends AbstractDAO<KGruppe> implements IKGruppeDAO {
 		super(KGruppe.class);
 	}
 	
-	public void deleteKGruppe(KGruppe kgruppe){
+	public void unregisterDelete(KGruppe kgruppe){
 		System.out.println("Want to delete kGruppe from Kunde...");
 		@SuppressWarnings("unchecked")
 		List<Kunde> list = sessionFactory.getCurrentSession().createQuery("from Kunde").list();

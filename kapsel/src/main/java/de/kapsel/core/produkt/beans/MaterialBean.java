@@ -26,40 +26,6 @@ public class MaterialBean implements Serializable{
 	
 	@ManagedProperty(value="#{materialService}")
 	private IMaterialService materialService;
-	
-	//region Getter & Setter
-	public Material getNewMaterial() {
-		return newMaterial;
-	}
-
-	public void setNewMaterial(Material newMaterial) {
-		this.newMaterial = newMaterial;
-	}
-
-	public List<Material> getMaterialien() {
-		return materialien;
-	}
-
-	public void setMaterialien(List<Material> materialien) {
-		this.materialien = materialien;
-	}
-
-	public Material getSelectedMaterial() {
-		return selectedMaterial;
-	}
-
-	public void setSelectedMaterial(Material selectedMaterial) {
-		this.selectedMaterial = selectedMaterial;
-	}
-
-	public IMaterialService getMaterialService() {
-		return materialService;
-	}
-
-	public void setMaterialService(IMaterialService materialService) {
-		this.materialService = materialService;
-	}
-	//endregion
 
 	@PostConstruct
     public void myInit() {
@@ -107,5 +73,42 @@ public class MaterialBean implements Serializable{
 		getMaterialService().deleteMaterial(getSelectedMaterial());
 		myInit();
 	}
+	
+	
+	//region Getter & Setter
+	public Material getNewMaterial() {
+		return newMaterial;
+	}
+
+	public void setNewMaterial(Material newMaterial) {
+		this.newMaterial = newMaterial;
+	}
+
+	public List<Material> getMaterialien() {
+		return materialien;
+	}
+
+	public void setMaterialien(List<Material> materialien) {
+		this.materialien = materialien;
+	}
+
+	public Material getSelectedMaterial() {
+		return selectedMaterial;
+	}
+
+	public void setSelectedMaterial(Material selectedMaterial) {
+		this.selectedMaterial = selectedMaterial;
+	}
+
+	public IMaterialService getMaterialService() {
+		return materialService;
+	}
+
+	public void setMaterialService(IMaterialService materialService) {
+		this.materialService = materialService;
+	}
+	//endregion
+
+
 	
 }

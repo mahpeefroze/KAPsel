@@ -22,20 +22,8 @@ public class UtilsService implements IUtilsService{
 
 	@Override
 	@Transactional(readOnly = false)
-	public void addUtils(Utils utils) {
-		utilsDAO.addItem(utils);
-	}
-
-	@Override
-	@Transactional(readOnly = false)
 	public void updateUtils(Utils utils) {
 		utilsDAO.updateItem(utils);
-	}
-
-	@Override
-	@Transactional(readOnly = false)
-	public void deleteUtils(Utils utils) {
-		utilsDAO.deleteItem(utils);
 	}
 
 	@Override

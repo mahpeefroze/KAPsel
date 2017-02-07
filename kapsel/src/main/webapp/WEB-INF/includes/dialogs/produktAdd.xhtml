@@ -7,9 +7,9 @@
 	<h:form id="dlgAddProduktPanel">
 	<p:panelGrid>
 		<p:row>
-		<p:column><p:commandButton id="newP" value="Create new Produkt" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(0)}"/></p:column>
-		<p:column><p:commandButton id="tempP" value="Create Produkt from template" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(1)}"/></p:column>
-		<p:column><p:commandButton id="selP" value="Select Produkt" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(2)}"/></p:column>
+		<p:column><p:commandButton id="newP" value="#{labels.prodCreate}" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(0)}"/></p:column>
+		<p:column><p:commandButton id="tempP" value="#{labels.prodFromTempl}" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(1)}"/></p:column>
+		<p:column><p:commandButton id="selP" value="#{labels.prodSelect}" update="dlgAddProduktPanel" action="#{auftragBean.addProduktDisplayChange(2)}"/></p:column>
 		</p:row>
 	</p:panelGrid>
 	<p:separator/>
@@ -49,7 +49,7 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:commandButton value="Add" action="#{auftragBean.addProduktNew()}" update=":sect_form dlgAddProduktPanel" oncomplete="PF('addProdukt').hide();"/>
+				<p:commandButton value="#{labels.add}" action="#{auftragBean.addProduktNew()}" update=":sect_form dlgAddProduktPanel" oncomplete="PF('addProdukt').hide();"/>
 			</p:column>
 		</p:row>
 	</p:panelGrid>
@@ -62,7 +62,7 @@
 				</p:selectOneListbox>
 			</p:column>
 			<p:column>
-				<p:commandButton value="Add empty" action="#{auftragBean.addProduktFromTemplate()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
+				<p:commandButton value="#{labels.add}" action="#{auftragBean.addProduktFromTemplate()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
 			</p:column>
 		</p:row>
 	</p:panelGrid>
@@ -76,7 +76,7 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:commandButton value="Add selected" action="#{auftragBean.addProduktFromSelection()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
+				<p:commandButton value="#{labels.add}" action="#{auftragBean.addProduktFromSelection()}" update=":sect_form" oncomplete="PF('addProdukt').hide();"/>
 			</p:column>
 		</p:row>
 	</p:panelGrid>

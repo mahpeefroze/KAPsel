@@ -21,14 +21,7 @@ public class BasicAuftragCalculator implements Serializable, IKapselCalculator<A
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
 	
-	public UtilsBean getUtilsContainer() {
-		return utilsContainer;
-	}
-
-	public void setUtilsContainer(UtilsBean utilsContainer) {
-		this.utilsContainer = utilsContainer;
-	}
-
+	
 	public int calculateTime(Auftrag a) {
 		int time=0;
 		if(a.getProdukte()!=null && !a.getProdukte().isEmpty()){
@@ -58,7 +51,11 @@ public class BasicAuftragCalculator implements Serializable, IKapselCalculator<A
 	@Override
 	public double calculateAfterDiscount(Auftrag a) {
 		double rabatt = a.getKunde().getRabatt();
-		double price = calculateBruttoPrice(a);
+		double price = a.getPreis();
+		if(price<=0){
+			price=calculateBruttoPrice(a);
+		}
+		 
 		if(a.getKunde().getGruppe()!=null && a.getKunde().getGruppe().getRabatt()>rabatt){
 			rabatt=a.getKunde().getGruppe().getRabatt();
 		}
@@ -83,6 +80,13 @@ public class BasicAuftragCalculator implements Serializable, IKapselCalculator<A
 		return price;
 	}
 	
-	
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
+	}
+
 
 }

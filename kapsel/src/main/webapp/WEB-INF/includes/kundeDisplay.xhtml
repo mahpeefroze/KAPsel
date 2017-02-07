@@ -6,15 +6,18 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
-
-	<p:panelGrid columns="3" styleClass="fullWidth">
-		<h:outputText value="#{kundeBean.selectedKunde.name}" />
-		<h:outputText value="#{labels.aktiv}: " styleClass="statusbox"/>
-		<p:selectBooleanCheckbox disabled="true" value="#{kundeBean.selectedKunde.aktiv}" />
+	<p:fieldset>
+	<p:panelGrid styleClass="fullWidth borderless">
+		<p:row>
+			<p:column><h:outputText value="#{kundeBean.selectedKunde.name}" /></p:column>
+			<p:column><h:outputText value="#{labels.aktiv}: " styleClass="statusbox"/></p:column>
+			<p:column style="width:30px;"><p:selectBooleanCheckbox disabled="true" value="#{kundeBean.selectedKunde.aktiv}" /></p:column>
+		</p:row>
 	</p:panelGrid>
+	</p:fieldset>
 	<p:spacer/>
 	<p:fieldset style="margin-bottom:10px;">
-		<p:panelGrid>
+		<p:panelGrid styleClass="borderless">
 			<p:row>
 				<p:column>#{labels.knr}:</p:column>
 				<p:column>#{kundeBean.selectedKunde.knr}</p:column>
@@ -36,32 +39,37 @@
 		</p:panelGrid>
 	</p:fieldset>
 	<p:fieldset toggleable="false" style="margin-bottom:10px;">
-		<p:panelGrid>
+		<p:panelGrid styleClass="borderless">
 			<p:row>
-				<p:column colspan="3">#{labels.adresse}</p:column>
+				<p:column colspan="2">#{labels.adresse}</p:column>
+				<p:column/>
 				<p:column colspan="2">#{labels.kontakt}</p:column>
 			</p:row>
 			<p:row>
 				<p:column>#{labels.strasse}:</p:column>
-				<p:column colspan="2">#{kundeBean.selectedKunde.adresse.strasse}</p:column>
+				<p:column>#{kundeBean.selectedKunde.adresse.strasse}</p:column>
+				<p:column/>
 				<p:column>#{labels.email}</p:column>
 				<p:column>#{kundeBean.selectedKunde.adresse.email}</p:column>
 			</p:row>
 			<p:row>
 				<p:column>#{labels.hausnr}</p:column>
-				<p:column colspan="2">#{kundeBean.selectedKunde.adresse.hausnr}</p:column>
+				<p:column>#{kundeBean.selectedKunde.adresse.hausnr}</p:column>
+				<p:column/>
 				<p:column>#{labels.telNr}</p:column>
 				<p:column>#{kundeBean.selectedKunde.adresse.telefon}</p:column>
 			</p:row>
 			<p:row>
 				<p:column>#{labels.plz}/#{labels.stadt}</p:column>
-				<p:column colspan="2">#{kundeBean.selectedKunde.adresse.plz}/#{kundeBean.selectedKunde.adresse.stadt}</p:column>
+				<p:column>#{kundeBean.selectedKunde.adresse.plz}/#{kundeBean.selectedKunde.adresse.stadt}</p:column>
+				<p:column/>
 				<p:column>#{labels.mobil}</p:column>
 				<p:column>#{kundeBean.selectedKunde.adresse.mobil}</p:column>
 			</p:row>
 			<p:row>
 				<p:column>#{labels.land}</p:column>
-				<p:column colspan="2">#{kundeBean.selectedKunde.adresse.land}</p:column>
+				<p:column>#{kundeBean.selectedKunde.adresse.land}</p:column>
+				<p:column/>
 				<p:column>#{labels.web}</p:column>
 				<p:column>#{kundeBean.selectedKunde.adresse.web}</p:column>
 			</p:row>

@@ -17,8 +17,6 @@ public class KundeDAO extends AbstractDAO<Kunde> implements ILazyLoadDAO<Kunde>{
 	public List<Kunde> getItemsWithChildren() {
 		String query="select distinct k"+
 				" from Kunde k"+
-				" left join fetch k.gruppe"+
-				" left join fetch k.adresse"+
 				" left join fetch k.auftraege";
 	
 	return getSessionFactory().getCurrentSession().createQuery(query).list();

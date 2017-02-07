@@ -22,7 +22,7 @@ public class Material extends AbstractKapselEntity implements Serializable{
 	private String name;
 	private double preis;
 	private ETypes.UnitT einheit;
-	private double verschnitt=1.0;
+	private double verschnitt;
 	private ETypes.MaterialT typ;
 	
 	

@@ -29,76 +29,18 @@ import org.primefaces.context.RequestContext;
 public class LoginBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	//PrimeFaces seems to misinterpret escape of \w with \, and takes ^\\w*$ as regex -> all words starting with '\' followed by 0 to many occurances of 'w'
-	//Moved regex expression to xhtml View
-	private final String pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[_])[\\w]{8,25}$";
+
+	private final String pwPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[_])[\\w]{8,25}$";
 	private final String success = "/views/secure/index.xhtml?faces-redirect=true";
 	private final String error= "/views/home.xhtml?faces-redirect=true";
 	
 	private User loginUser;
 	private String passwordNew;
-	private String passwordCtrl;
 	private boolean resPassword;
 	private boolean logged;
 	
 	@ManagedProperty(value="#{userService}")
 	private IUserService userService;
-	
-	//region Getter und Setter
-	public IUserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(IUserService userService) {
-        this.userService = userService;
-    }
-    
-    public String getPwPattern(){
-    	return pwPattern;
-    }
-
-	public User getLoginUser() {
-		return loginUser;
-	}
-
-	public void setLoginUser(User loginUser) {
-		this.loginUser = loginUser;
-	}
-
-	public String getPasswordNew() {
-		return passwordNew;
-	}
-
-	public void setPasswordNew(String passwordNew) {
-		this.passwordNew = passwordNew;
-	}
-
-	public boolean isResPassword() {
-		return resPassword;
-	}
-
-	public void setResPassword(boolean resPassword) {
-		this.resPassword = resPassword;
-	}
-
-	public boolean isLogged() {
-		return logged;
-	}
-
-	public void setLogged(boolean logged) {
-		this.logged = logged;
-	}
-	
-	public String getPasswordCtrl() {
-		return passwordCtrl;
-	}
-
-	public void setPasswordCtrl(String passwordCtrl) {
-		this.passwordCtrl = passwordCtrl;
-	}
-	
-	//endregion
-
 
 
 	@PostConstruct
@@ -244,6 +186,57 @@ public class LoginBean implements Serializable{
 		setResPassword(false);
 		setPasswordNew(null);
 	}
+	
+	
+	//region Getter und Setter
+	public IUserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
+    }
+    
+    public String getPwPattern(){
+    	return pwPattern;
+    }
+
+	public User getLoginUser() {
+		return loginUser;
+	}
+
+	public void setLoginUser(User loginUser) {
+		this.loginUser = loginUser;
+	}
+
+	public String getPasswordNew() {
+		return passwordNew;
+	}
+
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
+	}
+
+	public boolean isResPassword() {
+		return resPassword;
+	}
+
+	public void setResPassword(boolean resPassword) {
+		this.resPassword = resPassword;
+	}
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
+	}
+	
+	
+	//endregion
+
+
 	
 }
 

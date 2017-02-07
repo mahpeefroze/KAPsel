@@ -15,10 +15,6 @@ public class ETypes {
 		return KundeT.values();
 	}
 	
-	public KundeStatus[] getKundeStatus(){
-		return KundeStatus.values();
-	}
-	
 	public ProduktT[] getProduktT(){
 		return ProduktT.values();
 	}
@@ -58,25 +54,11 @@ public class ETypes {
 		Öffentlich;
 	}
 	
-	public enum KundeStatus{
-		Aktiv,
-		Gesperrt;
-	}
-
 	public enum UserT{
 		ADMIN,
 		MOD,
 		ADVUSER,
 		SYSUSER;
-	}
-
-	public enum ETables{
-		kunden,
-		auftraege,
-		users,
-		produkte,
-		leistungen,
-		adressen;
 	}
 	
 	public enum MaterialT{
@@ -119,6 +101,8 @@ public class ETypes {
 		Auftragsbestätigung,
 		Rechnung,
 		Abschlagsrechnung,
+		Brief,
+		Gesprächsprotokoll,
 		Lieferschein;
 	}
 	

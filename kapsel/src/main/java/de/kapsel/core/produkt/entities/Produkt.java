@@ -1,7 +1,6 @@
 package de.kapsel.core.produkt.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import de.kapsel.core.util.ETypes;
 import de.kapsel.core.util.entities.AbstractKapselEntity;
@@ -34,12 +31,11 @@ public class Produkt extends AbstractKapselEntity implements Serializable, Compa
 	private ETypes.ProduktT typ;
 	private int zeit;
 	private double preis;
-	private Timestamp erstDatum;
-	private Timestamp modDatum;
-	private Set<Bauteil> bauteile;
-	private Set<Arbeitsschritt> aschritte;
 	private boolean tempFlag=false;
 	private boolean stdFlag=false;
+	private Set<Bauteil> bauteile;
+	private Set<Arbeitsschritt> aschritte;
+	
 
 
 	@Id
@@ -100,23 +96,6 @@ public class Produkt extends AbstractKapselEntity implements Serializable, Compa
 		this.preis = preis;
 	}
 	
-	@CreationTimestamp
-	@Column(name="erst_datum", nullable=false)
-	public Timestamp getErstDatum() {
-		return erstDatum;
-	}
-	public void setErstDatum(Timestamp erstDatum) {
-		this.erstDatum = erstDatum;
-	}
-	
-	@UpdateTimestamp
-	@Column(name="mod_datum", nullable=false)
-	public Timestamp getModDatum() {
-		return modDatum;
-	}
-	public void setModDatum(Timestamp modDatum) {
-		this.modDatum = modDatum;
-	}
 	//mappedBy represents the field in Bauteil.java which is the counterpart to this bidirectional Relation @OneToMany <Set> bauteile => @ManyToOne produkt
 	//..which led to Circular Dependency => removed Produkt from Bauteil, hibernate maps the relation in additional table now
 	//fetch = FetchType.LAZY enabled by default for @xToMany mappings

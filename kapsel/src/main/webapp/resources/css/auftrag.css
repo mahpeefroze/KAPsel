@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 body{
-	background-color: #edfbfb;
+	background-color: #F5EDD7;
 }
 
 #statusbox {   
@@ -12,23 +12,23 @@ body{
 }
 
 #header {
-    border-color: #388EA6;
-    color: #388EA6;
+    border-color: #AE9752;
 }
 
 #nav {
-	border-color:#388EA6;
-    color:#388EA6;
-    background-color: #dcf7f8;
+	border-color:#AE9752;
+    background-color: #ECDDB1;
 }
 
 #section{
-	border-color:#388EA6;
-    color:#388EA6;
+	border-color:#AE9752;
+}
+
+#section table *{
 }
 
 .ui-accordion-content{
-	background-color:#dcf7f8;
+	background-color:#ECDDB1;
 }
 
 .ui-accordion .ui-accordion-header{
@@ -36,23 +36,23 @@ body{
 }
 
 .ui-accordion-header.ui-state-active{
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2), rgba(217,189,102, 0.8));
 }
 
 .ui-accordion-header.ui-state-hover{
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2), rgba(217,189,102, 0.8));
 }
 
 .ui-dialog-titlebar{
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2), rgba(217,189,102, 0.8));
 }
 
 .ui-datatable-header {
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2), rgba(217,189,102, 0.8));
 }
 
 .bgRibbon{
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2), rgba(217,189,102, 0.8));
 }
 
 .ui-inputfield.ui-widget.ui-state-default.ui-corner-all.hasDatepicker{

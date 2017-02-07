@@ -25,7 +25,7 @@
 }
 
 .auftrag-bigbutton{
-	background: linear-gradient(rgba(84,216,222, 0.2), rgba(84,216,222, 0.8));
+	background: linear-gradient(rgba(217,189,102, 0.2),rgba(217,189,102, 0.8));
 }
 
 .produkt-bigbutton{
@@ -41,5 +41,5 @@
 }
 
 .lager-bigbutton{
-	background: linear-gradient(rgba(217,189,102, 0.2),rgba(217,189,102, 0.8));
+	background: linear-gradient(rgba(230,172,172, 0.2),rgba(230,172,172, 0.8));
 }

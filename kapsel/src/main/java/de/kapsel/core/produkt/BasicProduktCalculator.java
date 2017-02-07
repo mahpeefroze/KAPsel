@@ -21,14 +21,7 @@ public class BasicProduktCalculator implements Serializable, IKapselCalculator<P
 	
 	@ManagedProperty(value="#{utilsBean}")
 	private UtilsBean utilsContainer;
-	
-	public UtilsBean getUtilsContainer() {
-		return utilsContainer;
-	}
 
-	public void setUtilsContainer(UtilsBean utilsContainer) {
-		this.utilsContainer = utilsContainer;
-	}
 	
 	public BasicProduktCalculator(){
 		
@@ -67,7 +60,7 @@ public class BasicProduktCalculator implements Serializable, IKapselCalculator<P
 				mek+=b.getMenge()*
 						(b.getMaterial()!=null ? getUoA(b) : 0)*
 						(b.getMaterial()!=null ? b.getMaterial().getPreis() : 0)*
-						(b.getMaterial()!=null ? (1+b.getMaterial().getVerschnitt()/100) : 1);
+						(b.getMaterial()!=null ? (1+b.getMaterial().getVerschnitt()/100) : 0);
 			}
 			price+= mek*(1+mgk/100);
 		}
@@ -115,5 +108,12 @@ public class BasicProduktCalculator implements Serializable, IKapselCalculator<P
 	}
 	
 	
+	public UtilsBean getUtilsContainer() {
+		return utilsContainer;
+	}
+
+	public void setUtilsContainer(UtilsBean utilsContainer) {
+		this.utilsContainer = utilsContainer;
+	}
 
 }
