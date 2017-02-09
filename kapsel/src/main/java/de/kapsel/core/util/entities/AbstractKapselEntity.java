@@ -2,6 +2,7 @@ package de.kapsel.core.util.entities;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +19,24 @@ public abstract class AbstractKapselEntity {
 	protected long bKey;
 	protected Timestamp erstDatum;
 	protected Timestamp modDatum;
+	protected int version;
 
+	public static long generateBKey(){
+		long stamp = new Date().getTime();
+		int hash = SessionUtils.getLoggedUser().hashCode();
+		double rand = Math.random();
+		int factor = (int) (rand*3719);
+		return stamp+(factor*hash);
+	}
+	
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).
+				append(getbKey()).
+				toHashCode();
+	}
+
+	public abstract boolean equals(Object obj);
+	
 	@Column(name="bKey", unique=true)
 	public long getbKey() {
 		return bKey;
@@ -46,20 +64,13 @@ public abstract class AbstractKapselEntity {
 		this.modDatum = modDatum;
 	}
 	
-	public static long generateBKey(){
-		long stamp = new Date().getTime();
-		int hash = SessionUtils.getLoggedUser().hashCode();
-		double rand = Math.random();
-		int factor = (int) (rand*3719);
-		return stamp+(factor*hash);
-	}
-	
-	public int hashCode() {
-		return new HashCodeBuilder(17, 31).
-				append(getbKey()).
-				toHashCode();
+	@Version
+	public int getVersion() {
+		return version;
 	}
 
-	public abstract boolean equals(Object obj);
+	public void setVersion(int version) {
+		this.version = version;
+	}
 	
 }

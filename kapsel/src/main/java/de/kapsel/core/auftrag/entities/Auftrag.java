@@ -44,7 +44,6 @@ public class Auftrag extends AbstractKapselEntity implements Serializable, Compa
 	private Set<ProduktWrapper> produkte;
 	private Set<KapselDocument> dokumente;
 	
-
 	
 
 	//Annotations at accessor-methods tell hibernate to use them to change variables, so get/set logic is aplied
@@ -200,7 +199,7 @@ public class Auftrag extends AbstractKapselEntity implements Serializable, Compa
 	public void setDokumente(Set<KapselDocument> dokumente) {
 		this.dokumente = dokumente;
 	}
-
+	
 	@Override
 	public int compareTo(Auftrag a) {
 		if(a==null){

@@ -30,6 +30,7 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
 import de.kapsel.core.auftrag.entities.KapselDocument;
@@ -392,6 +393,9 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 		super.enableEditMode();
 		tempPwList = new HashSet<ProduktWrapper>();
 		setSelectedTemplateId(0);
+		Auftrag orig = getAuftragService().getAuftragById(getSelectedAuftrag().getId());
+		getAuftraege().set(getAuftraege().indexOf(getSelectedAuftrag()), orig);
+		setSelectedAuftrag(orig);
 	}
 	
 	@Override
@@ -407,8 +411,18 @@ public class AuftragBean extends AbstractModulBean implements Serializable{
 				}
 			}
 		}
+		try{
 		updateAuftrag();
 		getUtilsContainer().updateNrStorage();
+		}catch (HibernateOptimisticLockingFailureException e){
+			System.out.println("Version mismatch. Optimistic Lock.");
+			int i = tempPwList.size();
+			while(i>0){
+				getUtilsContainer().rollbackLast("PNR");
+				i--;
+			}
+		}
+		
 		disableEditMode();
 	}
 

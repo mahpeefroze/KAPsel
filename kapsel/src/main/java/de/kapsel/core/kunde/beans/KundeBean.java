@@ -13,6 +13,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 
 import de.kapsel.core.auftrag.entities.Auftrag;
 import de.kapsel.core.kunde.entities.Adresse;
@@ -161,6 +162,9 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 	@Override
 	public void enableEditMode() {
 		super.enableEditMode();
+		Kunde orig = getKundeService().getKundeById(getSelectedKunde().getId());
+		getKunden().set(getKunden().indexOf(getSelectedKunde()), orig);
+		setSelectedKunde(orig);
 		if(getSelectedKunde().getAdresse()==null){
 			getSelectedKunde().setAdresse(new Adresse());
 		}
@@ -177,7 +181,11 @@ public class KundeBean extends AbstractModulBean implements Serializable{
 		}else{
 			getSelectedKunde().getAdresse().setbKey(AbstractKapselEntity.generateBKey());
 		}
-		updateKunde();
+		try{
+			updateKunde();
+		}catch (HibernateOptimisticLockingFailureException e){
+			System.out.println("Version mismatch. Optimistic locking.");
+		}
 		disableEditMode();
 	}
 

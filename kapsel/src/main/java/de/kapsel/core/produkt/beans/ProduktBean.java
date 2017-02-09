@@ -13,6 +13,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 
 import de.kapsel.core.produkt.entities.Arbeitsschritt;
 import de.kapsel.core.produkt.entities.Bauteil;
@@ -201,11 +202,18 @@ public class ProduktBean extends AbstractModulBean implements Serializable{
 	//region editMode
 	public void enableEditMode(){
 		super.enableEditMode();
+		Produkt orig = getProduktService().getProduktById(getSelectedProdukt().getId());
+		getProdukte().set(getProdukte().indexOf(getSelectedProdukt()), orig);
+		setSelectedProdukt(orig);
 	}
 
 	@Override
 	public void onEditComplete() {
-		updateProdukt();
+		try{
+			updateProdukt();
+		}catch (HibernateOptimisticLockingFailureException e){
+			System.out.println("Version mismatch. Optimistic locking.");
+		}
 		disableEditMode();
 	}
 
